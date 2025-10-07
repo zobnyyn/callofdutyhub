@@ -26,6 +26,9 @@ RUN curl -fsSL https://deb.nodesource.com/setup_18.x | bash - && \
 # Установка расширения pdo_mysql, intl и zip
 RUN docker-php-ext-install pdo_mysql intl zip
 
+# Копирование кастомной конфигурации PHP
+COPY php.ini /usr/local/etc/php/conf.d/uploads.ini
+
 # Копирование файлов проекта
 WORKDIR /var/www
 COPY . .

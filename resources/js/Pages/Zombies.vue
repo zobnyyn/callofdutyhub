@@ -12,7 +12,7 @@
     <Header />
 
     <!-- Hero Section - Metro Style -->
-    <section class="pt-32 pb-12 px-6 relative">
+    <section class="pt-20 md:pt-32 pb-8 md:pb-12 px-3 md:px-6 relative">
       <!-- Background with blur effect -->
       <div class="absolute inset-0 bg-gradient-to-br from-zinc-950/40 via-black/50 to-orange-950/20 backdrop-blur-sm"></div>
 
@@ -26,7 +26,7 @@
 
       <div class="container mx-auto relative z-10">
         <!-- Terminal Header -->
-        <div class="mb-8 font-mono text-sm">
+        <div class="mb-6 md:mb-8 font-mono text-xs md:text-sm">
           <div class="text-orange-500 mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             <span class="text-orange-600">&gt;</span> SYSTEM INITIALIZED...
           </div>
@@ -43,21 +43,21 @@
         </div>
 
         <!-- Main Title -->
-        <div class="mb-12">
-          <h1 class="text-6xl md:text-8xl font-black mb-4 leading-none uppercase font-mono">
-            <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 mb-2 terminal-glow drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
+        <div class="mb-8 md:mb-12">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-black mb-4 leading-none uppercase font-mono">
+            <span class="block text-red-600 mb-2 terminal-glow-red drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               ZOMBIES
             </span>
             <span class="flex items-center text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               <span>TREYARCH</span>
-              <span class="inline-block w-4 h-12 md:h-20 bg-orange-500 ml-4 cursor-blink"></span>
+              <span class="inline-block w-3 h-8 sm:h-10 md:h-12 lg:h-20 bg-orange-500 ml-2 md:ml-4 cursor-blink"></span>
             </span>
           </h1>
 
-          <div class="text-orange-600 font-mono text-sm mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <div class="text-orange-600 font-mono text-xs md:text-sm mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             <span class="text-orange-600">&gt;</span> DESCRIPTION:
           </div>
-          <p class="text-xl text-gray-300 leading-relaxed font-mono max-w-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <p class="text-base md:text-xl text-gray-300 leading-relaxed font-mono max-w-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             Выберите игру из серии Call of Duty от Treyarch и найдите гайд для нужной вам карты.
           </p>
         </div>
@@ -65,18 +65,18 @@
     </section>
 
     <!-- Metro Tiles Section - Treyarch Games -->
-    <section class="py-12 px-6 relative">
+    <section class="py-8 md:py-12 px-3 md:px-6 relative">
       <div class="container mx-auto relative z-10">
         <!-- Section Header -->
-        <div class="mb-8 font-mono">
-          <div class="text-orange-500 text-sm mb-2">
+        <div class="mb-6 md:mb-8 font-mono">
+          <div class="text-orange-500 text-xs md:text-sm mb-2">
             <span class="text-orange-600">&gt;</span> AVAILABLE_GAMES:
           </div>
-          <div class="h-px bg-gradient-to-r from-orange-500 to-transparent max-w-md mb-8"></div>
+          <div class="h-px bg-gradient-to-r from-orange-500 to-transparent max-w-md mb-6 md:mb-8"></div>
         </div>
 
         <!-- Metro Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-7xl">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-7xl">
 
           <!-- World at War -->
           <div
@@ -401,6 +401,15 @@ onMounted(() => {
     0 0 20px rgba(249, 115, 22, 0.4),
     0 0 30px rgba(249, 115, 22, 0.3),
     0 0 40px rgba(249, 115, 22, 0.2);
+}
+
+/* Терминальное свечение (красное) */
+.terminal-glow-red {
+  text-shadow:
+    0 0 10px rgba(220, 38, 38, 0.7),
+    0 0 20px rgba(220, 38, 38, 0.5),
+    0 0 30px rgba(220, 38, 38, 0.3),
+    0 0 40px rgba(220, 38, 38, 0.2);
 }
 
 /* Терминальная сетка */

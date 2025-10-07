@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\ZombieGuide;
+use App\Models\GuideAchievement;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Auth;
 
 class ZombieGuideController extends Controller
 {
@@ -45,9 +47,51 @@ class ZombieGuideController extends Controller
         // Увеличиваем счетчик просмотров
         $guide->increment('views');
 
+        // Проверяем, есть ли у пользователя уже это достижение
+        $hasAchievement = false;
+        if (Auth::check()) {
+            $hasAchievement = GuideAchievement::where('user_id', Auth::id())
+                ->where('zombie_guide_id', $id)
+                ->exists();
+        }
+
         return Inertia::render('ZombieGuides/ShowGuide', [
-            'guide' => $guide
+            'guide' => $guide,
+            'hasAchievement' => $hasAchievement
         ]);
+    }
+
+    /**
+     * Записать достижение за просмотр гайда
+     */
+    public function completeGuide(Request $request, $game, $mapSlug, $id)
+    {
+        if (!Auth::check()) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        $guide = ZombieGuide::where('game', $game)
+            ->where('map_slug', $mapSlug)
+            ->where('is_published', true)
+            ->findOrFail($id);
+
+        // Пытаемся создать достижение (если уже есть - просто игнорируем)
+        try {
+            GuideAchievement::firstOrCreate([
+                'user_id' => Auth::id(),
+                'zombie_guide_id' => $guide->id,
+            ]);
+
+            return response()->json([
+                'message' => 'Achievement unlocked!',
+                'success' => true
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Achievement already unlocked',
+                'success' => false
+            ]);
+        }
     }
 
     /**

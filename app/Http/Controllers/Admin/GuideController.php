@@ -34,8 +34,8 @@ class GuideController extends Controller
             'map_slug' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'content' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'content' => 'required|string|max:5000000', // Увеличен лимит для больших гайдов
+            'image' => 'nullable|image|max:10240', // Увеличен до 10MB
             'is_published' => 'boolean',
         ]);
 
@@ -65,8 +65,8 @@ class GuideController extends Controller
             'map_slug' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'content' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'content' => 'required|string|max:5000000', // Увеличен лимит для больших гайдов
+            'image' => 'nullable|image|max:10240', // Увеличен до 10MB
             'is_published' => 'boolean',
         ]);
 

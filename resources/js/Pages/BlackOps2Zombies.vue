@@ -17,7 +17,7 @@
     <Header />
 
     <!-- Hero Section -->
-    <section class="pt-32 pb-12 px-6 relative">
+    <section class="pt-20 md:pt-32 pb-8 md:pb-12 px-3 md:px-6 relative">
       <!-- Background with blur effect -->
       <div class="absolute inset-0 bg-gradient-to-br from-zinc-950/40 via-black/50 to-orange-950/20"></div>
 
@@ -31,7 +31,7 @@
 
       <div class="container mx-auto relative z-10">
         <!-- Terminal Header -->
-        <div class="mb-8 font-mono text-sm">
+        <div class="mb-6 md:mb-8 font-mono text-xs md:text-sm">
           <div class="text-orange-500 mb-2 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             <span class="text-orange-600">&gt;</span> SYSTEM INITIALIZED...
           </div>
@@ -48,30 +48,30 @@
         </div>
 
         <!-- Main Title -->
-        <div class="mb-8">
-          <h1 class="text-5xl md:text-7xl font-black mb-4 leading-none uppercase font-mono">
+        <div class="mb-6 md:mb-8">
+          <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black mb-4 leading-none uppercase font-mono">
             <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 mb-2 terminal-glow drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               BLACK OPS II
             </span>
             <span class="flex items-center text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
               <span>ZOMBIES</span>
-              <span class="inline-block w-4 h-12 md:h-16 bg-orange-500 ml-4 cursor-blink"></span>
+              <span class="inline-block w-3 h-8 sm:h-10 md:h-12 lg:h-16 bg-orange-500 ml-2 md:ml-4 cursor-blink"></span>
             </span>
           </h1>
 
-          <div class="text-orange-600 font-mono text-sm mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <div class="text-orange-600 font-mono text-xs md:text-sm mb-3 drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             <span class="text-orange-600">&gt;</span> YEAR: 2012
           </div>
-          <p class="text-lg text-gray-300 leading-relaxed font-mono max-w-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
+          <p class="text-sm md:text-base lg:text-lg text-gray-300 leading-relaxed font-mono max-w-3xl drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)]">
             Выберите карту из Call of Duty: Black Ops 2 - новая эра Zombies с открытым миром.
           </p>
         </div>
 
         <!-- Back Button -->
-        <div class="mb-8">
+        <div class="mb-6 md:mb-8">
           <button
             @click="$inertia.visit('/zombies')"
-            class="px-6 py-3 border-2 border-orange-500/30 text-orange-500 font-mono font-black hover:bg-orange-500/10 transition-all flex items-center gap-2"
+            class="px-4 md:px-6 py-2 md:py-3 border-2 border-orange-500/30 text-orange-500 font-mono font-black hover:bg-orange-500/10 transition-all flex items-center gap-2 text-sm md:text-base"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
@@ -83,18 +83,18 @@
     </section>
 
     <!-- Maps Grid Section -->
-    <section class="py-12 px-6 relative">
+    <section class="py-8 md:py-12 px-3 md:px-6 relative">
       <div class="container mx-auto relative z-10">
         <!-- Section Header -->
-        <div class="mb-8 font-mono">
-          <div class="text-orange-500 text-sm mb-2">
+        <div class="mb-6 md:mb-8 font-mono">
+          <div class="text-orange-500 text-xs md:text-sm mb-2">
             <span class="text-orange-600">&gt;</span> AVAILABLE_MAPS: 6
           </div>
-          <div class="h-px bg-gradient-to-r from-orange-500 to-transparent max-w-md mb-8"></div>
+          <div class="h-px bg-gradient-to-r from-orange-500 to-transparent max-w-md mb-6 md:mb-8"></div>
         </div>
 
         <!-- Maps Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 max-w-7xl">
 
           <!-- TranZit -->
           <div

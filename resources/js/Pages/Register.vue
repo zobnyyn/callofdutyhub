@@ -7,7 +7,7 @@
     <Header />
 
     <!-- Register Section - Terminal Style -->
-    <section class="pt-40 pb-24 px-6 relative min-h-screen flex items-center">
+    <section class="pt-24 md:pt-40 pb-12 md:pb-24 px-3 md:px-6 relative min-h-screen flex items-center">
       <!-- Background -->
       <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-orange-950/20"></div>
 
@@ -22,7 +22,7 @@
       <div class="container mx-auto relative z-10">
         <div class="max-w-2xl mx-auto">
           <!-- Terminal Header -->
-          <div class="mb-8 font-mono text-sm">
+          <div class="mb-6 md:mb-8 font-mono text-xs md:text-sm">
             <div class="text-orange-500 mb-2">
               <span class="text-orange-600">&gt;</span> SYSTEM INITIALIZED...
             </div>
@@ -36,24 +36,24 @@
           </div>
 
           <!-- Register Title -->
-          <div class="mb-10">
-            <div class="text-orange-600 font-mono text-sm mb-4">
+          <div class="mb-8 md:mb-10">
+            <div class="text-orange-600 font-mono text-xs md:text-sm mb-3 md:mb-4">
               <span class="text-orange-600">&gt;</span> OPERATOR_RECRUITMENT_SYSTEM
             </div>
 
-            <h1 class="text-5xl md:text-7xl font-black mb-6 leading-none uppercase font-mono">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-black mb-4 md:mb-6 leading-none uppercase font-mono">
               <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 mb-2 terminal-glow">
                 РЕГИСТРАЦИЯ
               </span>
               <span class="block text-white flex items-center">
                 <span>ОПЕРАТОРА</span>
-                <span class="inline-block w-3 h-12 md:h-16 bg-orange-500 ml-4 cursor-blink"></span>
+                <span class="inline-block w-2 md:w-3 h-10 md:h-12 lg:h-16 bg-orange-500 ml-2 md:ml-4 cursor-blink"></span>
               </span>
             </h1>
           </div>
 
           <!-- Register Form - Terminal Style -->
-          <form @submit.prevent="register" class="space-y-6">
+          <form @submit.prevent="register" class="space-y-4 md:space-y-6">
             <!-- Error Message -->
             <div v-if="errors.general" class="border border-red-500/30 bg-red-900/20 p-4 font-mono">
               <div class="text-red-500 text-sm">

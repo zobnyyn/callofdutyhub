@@ -11,7 +11,7 @@
     <Header />
 
     <!-- Hero Section - Terminal Style -->
-    <section class="pt-40 pb-24 px-6 relative min-h-screen flex items-center">
+    <section class="pt-24 md:pt-40 pb-12 md:pb-24 px-3 md:px-6 relative min-h-screen flex items-center">
       <!-- Background -->
       <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-orange-950/20"></div>
 
@@ -26,7 +26,7 @@
       <div class="container mx-auto relative z-10">
         <div class="max-w-6xl">
           <!-- Terminal Header -->
-          <div class="mb-8 font-mono text-sm">
+          <div class="mb-6 md:mb-8 font-mono text-xs md:text-sm">
             <div class="text-orange-500 mb-2">
               <span class="text-orange-600">&gt;</span> SYSTEM INITIALIZED...
             </div>
@@ -39,65 +39,65 @@
             <div class="text-orange-500 mb-4">
               <span class="text-orange-600">&gt;</span> WELCOME TO BLACK OPS TERMINAL
             </div>
-            <div class="h-px bg-gradient-to-r from-orange-500 via-red-500 to-transparent mb-8"></div>
+            <div class="h-px bg-gradient-to-r from-orange-500 via-red-500 to-transparent mb-6 md:mb-8"></div>
           </div>
 
           <!-- Main Terminal Output -->
-          <div class="mb-10">
-            <div class="text-orange-600 font-mono text-sm mb-4">
+          <div class="mb-8 md:mb-10">
+            <div class="text-orange-600 font-mono text-xs md:text-sm mb-3 md:mb-4">
               <span class="text-orange-600">&gt;</span> DISPLAY MISSION_BRIEF
             </div>
 
-            <h1 class="text-7xl md:text-9xl font-black mb-6 leading-none uppercase font-mono">
+            <h1 class="text-4xl sm:text-5xl md:text-7xl lg:text-9xl font-black mb-4 md:mb-6 leading-none uppercase font-mono">
               <span class="block text-transparent bg-clip-text bg-gradient-to-r from-orange-500 via-red-500 to-orange-600 mb-2 terminal-glow">
                 CALL OF DUTY
               </span>
               <span class="block text-white flex items-center">
                 <span>TERMINAL</span>
-                <span class="inline-block w-4 h-16 md:h-24 bg-orange-500 ml-4 cursor-blink"></span>
+                <span class="inline-block w-3 h-10 sm:h-12 md:h-16 lg:h-24 bg-orange-500 ml-2 md:ml-4 cursor-blink"></span>
               </span>
             </h1>
 
-            <div class="text-orange-600 font-mono text-sm mb-4">
+            <div class="text-orange-600 font-mono text-xs md:text-sm mb-3 md:mb-4">
               <span class="text-orange-600">&gt;</span> DESCRIPTION:
             </div>
-            <p class="text-xl md:text-2xl text-gray-400 leading-relaxed mb-6 font-mono">
+            <p class="text-base md:text-xl lg:text-2xl text-gray-400 leading-relaxed mb-4 md:mb-6 font-mono">
               <span class="text-orange-500">[CLASSIFIED]</span> Лучшее и большое комьюнити людей, которые обожают Call of Duty.
             </p>
           </div>
 
           <!-- Stats - Terminal Style -->
-          <div class="mb-10 font-mono text-sm">
-            <div class="text-orange-600 mb-4">
+          <div class="mb-8 md:mb-10 font-mono text-xs md:text-sm">
+            <div class="text-orange-600 mb-3 md:mb-4">
               <span class="text-orange-600">&gt;</span> SYSTEM_STATS:
             </div>
-            <div class="grid grid-cols-4 gap-4 max-w-3xl">
-              <div class="border border-orange-500/30 bg-orange-500/5 p-4 relative group hover:bg-orange-500/10 transition-all">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-2 md:gap-4 max-w-3xl">
+              <div class="border border-orange-500/30 bg-orange-500/5 p-3 md:p-4 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-1">OPERATORS:</div>
-                <div class="text-3xl font-black text-orange-500">1K+</div>
+                <div class="text-[10px] md:text-xs text-orange-600 mb-1">OPERATORS:</div>
+                <div class="text-2xl md:text-3xl font-black text-orange-500">1K+</div>
               </div>
-              <div class="border border-orange-500/30 bg-orange-500/5 p-4 relative group hover:bg-orange-500/10 transition-all">
+              <div class="border border-orange-500/30 bg-orange-500/5 p-3 md:p-4 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-1">MISSIONS:</div>
-                <div class="text-3xl font-black text-orange-500">500+</div>
+                <div class="text-[10px] md:text-xs text-orange-600 mb-1">MISSIONS:</div>
+                <div class="text-2xl md:text-3xl font-black text-orange-500">500+</div>
               </div>
-              <div class="border border-orange-500/30 bg-orange-500/5 p-4 relative group hover:bg-orange-500/10 transition-all">
+              <div class="border border-orange-500/30 bg-orange-500/5 p-3 md:p-4 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-1">STATUS:</div>
-                <div class="text-3xl font-black text-orange-500">24/7</div>
+                <div class="text-[10px] md:text-xs text-orange-600 mb-1">STATUS:</div>
+                <div class="text-2xl md:text-3xl font-black text-orange-500">24/7</div>
               </div>
-              <div class="border border-orange-500/30 bg-orange-500/5 p-4 relative group hover:bg-orange-500/10 transition-all">
+              <div class="border border-orange-500/30 bg-orange-500/5 p-3 md:p-4 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-1">LEVEL:</div>
-                <div class="text-3xl font-black text-orange-500">MAX</div>
+                <div class="text-[10px] md:text-xs text-orange-600 mb-1">LEVEL:</div>
+                <div class="text-2xl md:text-3xl font-black text-orange-500">MAX</div>
               </div>
             </div>
           </div>
 
           <!-- Command Input Style CTA -->
           <div class="font-mono">
-            <div class="text-orange-600 text-sm mb-3">
+            <div class="text-orange-600 text-xs md:text-sm mb-3">
               <span class="text-orange-600">&gt;</span> AVAILABLE_COMMANDS:
             </div>
             <div class="flex flex-col sm:flex-row items-start gap-3">

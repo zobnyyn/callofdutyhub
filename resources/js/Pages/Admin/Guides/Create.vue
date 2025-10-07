@@ -209,6 +209,9 @@ import { Link, useForm } from '@inertiajs/vue3';
 import Header from '../../../Components/Header.vue';
 import TiptapEditor from '../../../Components/TiptapEditor.vue';
 
+// Высота хэдера для правильного позиционирования
+const HEADER_HEIGHT = 120; // примерная высота хэдера в пикселях
+
 const form = useForm({
   game: '',
   map_slug: '',

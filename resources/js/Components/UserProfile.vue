@@ -45,6 +45,20 @@
           Редактировать профиль
         </button>
         <button
+          @click="goToFriends"
+          class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 rounded font-mono flex items-center"
+        >
+          <span class="text-orange-600 mr-2">&gt;</span>
+          Друзья
+        </button>
+        <button
+          @click="goToAchievements"
+          class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 rounded font-mono flex items-center"
+        >
+          <span class="text-orange-600 mr-2">&gt;</span>
+          Достижения
+        </button>
+        <button
           @click="handleLogout"
           class="w-full text-left px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 rounded font-mono flex items-center"
         >
@@ -311,5 +325,13 @@ function goToEditProfile() {
 
 function goToViewProfile() {
   router.visit(`/profile/${props.user.id}`);
+}
+
+function goToFriends() {
+  router.visit(`/profile/${props.user.id}?tab=friends`);
+}
+
+function goToAchievements() {
+  router.visit(`/profile/${props.user.id}?tab=achievements`);
 }
 </script>
