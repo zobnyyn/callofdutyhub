@@ -179,6 +179,23 @@
               </label>
             </div>
 
+            <!-- Achievement Status -->
+            <div class="border border-orange-500/30 bg-orange-500/5 p-6">
+              <label class="flex items-center cursor-pointer">
+                <input
+                  v-model="form.gives_achievement"
+                  type="checkbox"
+                  class="w-5 h-5 bg-black border-2 border-orange-500/30 text-orange-500 focus:ring-orange-500 focus:ring-offset-black cursor-pointer"
+                />
+                <span class="ml-3 text-orange-600 font-mono text-sm">
+                  <span class="text-orange-600">&gt;</span> ДАВАТЬ ДОСТИЖЕНИЕ ЗА ПРОСМОТР
+                </span>
+              </label>
+              <div class="mt-2 text-xs text-gray-400 font-mono ml-8">
+                Если включено, пользователи получат достижение за просмотр этого гайда
+              </div>
+            </div>
+
             <!-- Recommended Items Section -->
             <div class="border-2 border-orange-500/50 bg-orange-500/5 p-6">
               <div class="text-orange-500 font-mono text-lg mb-6 flex items-center gap-2">
@@ -268,7 +285,8 @@ const form = useForm({
   description: '',
   content: '',
   image: null,
-  is_published: false
+  is_published: false,
+  gives_achievement: true
 });
 
 // Карты для каждой игры

@@ -16,12 +16,14 @@ class ZombieGuide extends Model
         'content',
         'image',
         'is_published',
+        'gives_achievement',
         'views',
         'user_id'
     ];
 
     protected $casts = [
         'is_published' => 'boolean',
+        'gives_achievement' => 'boolean',
         'views' => 'integer',
     ];
 

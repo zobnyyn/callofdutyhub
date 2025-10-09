@@ -83,6 +83,14 @@ class ZombieGuideController extends Controller
             ->where('is_published', true)
             ->findOrFail($id);
 
+        // Проверяем, дает ли этот гайд достижение
+        if (!$guide->gives_achievement) {
+            return response()->json([
+                'message' => 'This guide does not grant an achievement',
+                'success' => false
+            ], 403);
+        }
+
         // Пытаемся создать достижение (если уже есть - просто игнорируем)
         try {
             GuideAchievement::firstOrCreate([

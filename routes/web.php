@@ -72,7 +72,7 @@ Route::middleware('auth')->group(function () {
 // Маршруты для достижений
 Route::get('/api/achievements/user/{userId}', [\App\Http\Controllers\AchievementController::class, 'getUserAchievements'])->name('achievements.user');
 Route::get('/api/achievements/displayed/{userId}', [\App\Http\Controllers\AchievementController::class, 'getDisplayedAchievements'])->name('achievements.displayed');
-Route::post('/api/achievements/update-displayed', [\AppHttp\Controllers\AchievementController::class, 'updateDisplayedAchievements'])->middleware('auth')->name('achievements.update');
+Route::post('/api/achievements/update-displayed', [\App\Http\Controllers\AchievementController::class, 'updateDisplayedAchievements'])->middleware('auth')->name('achievements.update');
 
 // API для онлайн пользователей
 Route::get('/api/online-users', [\App\Http\Controllers\OnlineUsersController::class, 'index'])->name('online.users');
