@@ -691,9 +691,17 @@ import ascension from '../../images/blackops3zombies/ascension.jpg';
 import shangrila from '../../images/blackops3zombies/shangrila.jpg';
 import moon from '../../images/blackops3zombies/moon.jpg';
 import originsZC from '../../images/blackops3zombies/origins.jpg';
-import { router } from '@inertiajs/vue3';
+import { router, usePage } from '@inertiajs/vue3';
+import { computed } from 'vue';
+
+const page = usePage();
+const user = computed(() => page.props.auth?.user || null);
 
 const navigateToGuides = (mapSlug) => {
+  if (!user.value) {
+    router.visit('/register');
+    return;
+  }
   router.visit(`/zombies/Black Ops 3/${mapSlug}/guides`);
 };
 </script>

@@ -70,6 +70,7 @@
                 <option value="Black Ops 4">Call of Duty: Black Ops 4</option>
                 <option value="Cold War">Call of Duty: Black Ops Cold War</option>
                 <option value="Black Ops 6">Call of Duty: Black Ops 6</option>
+                <option value="Black Ops 7">Call of Duty: Black Ops 7</option>
               </select>
             </div>
 
@@ -186,6 +187,48 @@
               </label>
             </div>
 
+            <!-- Recommended Items Section -->
+            <div class="border-2 border-orange-500/50 bg-orange-500/5 p-6">
+              <div class="text-orange-500 font-mono text-lg mb-6 flex items-center gap-2">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                </svg>
+                <span class="text-orange-600">&gt;</span> РЕКОМЕНДУЕМЫЕ ПРЕДМЕТЫ
+              </div>
+              <div class="text-gray-400 text-sm font-mono mb-6">
+                Выберите предметы, которые будут отображаться в начале гайда
+              </div>
+
+              <div class="space-y-6">
+                <!-- Weapons -->
+                <GuideItemSelector
+                  label="РЕКОМЕНДУЕМОЕ ОРУЖИЕ"
+                  buttonText="ОРУЖИЕ"
+                  type="weapon"
+                  :selectedGame="form.game"
+                  v-model="selectedWeapons"
+                />
+
+                <!-- Perks -->
+                <GuideItemSelector
+                  label="РЕКОМЕНДУЕМЫЕ ПЕРКИ"
+                  buttonText="ПЕРК"
+                  type="perk"
+                  :selectedGame="form.game"
+                  v-model="selectedPerks"
+                />
+
+                <!-- Gums -->
+                <GuideItemSelector
+                  label="РЕКОМЕНДУЕМЫЕ ЖВАЧКИ"
+                  buttonText="ЖВАЧКУ"
+                  type="gum"
+                  :selectedGame="form.game"
+                  v-model="selectedGums"
+                />
+              </div>
+            </div>
+
             <!-- Submit Buttons -->
             <div class="flex gap-4 pt-4">
               <button
@@ -212,17 +255,59 @@
 </template>
 
 <script setup>
-import { ref, computed, watch } from 'vue';
+import { ref, computed, watch, onMounted } from 'vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import Header from '../../../Components/Header.vue';
 import TiptapEditor from '../../../Components/TiptapEditor.vue';
+import GuideItemSelector from '../../../Components/GuideItemSelector.vue';
 
 const props = defineProps({
   guide: {
     type: Object,
     required: true
+  },
+  weapons: {
+    type: Array,
+    default: () => []
+  },
+  perks: {
+    type: Array,
+    default: () => []
+  },
+  gums: {
+    type: Array,
+    default: () => []
+  },
+  selectedWeapons: {
+    type: Array,
+    default: () => []
+  },
+  selectedPerks: {
+    type: Array,
+    default: () => []
+  },
+  selectedGums: {
+    type: Array,
+    default: () => []
   }
 });
+
+// Отладка - выводим данные в консоль
+onMounted(() => {
+  console.log('=== EDIT GUIDE DEBUG ===');
+  console.log('Guide:', props.guide);
+  console.log('Available weapons:', props.weapons);
+  console.log('Available perks:', props.perks);
+  console.log('Available gums:', props.gums);
+  console.log('Selected weapons:', props.selectedWeapons);
+  console.log('Selected perks:', props.selectedPerks);
+  console.log('Selected gums:', props.selectedGums);
+});
+
+// Выбранные предметы
+const selectedWeapons = ref([...props.selectedWeapons]);
+const selectedPerks = ref([...props.selectedPerks]);
+const selectedGums = ref([...props.selectedGums]);
 
 const form = useForm({
   game: props.guide.game,
@@ -277,9 +362,34 @@ const gameMaps = {
     { slug: 'bo3-moon', name: 'Moon (ZC)' },
     { slug: 'bo3-origins', name: 'Origins (ZC)' }
   ],
-  'Black Ops 4': [],
-  'Cold War': [],
-  'Black Ops 6': []
+  'Black Ops 4': [
+    { slug: 'ix', name: 'IX' },
+    { slug: 'blood-of-the-dead', name: 'Blood of the Dead' },
+    { slug: 'voyage-of-despair', name: 'Voyage of Despair' },
+    { slug: 'classified', name: 'Classified' },
+    { slug: 'dead-of-the-night', name: 'Dead of the Night' },
+    { slug: 'ancient-evil', name: 'Ancient Evil' },
+    { slug: 'alpha-omega', name: 'Alpha Omega' },
+    { slug: 'tag-der-toten', name: 'Tag der Toten' }
+  ],
+  'Cold War': [
+    { slug: 'die-maschine', name: 'Die Maschine' },
+    { slug: 'firebase-z', name: 'Firebase Z' },
+    { slug: 'outbreak', name: 'Outbreak' },
+    { slug: 'mauer-der-toten', name: 'Mauer der Toten' },
+    { slug: 'forsaken', name: 'Forsaken' }
+  ],
+  'Black Ops 6': [
+    { slug: 'liberty-falls', name: 'Liberty Falls' },
+    { slug: 'terminus', name: 'Terminus' },
+    { slug: 'citadelle-des-morts', name: 'Citadelle des Morts' },
+    { slug: 'the-tomb', name: 'The Tomb' },
+    { slug: 'shattered-veil', name: 'Shattered Veil' },
+    { slug: 'reckoning', name: 'Reckoning' }
+  ],
+  'Black Ops 7': [
+    { slug: 'ashes-of-the-damned', name: 'Ashes of the Damned' }
+  ]
 };
 
 // Доступные карты для выбранной игры
@@ -337,8 +447,17 @@ function submit() {
   processing.value = true;
   errors.value = {};
 
-  form.post(`/admin/guides/${props.guide.id}`, {
+  // Добавляем ID выбранных предметов в форму
+  const formData = {
+    ...form.data(),
+    selected_weapons: selectedWeapons.value.map(item => item.id),
+    selected_perks: selectedPerks.value.map(item => item.id),
+    selected_gums: selectedGums.value.map(item => item.id),
+  };
+
+  form.transform(() => formData).post(`/admin/guides/${props.guide.id}`, {
     preserveScroll: true,
+    forceFormData: true,
     onError: (err) => {
       errors.value = err;
       processing.value = false;

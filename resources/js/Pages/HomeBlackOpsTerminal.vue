@@ -1,5 +1,10 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
+    <!-- Background Video -->
+    <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-30">
+      <source :src="backgroundVideo" type="video/mp4">
+    </video>
+
     <!-- CRT Screen Effect -->
     <!-- <div class="fixed inset-0 pointer-events-none z-50 crt-overlay"></div> -->
     <!-- <div class="fixed inset-0 pointer-events-none z-50 scanlines"></div> -->
@@ -101,18 +106,18 @@
               <span class="text-orange-600">&gt;</span> AVAILABLE_COMMANDS:
             </div>
             <div class="flex flex-col sm:flex-row items-start gap-3">
-              <button class="group relative px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-black font-black text-lg tracking-wider transition-all overflow-hidden border-2 border-orange-700">
+              <a href="/register" class="group relative px-8 py-4 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-black font-black text-lg tracking-wider transition-all overflow-hidden border-2 border-orange-700">
                 <span class="absolute inset-0 terminal-grid opacity-20" aria-hidden="true"></span>
                 <span class="relative z-10 flex items-center">
                   <span class="text-black/60 mr-2">&gt;</span>
-                  <span>ПРИСОЕДИНИТСЯ</span>
+                  <span>ПРИСОЕДИНИТЬСЯ</span>
                   <span class="inline-block w-2 h-4 bg-black/30 ml-2 cursor-blink"></span>
                 </span>
-              </button>
-              <button class="px-8 py-4 border-2 border-orange-500/50 hover:bg-orange-500/10 text-orange-500 font-black text-lg tracking-wider transition-all">
+              </a>
+              <a href="/about" class="px-8 py-4 border-2 border-orange-500/50 hover:bg-orange-500/10 text-orange-500 font-black text-lg tracking-wider transition-all">
                 <span class="text-orange-600/60 mr-2">&gt;</span>
                 <span>УЗНАТЬ БОЛЬШЕ</span>
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -144,7 +149,7 @@
             <div class="absolute inset-0 terminal-grid opacity-5"></div>
             <div class="absolute top-0 left-0 right-0 h-px bg-orange-500"></div>
 
-            <div class="relative z-10">
+            <div class="relative z-10 flex flex-col h-full">
               <div class="flex items-center justify-between mb-6 font-mono text-xs text-orange-600">
                 <span>&gt; MODULE_01</span>
                 <div class="flex items-center space-x-1">
@@ -163,11 +168,11 @@
               <h3 class="text-2xl font-black text-white mb-4 uppercase font-mono">
                 <span class="text-orange-600">&gt;</span> АНАЛИТИКА
               </h3>
-              <p class="text-gray-400 leading-relaxed mb-6 text-sm">
+              <p class="text-gray-400 leading-relaxed mb-6 text-sm min-h-[3rem]">
                 Актуальные новости, обзоры оружия, карт, мета-гайды и многое другое.
               </p>
 
-              <div class="font-mono text-xs text-orange-500 group-hover:text-orange-400 transition-colors">
+              <div class="font-mono text-xs text-orange-500 group-hover:text-orange-400 transition-colors mt-auto">
                 <span class="text-orange-600">&gt;</span> ACCESS_MODULE
               </div>
             </div>
@@ -178,7 +183,7 @@
             <div class="absolute inset-0 terminal-grid opacity-5"></div>
             <div class="absolute top-0 left-0 right-0 h-px bg-orange-500"></div>
 
-            <div class="relative z-10">
+            <div class="relative z-10 flex flex-col h-full">
               <div class="flex items-center justify-between mb-6 font-mono text-xs text-orange-600">
                 <span>&gt; MODULE_02</span>
                 <div class="flex items-center space-x-1">
@@ -199,11 +204,11 @@
               <h3 class="text-2xl font-black text-white mb-4 uppercase font-mono">
                 <span class="text-orange-600">&gt;</span> ОТРЯДЫ
               </h3>
-              <p class="text-gray-400 leading-relaxed mb-6 text-sm">
+              <p class="text-gray-400 leading-relaxed mb-6 text-sm min-h-[3rem]">
                 Найдите тиммейтов для warzone, multiplayer и других режимов.
               </p>
 
-              <div class="font-mono text-xs text-orange-500 group-hover:text-orange-400 transition-colors">
+              <div class="font-mono text-xs text-orange-500 group-hover:text-orange-400 transition-colors mt-auto">
                 <span class="text-orange-600">&gt;</span> ACCESS_MODULE
               </div>
             </div>
@@ -214,7 +219,7 @@
             <div class="absolute inset-0 terminal-grid opacity-5"></div>
             <div class="absolute top-0 left-0 right-0 h-px bg-orange-500"></div>
 
-            <div class="relative z-10">
+            <div class="relative z-10 flex flex-col h-full">
               <div class="flex items-center justify-between mb-6 font-mono text-xs text-orange-600">
                 <span>&gt; MODULE_03</span>
                 <div class="flex items-center space-x-1">
@@ -233,11 +238,11 @@
               <h3 class="text-2xl font-black text-white mb-4 uppercase font-mono">
                 <span class="text-orange-600">&gt;</span> СВЯЗЬ
               </h3>
-              <p class="text-gray-400 leading-relaxed mb-6 text-sm">
+              <p class="text-gray-400 leading-relaxed mb-6 text-sm min-h-[3rem]">
                 Общение с другими игроками через встроенный чат и discord канал.
               </p>
 
-              <div class="font-mono text-xs text-orange-500 group-hover:text-orange-400 transition-colors">
+              <div class="font-mono text-xs text-orange-500 group-hover:text-orange-400 transition-colors mt-auto">
                 <span class="text-orange-600">&gt;</span> ACCESS_MODULE
               </div>
             </div>
@@ -399,122 +404,30 @@
     </section>
 
     <!-- Footer - Terminal Style -->
-    <footer class="py-16 px-6 bg-zinc-950 border-t border-orange-500/20 relative overflow-hidden">
-      <div class="absolute inset-0 terminal-grid opacity-5"></div>
-
-      <div class="container mx-auto relative z-10">
-        <!-- Terminal prompt -->
-        <div class="font-mono text-sm text-orange-500 mb-8">
-          <span class="text-orange-600">&gt;</span> SYSTEM_INFO --footer
-        </div>
-
-        <div class="grid md:grid-cols-4 gap-8 mb-12">
-          <div>
-            <div class="flex items-center space-x-3 mb-4">
-              <div class="w-10 h-10 bg-gradient-to-br from-orange-600 to-red-700 transform rotate-45 flex items-center justify-center relative">
-                <div class="absolute inset-0 terminal-grid opacity-30"></div>
-                <div class="w-8 h-8 bg-black transform -rotate-45"></div>
-              </div>
-              <div>
-                <div class="text-lg font-black font-mono">
-                  <span class="text-orange-500">BLACK</span><span class="text-white">OPS</span>
-                </div>
-                <div class="text-[8px] text-orange-600/70 tracking-widest font-mono">TERMINAL_v3.0</div>
-              </div>
-            </div>
-            <p class="text-gray-600 text-sm leading-relaxed font-mono">
-              Элитное сообщество операторов Black Ops. Тактическое превосходство и контроль поля боя.
-            </p>
-          </div>
-
-          <div>
-            <h3 class="text-sm font-black text-orange-500 mb-4 tracking-wider uppercase font-mono">
-              <span class="text-orange-600">&gt;</span> НАВИГАЦИЯ
-            </h3>
-            <ul class="space-y-2 text-sm font-mono">
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Главная
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Black Ops
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Modern Warfare
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Сообщество
-              </a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-sm font-black text-orange-500 mb-4 tracking-wider uppercase font-mono">
-              <span class="text-orange-600">&gt;</span> КАНАЛЫ
-            </h3>
-            <ul class="space-y-2 text-sm font-mono">
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Discord
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> YouTube
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Twitch
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Twitter
-              </a></li>
-            </ul>
-          </div>
-
-          <div>
-            <h3 class="text-sm font-black text-orange-500 mb-4 tracking-wider uppercase font-mono">
-              <span class="text-orange-600">&gt;</span> ПОДДЕРЖКА
-            </h3>
-            <ul class="space-y-2 text-sm font-mono">
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Помощь
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Партнёрство
-              </a></li>
-              <li><a href="#" class="text-gray-600 hover:text-orange-500 transition-colors">
-                <span class="text-orange-800">&gt;</span> Правила
-              </a></li>
-            </ul>
-          </div>
-        </div>
-
-        <div class="border-t border-orange-500/20 pt-8">
-          <div class="font-mono text-xs text-orange-600 mb-4">
-            <span class="text-orange-600">&gt;</span> EXIT_STATUS: <span class="text-green-500">[OK]</span>
-          </div>
-          <div class="flex flex-col md:flex-row items-center justify-between text-gray-700 text-sm font-mono">
-            <div>&copy; 2025 Black_Ops_Terminal // All_Rights_Reserved</div>
-            <div class="flex items-center space-x-4 mt-4 md:mt-0">
-              <div class="flex items-center space-x-2">
-                <div class="w-2 h-2 bg-orange-500"></div>
-                <span class="text-orange-500">SYSTEM_ONLINE</span>
-              </div>
-              <div>|</div>
-              <span>v3.0.1</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 import Header from '@/Components/Header.vue';
+import Footer from '@/Components/Footer.vue';
 
 const currentTime = ref('00:00:00');
 const showDropdown = ref(false);
 const showMWDropdown = ref(false);
 let dropdownTimeout: number | null = null;
 let mwDropdownTimeout: number | null = null;
+
+// Массив фоновых видео
+const backgroundVideos = [
+  '/backgroundvideo/homepage/cod_main_page_1.mp4',
+  '/backgroundvideo/homepage/cod_main_page_2.mp4',
+  '/backgroundvideo/homepage/cod_main_page_3.mp4',
+];
+
+// Выбираем случайное видео
+const backgroundVideo = ref('');
 
 const updateTime = () => {
   const now = new Date();
@@ -524,6 +437,10 @@ const updateTime = () => {
 let intervalId: number;
 
 onMounted(() => {
+  // Получаем случайный индекс
+  const randomIndex = Math.floor(Math.random() * backgroundVideos.length);
+  backgroundVideo.value = backgroundVideos[randomIndex];
+
   updateTime();
   intervalId = window.setInterval(updateTime, 1000);
 });

@@ -131,6 +131,160 @@
               </div>
             </header>
 
+            <!-- Recommended Items Section -->
+            <div v-if="recommendedWeapons.length > 0 || recommendedPerks.length > 0 || recommendedGums.length > 0" class="mb-8 md:mb-12">
+              <div class="border-2 border-orange-500/50 bg-orange-500/5 p-4 md:p-6">
+                <div class="flex items-center justify-between mb-4 md:mb-6">
+                  <div class="flex items-center gap-2">
+                    <svg class="w-5 h-5 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                    </svg>
+                    <h2 class="text-lg md:text-xl font-black text-orange-500 font-mono uppercase">
+                      <span class="text-orange-600">&gt;</span> Рекомендуемые предметы
+                    </h2>
+                  </div>
+                  <button
+                    @click="itemsExpanded = !itemsExpanded"
+                    class="text-orange-500 hover:text-orange-400 transition-colors p-2"
+                    :title="itemsExpanded ? 'Свернуть' : 'Развернуть'"
+                  >
+                    <svg class="w-5 h-5 transition-transform" :class="{ 'rotate-180': !itemsExpanded }" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                    </svg>
+                  </button>
+                </div>
+
+                <transition
+                  enter-active-class="transition-all duration-300 ease-out"
+                  enter-from-class="opacity-0 max-h-0"
+                  enter-to-class="opacity-100 max-h-[2000px]"
+                  leave-active-class="transition-all duration-300 ease-in"
+                  leave-from-class="opacity-100 max-h-[2000px]"
+                  leave-to-class="opacity-0 max-h-0"
+                >
+                  <div v-show="itemsExpanded" class="overflow-hidden">
+                    <!-- Weapons -->
+                    <div v-if="recommendedWeapons.length > 0" class="mb-5">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Оружие:
+                      </h3>
+                      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
+                        <div
+                          v-for="weapon in recommendedWeapons"
+                          :key="weapon.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = weapon.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-[4/3] border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black">
+                            <img
+                              v-if="weapon.image"
+                              :src="`/storage/${weapon.image}`"
+                              :alt="weapon.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center">{{ weapon.name }}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Perks -->
+                    <div v-if="recommendedPerks.length > 0" class="mb-5">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Перки:
+                      </h3>
+                      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-3">
+                        <div
+                          v-for="perk in recommendedPerks"
+                          :key="perk.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = perk.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-square border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black">
+                            <img
+                              v-if="perk.image"
+                              :src="`/storage/${perk.image}`"
+                              :alt="perk.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center">{{ perk.name }}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Gums -->
+                    <div v-if="recommendedGums.length > 0">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Жвачки:
+                      </h3>
+                      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-3">
+                        <div
+                          v-for="gum in recommendedGums"
+                          :key="gum.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = gum.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-square border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black relative">
+                            <img
+                              v-if="gum.image"
+                              :src="`/storage/${gum.image}`"
+                              :alt="gum.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <!-- Rarity Badge -->
+                            <div v-if="gum.rarity" class="absolute top-1 right-1">
+                              <div
+                                class="w-2 h-2 rounded-full border border-black/50"
+                                :class="getRarityClasses(gum.rarity)"
+                                :title="getRarityName(gum.rarity)"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="flex flex-col items-center gap-1">
+                            <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center w-full">{{ gum.name }}</div>
+                            <!-- Rarity Tag -->
+                            <div v-if="gum.rarity"
+                              class="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded"
+                              :class="getRarityClasses(gum.rarity)"
+                            >
+                              {{ getRarityName(gum.rarity).toUpperCase() }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </transition>
+              </div>
+            </div>
+
+            <!-- Floating Tooltip -->
+            <Teleport to="body">
+              <div
+                v-if="showTooltip && getTooltipData(showTooltip)"
+                class="fixed z-[10000] pointer-events-none"
+                :style="tooltipStyle"
+              >
+                <div class="bg-black/95 backdrop-blur-sm border-2 border-orange-500 shadow-2xl p-4 max-w-xs">
+                  <div class="text-orange-500 font-bold mb-2 text-sm font-mono">{{ getTooltipData(showTooltip).name }}</div>
+                  <div class="text-gray-300 text-xs leading-relaxed">{{ getTooltipData(showTooltip).description }}</div>
+                </div>
+              </div>
+            </Teleport>
+
             <!-- Guide Content -->
             <div class="prose prose-invert prose-orange max-w-none">
               <div ref="contentRef" class="guide-content text-gray-300 leading-relaxed text-base md:text-lg" v-html="guide.content"></div>
@@ -209,7 +363,19 @@ import axios from 'axios';
 
 const props = defineProps({
   guide: Object,
-  hasAchievement: Boolean
+  hasAchievement: Boolean,
+  recommendedWeapons: {
+    type: Array,
+    default: () => []
+  },
+  recommendedPerks: {
+    type: Array,
+    default: () => []
+  },
+  recommendedGums: {
+    type: Array,
+    default: () => []
+  }
 });
 
 const contentRef = ref(null);
@@ -218,6 +384,8 @@ const activeHeading = ref('');
 const scrollProgress = ref(0);
 const achievementUnlocked = ref(props.hasAchievement);
 const showAchievementNotification = ref(false);
+const itemsExpanded = ref(true);
+const showTooltip = ref(null);
 
 const sidebarClasses = ref('lg:sticky lg:top-32 lg:max-h-[calc(100vh-9rem)] lg:overflow-y-auto');
 
@@ -338,6 +506,7 @@ onMounted(() => {
   nextTick(() => {
     generateTableOfContents();
     window.addEventListener('scroll', updateActiveHeading);
+    window.addEventListener('mousemove', updateTooltipPosition);
     updateActiveHeading();
 
     // Добавляем обработчик кликов на якорные ссылки в контенте
@@ -349,6 +518,7 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener('scroll', updateActiveHeading);
+  window.removeEventListener('mousemove', updateTooltipPosition);
 
   // Удаляем обработчик кликов
   if (contentRef.value) {
@@ -371,6 +541,76 @@ const handleContentClick = (event) => {
       scrollToHeading(id);
     }
   }
+};
+
+// Получить данные для tooltip'а
+const getTooltipData = (id) => {
+  const weapon = props.recommendedWeapons.find(w => w.id === id);
+  if (weapon && weapon.description) {
+    return {
+      name: weapon.name,
+      description: weapon.description
+    };
+  }
+
+  const perk = props.recommendedPerks.find(p => p.id === id);
+  if (perk && perk.description) {
+    return {
+      name: perk.name,
+      description: perk.description
+    };
+  }
+
+  const gum = props.recommendedGums.find(g => g.id === id);
+  if (gum && gum.description) {
+    return {
+      name: gum.name,
+      description: gum.description
+    };
+  }
+
+  return null;
+};
+
+// Стиль для tooltip'а
+const tooltipStyle = ref({
+  top: '0px',
+  left: '0px',
+  transform: 'translate(-50%, calc(-100% - 10px))'
+});
+
+// Обновить позицию tooltip'а
+const updateTooltipPosition = (event) => {
+  const { clientX, clientY } = event;
+  tooltipStyle.value = {
+    top: `${clientY}px`,
+    left: `${clientX}px`,
+    transform: 'translate(-50%, calc(-100% - 10px))'
+  };
+};
+
+// Получить название редкости
+const getRarityName = (rarity) => {
+  const rarityNames = {
+    rare: 'Редкая',
+    epic: 'Эпическая',
+    legendary: 'Легендарная',
+    ultra: 'Ультра',
+    whimsical: 'Причудливая'
+  };
+  return rarityNames[rarity] || rarity;
+};
+
+// Получить CSS-классы для редкости
+const getRarityClasses = (rarity) => {
+  const rarityClasses = {
+    rare: 'bg-blue-500 text-white',
+    epic: 'bg-purple-500 text-white',
+    legendary: 'bg-amber-500 text-black',
+    ultra: 'bg-red-600 text-white',
+    whimsical: 'bg-gradient-to-r from-green-500 via-purple-500 to-orange-500 text-white'
+  };
+  return rarityClasses[rarity] || 'bg-gray-500 text-white';
 };
 </script>
 

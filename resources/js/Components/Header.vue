@@ -60,63 +60,161 @@
           </a>
           <span class="text-orange-900">|</span>
           <div class="relative"
-             @mouseenter="openDropdown"
-             @mouseleave="closeDropdown"
-             @focusin="openDropdown"
-             @focusout="closeDropdown">
-            <a href="#" class="terminal-nav-item flex items-center group">
+             @mouseenter="openCodWikiDropdown"
+             @mouseleave="closeCodWikiDropdown"
+             @focusin="openCodWikiDropdown"
+             @focusout="closeCodWikiDropdown">
+            <a href="/cod-wiki" class="terminal-nav-item flex items-center group">
               <span class="text-orange-600 font-mono mr-1">&gt;</span>
-              <span class="group-hover:text-orange-400">BLACK OPS</span>
+              <span class="group-hover:text-orange-400">COD WIKI</span>
             </a>
-            <!-- Dropdown -->
-            <div v-show="showDropdown" class="absolute left-0 mt-2 w-56 bg-black border border-orange-600/30 rounded-md shadow-lg opacity-100 pointer-events-auto transform translate-y-0 transition-all duration-150 z-50"
-              @mouseenter="openDropdown" @mouseleave="closeDropdown">
+            <!-- Combined Dropdown -->
+            <div v-show="showCodWikiDropdown" class="absolute left-0 mt-2 w-72 bg-black border border-orange-600/30 rounded-md shadow-lg opacity-100 pointer-events-auto transform translate-y-0 transition-all duration-150 z-50"
+              @mouseenter="openCodWikiDropdown" @mouseleave="closeCodWikiDropdown">
               <ul class="py-2">
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: World at War (2008)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops (2010)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops II (2012)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops III (2015)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops 4 (2018)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops Cold War (2020)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops 6 (2024)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Black Ops 7 (2025)</a></li>
+                <!-- Black Ops Section -->
+                <li class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-b border-orange-500/20">
+                  Black Ops Series
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="worldatwar" alt="World at War" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>World at War (2008)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="blackops1" alt="Black Ops" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Black Ops (2010)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="blackops2" alt="Black Ops II" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Black Ops II (2012)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="blackops3" alt="Black Ops III" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Black Ops III (2015)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="blackops4" alt="Black Ops 4" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Black Ops 4 (2018)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="coldwar" alt="Cold War" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Cold War (2020)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="blackops6" alt="Black Ops 6" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Black Ops 6 (2024)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="blackops7" alt="Black Ops 7" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>Black Ops 7 (2025)</span>
+                  </a>
+                </li>
+
+                <!-- Modern Warfare Section -->
+                <li class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-b border-orange-500/20 mt-2">
+                  Modern Warfare Series
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="mw2007" alt="COD 4: MW" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>COD 4: MW (2007)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="mw2009" alt="MW 2" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>MW 2 (2009)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="mw2011" alt="MW 3" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>MW 3 (2011)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="mw2019" alt="MW" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>MW (2019)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="mw2022" alt="MW II" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>MW II (2022)</span>
+                  </a>
+                </li>
+                <li>
+                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                    <img :src="mw2023" alt="MW III" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
+                    <span>MW III (2023)</span>
+                  </a>
+                </li>
               </ul>
             </div>
           </div>
           <span class="text-orange-900">|</span>
-          <div class="relative"
-             @mouseenter="openMWDropdown"
-             @mouseleave="closeMWDropdown"
-             @focusin="openMWDropdown"
-             @focusout="closeMWDropdown">
-            <a href="#" class="terminal-nav-item flex items-center group">
-              <span class="text-orange-600 font-mono mr-1">&gt;</span>
-              <span class="group-hover:text-orange-400">MODERN WARFARE</span>
-            </a>
-            <div v-show="showMWDropdown" class="absolute left-0 mt-2 w-56 bg-black border border-orange-600/30 rounded-md shadow-lg opacity-100 pointer-events-auto transform translate-y-0 transition-all duration-150 z-50"
-              @mouseenter="openMWDropdown" @mouseleave="closeMWDropdown">
-              <ul class="py-2">
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty 4: Modern Warfare (2007)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Modern Warfare 2 (2009)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Modern Warfare 3 (2011)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Modern Warfare Remastered (2016)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Modern Warfare (2019)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Modern Warfare II (2022)</a></li>
-                <li><a href="#" class="block px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400">Call of Duty: Modern Warfare III (2023)</a></li>
-              </ul>
-            </div>
-          </div>
-          <span class="text-orange-900">|</span>
-          <a href="#" class="terminal-nav-item group">
+          <a href="/community" class="terminal-nav-item group">
             <span class="text-orange-600 font-mono mr-1">&gt;</span>
             <span class="group-hover:text-orange-400">СООБЩЕСТВО</span>
           </a>
           <template v-if="user && user.is_admin">
             <span class="text-orange-900">|</span>
-            <a href="/admin/guides" class="terminal-nav-item group">
-              <span class="text-orange-600 font-mono mr-1">&gt;</span>
-              <span class="group-hover:text-orange-400">АДМИНКА</span>
-            </a>
+            <div class="relative"
+               @mouseenter="openAdminDropdown"
+               @mouseleave="closeAdminDropdown"
+               @focusin="openAdminDropdown"
+               @focusout="closeAdminDropdown">
+              <button class="terminal-nav-item flex items-center group">
+                <span class="text-orange-600 font-mono mr-1">&gt;</span>
+                <span class="group-hover:text-orange-400">АДМИНКА</span>
+              </button>
+              <!-- Admin Dropdown -->
+              <div v-show="showAdminDropdown" class="absolute left-0 mt-2 w-56 bg-black border border-orange-600/30 rounded-md shadow-lg opacity-100 pointer-events-auto transform translate-y-0 transition-all duration-150 z-50"
+                @mouseenter="openAdminDropdown" @mouseleave="closeAdminDropdown">
+                <ul class="py-2">
+                  <li>
+                    <a href="/admin/guides" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                      </svg>
+                      <span>Управление гайдами</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/admin/items" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                      </svg>
+                      <span>Управление предметами</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/admin/articles" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                      </svg>
+                      <span>Управление статьями</span>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </template>
         </div>
 
@@ -171,16 +269,16 @@
             <span class="text-orange-600 mr-2">&gt;</span>ZOMBIES
           </a>
 
-          <!-- Mobile Black Ops Submenu -->
+          <!-- Mobile COD WIKI Combined Menu -->
           <div class="border border-orange-500/40 bg-orange-500/10">
             <button
-              @click="toggleBlackOpsMenu"
+              @click="toggleCodWikiMenu"
               class="w-full px-4 py-3 text-sm font-mono text-orange-500 hover:bg-orange-500/20 transition-all flex items-center justify-between"
             >
-              <span><span class="text-orange-600 mr-2">&gt;</span>BLACK OPS</span>
+              <span><span class="text-orange-600 mr-2">&gt;</span>COD WIKI</span>
               <svg
                 class="w-4 h-4 transition-transform"
-                :class="{ 'rotate-180': showBlackOpsMobile }"
+                :class="{ 'rotate-180': showCodWikiMobile }"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -188,54 +286,117 @@
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
               </svg>
             </button>
-            <div v-show="showBlackOpsMobile" class="bg-orange-950/30">
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">World at War (2008)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Black Ops (2010)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Black Ops II (2012)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Black Ops III (2015)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Black Ops 4 (2018)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Cold War (2020)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Black Ops 6 (2024)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">Black Ops 7 (2025)</a>
+            <div v-show="showCodWikiMobile" class="bg-orange-950/30">
+              <!-- Black Ops Section -->
+              <div class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20">
+                Black Ops Series
+              </div>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="worldatwar" alt="World at War" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>World at War (2008)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops1" alt="Black Ops" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Black Ops (2010)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops2" alt="Black Ops II" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Black Ops II (2012)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops3" alt="Black Ops III" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Black Ops III (2015)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops4" alt="Black Ops 4" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Black Ops 4 (2018)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="coldwar" alt="Cold War" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Cold War (2020)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops6" alt="Black Ops 6" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Black Ops 6 (2024)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops7" alt="Black Ops 7" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>Black Ops 7 (2025)</span>
+              </a>
+
+              <!-- Modern Warfare Section -->
+              <div class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20 mt-2">
+                Modern Warfare Series
+              </div>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2007" alt="COD 4: MW" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>COD 4: MW (2007)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2009" alt="MW 2" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>MW 2 (2009)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2011" alt="MW 3" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>MW 3 (2011)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2019" alt="MW" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>MW (2019)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2022" alt="MW II" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>MW II (2022)</span>
+              </a>
+              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2023" alt="MW III" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+                <span>MW III (2023)</span>
+              </a>
             </div>
           </div>
 
-          <!-- Mobile Modern Warfare Submenu -->
-          <div class="border border-orange-500/40 bg-orange-500/10">
-            <button
-              @click="toggleMWMenu"
-              class="w-full px-4 py-3 text-sm font-mono text-orange-500 hover:bg-orange-500/20 transition-all flex items-center justify-between"
-            >
-              <span><span class="text-orange-600 mr-2">&gt;</span>MODERN WARFARE</span>
-              <svg
-                class="w-4 h-4 transition-transform"
-                :class="{ 'rotate-180': showMWMobile }"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-              </svg>
-            </button>
-            <div v-show="showMWMobile" class="bg-orange-950/30">
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">COD 4: MW (2007)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">MW 2 (2009)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">MW 3 (2011)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">MW Remastered (2016)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">MW (2019)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">MW II (2022)</a>
-              <a href="#" class="block px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">MW III (2023)</a>
-            </div>
-          </div>
-
-          <a href="#" class="block px-4 py-3 text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
+          <a href="/community" class="block px-4 py-3 text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
             <span class="text-orange-600 mr-2">&gt;</span>СООБЩЕСТВО
           </a>
 
           <template v-if="user && user.is_admin">
-            <a href="/admin/guides" class="block px-4 py-3 text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
-              <span class="text-orange-600 mr-2">&gt;</span>АДМИНКА
-            </a>
+            <div class="border border-orange-500/40 bg-orange-500/10">
+              <button
+                @click="toggleAdminMenu"
+                class="w-full px-4 py-3 text-sm font-mono text-orange-500 hover:bg-orange-500/20 transition-all flex items-center justify-between"
+              >
+                <span><span class="text-orange-600 mr-2">&gt;</span>АДМИНКА</span>
+                <svg
+                  class="w-4 h-4 transition-transform"
+                  :class="{ 'rotate-180': showAdminMobile }"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div v-show="showAdminMobile" class="bg-orange-950/30">
+                <a href="/admin/guides" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                  </svg>
+                  <span>Управление гайдами</span>
+                </a>
+                <a href="/admin/items" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"></path>
+                  </svg>
+                  <span>Управление предметами</span>
+                </a>
+                <a href="/admin/articles" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
+                  </svg>
+                  <span>Управление статьями</span>
+                </a>
+              </div>
+            </div>
           </template>
 
           <!-- Mobile Auth Buttons -->
@@ -265,18 +426,36 @@ import UserProfile from './UserProfile.vue';
 import NotificationBell from './NotificationBell.vue';
 import FloatingChat from './FloatingChat.vue';
 
+// Импорт иконок для Black Ops
+import worldatwar from '../../images/icons/worldatwar.jpg';
+import blackops1 from '../../images/icons/blackops1.jpg';
+import blackops2 from '../../images/icons/blackops2.jpg';
+import blackops3 from '../../images/icons/blackops3.jpg';
+import blackops4 from '../../images/icons/blackops4.jpg';
+import coldwar from '../../images/icons/coldwar.jpg';
+import blackops6 from '../../images/icons/blackops6.jpg';
+import blackops7 from '../../images/icons/blackops7.jpg';
+
+// Импорт иконок для Modern Warfare
+import mw2007 from '../../images/icons/mw2007.jpg';
+import mw2009 from '../../images/icons/mw2009.jpg';
+import mw2011 from '../../images/icons/mw2011.jpg';
+import mw2019 from '../../images/icons/mw2019.jpg';
+import mw2022 from '../../images/icons/mw2022.jpg';
+import mw2023 from '../../images/icons/mw2023.jpg';
+
 const page = usePage();
 const user = ref(page.props.auth?.user || null);
 
 const currentTime = ref('00:00:00');
-const showDropdown = ref(false);
-const showMWDropdown = ref(false);
 const showMobileMenu = ref(false);
-const showBlackOpsMobile = ref(false);
-const showMWMobile = ref(false);
+const showAdminDropdown = ref(false);
+const showAdminMobile = ref(false);
+const showCodWikiDropdown = ref(false);
+const showCodWikiMobile = ref(false);
 const headerHeight = ref(100); // Примерная высота header
-let dropdownTimeout = null;
-let mwDropdownTimeout = null;
+let adminDropdownTimeout = null;
+let codWikiDropdownTimeout = null;
 
 // Блокировка прокрутки при открытии мобильного меню
 watch(showMobileMenu, (isOpen) => {
@@ -314,36 +493,35 @@ onUnmounted(() => {
   document.body.style.overflow = '';
 });
 
-function openDropdown() {
-  if (dropdownTimeout) clearTimeout(dropdownTimeout);
-  showDropdown.value = true;
+function openAdminDropdown() {
+  if (adminDropdownTimeout) clearTimeout(adminDropdownTimeout);
+  showAdminDropdown.value = true;
 }
-function closeDropdown() {
-  dropdownTimeout = window.setTimeout(() => {
-    showDropdown.value = false;
+function closeAdminDropdown() {
+  adminDropdownTimeout = window.setTimeout(() => {
+    showAdminDropdown.value = false;
   }, 150);
 }
-function openMWDropdown() {
-  if (mwDropdownTimeout) clearTimeout(mwDropdownTimeout);
-  showMWDropdown.value = true;
+function openCodWikiDropdown() {
+  if (codWikiDropdownTimeout) clearTimeout(codWikiDropdownTimeout);
+  showCodWikiDropdown.value = true;
 }
-function closeMWDropdown() {
-  mwDropdownTimeout = window.setTimeout(() => {
-    showMWDropdown.value = false;
+function closeCodWikiDropdown() {
+  codWikiDropdownTimeout = window.setTimeout(() => {
+    showCodWikiDropdown.value = false;
   }, 150);
 }
 function toggleMobileMenu() {
   showMobileMenu.value = !showMobileMenu.value;
   if (!showMobileMenu.value) {
-    showBlackOpsMobile.value = false;
-    showMWMobile.value = false;
+    showCodWikiMobile.value = false;
   }
 }
-function toggleBlackOpsMenu() {
-  showBlackOpsMobile.value = !showBlackOpsMobile.value;
+function toggleCodWikiMenu() {
+  showCodWikiMobile.value = !showCodWikiMobile.value;
 }
-function toggleMWMenu() {
-  showMWMobile.value = !showMWMobile.value;
+function toggleAdminMenu() {
+  showAdminMobile.value = !showAdminMobile.value;
 }
 </script>
 

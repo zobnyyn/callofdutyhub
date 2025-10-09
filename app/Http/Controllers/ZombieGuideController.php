@@ -41,7 +41,7 @@ class ZombieGuideController extends Controller
         $guide = ZombieGuide::where('game', $game)
             ->where('map_slug', $mapSlug)
             ->where('is_published', true)
-            ->with('user')
+            ->with(['user', 'items'])
             ->findOrFail($id);
 
         // Увеличиваем счетчик просмотров
@@ -55,9 +55,17 @@ class ZombieGuideController extends Controller
                 ->exists();
         }
 
+        // Разделяем предметы по категориям
+        $weapons = $guide->items->where('pivot.category', 'weapon')->values();
+        $perks = $guide->items->where('pivot.category', 'perk')->values();
+        $gums = $guide->items->where('pivot.category', 'gum')->values();
+
         return Inertia::render('ZombieGuides/ShowGuide', [
             'guide' => $guide,
-            'hasAchievement' => $hasAchievement
+            'hasAchievement' => $hasAchievement,
+            'recommendedWeapons' => $weapons,
+            'recommendedPerks' => $perks,
+            'recommendedGums' => $gums,
         ]);
     }
 
@@ -240,6 +248,114 @@ class ZombieGuideController extends Controller
                 'bo3-origins' => [
                     'name' => 'Origins',
                     'description' => 'Zombie Chronicles'
+                ]
+            ],
+            'Black Ops 4' => [
+                'ix' => [
+                    'name' => 'IX',
+                    'description' => 'Gladiator Arena',
+                    'image' => '/images/blackops4zombies/ix.jpg'
+                ],
+                'blood-of-the-dead' => [
+                    'name' => 'Blood of the Dead',
+                    'description' => 'Alcatraz Penitentiary',
+                    'image' => '/images/blackops4zombies/bloodofthedead.jpg'
+                ],
+                'voyage-of-despair' => [
+                    'name' => 'Voyage of Despair',
+                    'description' => 'Titanic',
+                    'image' => '/images/blackops4zombies/voyageofdespair.jpg'
+                ],
+                'classified' => [
+                    'name' => 'Classified',
+                    'description' => 'Pentagon',
+                    'image' => '/images/blackops4zombies/classified.jpg'
+                ],
+                'dead-of-the-night' => [
+                    'name' => 'Dead of the Night',
+                    'description' => 'Alistair\'s Mansion',
+                    'image' => '/images/blackops4zombies/deadofthenight.jpg'
+                ],
+                'ancient-evil' => [
+                    'name' => 'Ancient Evil',
+                    'description' => 'Delphi',
+                    'image' => '/images/blackops4zombies/ancientevil.jpg'
+                ],
+                'alpha-omega' => [
+                    'name' => 'Alpha Omega',
+                    'description' => 'Broken Arrow Facility',
+                    'image' => '/images/blackops4zombies/alphaomega.jpg'
+                ],
+                'tag-der-toten' => [
+                    'name' => 'Tag der Toten',
+                    'description' => 'Siberia',
+                    'image' => '/images/blackops4zombies/tagdertoten.jpg'
+                ]
+            ],
+            'Cold War' => [
+                'die-maschine' => [
+                    'name' => 'Die Maschine',
+                    'description' => 'Nacht der Untoten Facility',
+                    'image' => '/images/blackopscoldwarzombies/diemashin.jpg'
+                ],
+                'firebase-z' => [
+                    'name' => 'Firebase Z',
+                    'description' => 'Outpost 25',
+                    'image' => '/images/blackopscoldwarzombies/firebazez.jpg'
+                ],
+                'outbreak' => [
+                    'name' => 'Outbreak',
+                    'description' => 'Open World',
+                    'image' => '/images/blackopscoldwarzombies/outbreak.jpg'
+                ],
+                'mauer-der-toten' => [
+                    'name' => 'Mauer der Toten',
+                    'description' => 'Berlin',
+                    'image' => '/images/blackopscoldwarzombies/mauerdertoten.jpg'
+                ],
+                'forsaken' => [
+                    'name' => 'Forsaken',
+                    'description' => 'Abandoned Mall',
+                    'image' => '/images/blackopscoldwarzombies/forsaken.jpg'
+                ]
+            ],
+            'Black Ops 6' => [
+                'liberty-falls' => [
+                    'name' => 'Liberty Falls',
+                    'description' => 'West Virginia Town',
+                    'image' => '/images/blackops6zombies/libertyfalls.jpg'
+                ],
+                'terminus' => [
+                    'name' => 'Terminus',
+                    'description' => 'Philippine Sea Prison',
+                    'image' => '/images/blackops6zombies/terminus.jpg'
+                ],
+                'citadelle-des-morts' => [
+                    'name' => 'Citadelle des Morts',
+                    'description' => 'Medieval Castle',
+                    'image' => '/images/blackops6zombies/citadelledesmorts.jpg'
+                ],
+                'the-tomb' => [
+                    'name' => 'The Tomb',
+                    'description' => 'Ancient Egypt',
+                    'image' => '/images/blackops6zombies/tomb.jpg'
+                ],
+                'shattered-veil' => [
+                    'name' => 'Shattered Veil',
+                    'description' => 'Dimensional Rift',
+                    'image' => '/images/blackops6zombies/shatteredveil.jpg'
+                ],
+                'reckoning' => [
+                    'name' => 'Reckoning',
+                    'description' => 'Final Battle',
+                    'image' => '/images/blackops6zombies/reckoning.jpg'
+                ]
+            ],
+            'Black Ops 7' => [
+                'ashes-of-the-damned' => [
+                    'name' => 'Ashes of the Damned',
+                    'description' => 'Infernal Wasteland',
+                    'image' => '/images/blackops7zombies/ashesofthedeamnt.jpg'
                 ]
             ]
         ];
