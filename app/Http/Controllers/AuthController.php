@@ -28,11 +28,15 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
+        // Отправляем письмо с подтверждением email
+        $user->sendEmailVerificationNotification();
+
         Auth::login($user);
 
         return response()->json([
-            'message' => 'Регистрация успешна',
+            'message' => 'Регистрация успешна. Проверьте вашу почту для подтверждения email.',
             'user' => $user,
+            'email_verification_required' => true,
         ], 201);
     }
 

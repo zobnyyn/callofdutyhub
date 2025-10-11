@@ -526,13 +526,83 @@
         </div>
       </div>
     </article>
+
+    <!-- Lightbox для изображений из контента -->
+    <Teleport to="body">
+      <Transition name="fade">
+        <div
+          v-if="lightboxOpen"
+          @click="closeLightbox"
+          class="fixed inset-0 z-[9999] bg-black/95 flex items-center justify-center p-4"
+        >
+          <!-- Close Button -->
+          <button
+            @click.stop="closeLightbox"
+            class="absolute top-4 right-4 w-12 h-12 flex items-center justify-center border-2 border-orange-500/50 hover:border-orange-500 bg-black/50 hover:bg-orange-500/10 transition-all text-orange-500 font-mono text-xl z-10"
+          >
+            ×
+          </button>
+
+          <!-- Zoom Controls -->
+          <div class="absolute top-4 left-4 flex flex-col gap-2 z-10">
+            <button
+              @click.stop="zoomIn"
+              class="w-12 h-12 flex items-center justify-center border-2 border-orange-500/50 hover:border-orange-500 bg-black/50 hover:bg-orange-500/10 transition-all text-orange-500 font-mono text-xl"
+              title="Приблизить"
+            >
+              +
+            </button>
+            <button
+              @click.stop="zoomOut"
+              class="w-12 h-12 flex items-center justify-center border-2 border-orange-500/50 hover:border-orange-500 bg-black/50 hover:bg-orange-500/10 transition-all text-orange-500 font-mono text-xl"
+              title="Отдалить"
+            >
+              −
+            </button>
+            <button
+              @click.stop="resetZoom"
+              class="w-12 h-12 flex items-center justify-center border-2 border-orange-500/50 hover:border-orange-500 bg-black/50 hover:bg-orange-500/10 transition-all text-orange-500 font-mono text-xs"
+              title="Сбросить зум"
+            >
+              1:1
+            </button>
+          </div>
+
+          <!-- Zoom Level Indicator -->
+          <div class="absolute bottom-4 left-4 px-3 py-2 bg-black/50 border border-orange-500/50 text-orange-500 font-mono text-sm z-10">
+            {{ Math.round(imageZoom * 100) }}%
+          </div>
+
+          <!-- Image Container -->
+          <div
+            @click.stop
+            class="max-w-7xl w-full overflow-auto"
+            @wheel.prevent="handleWheel"
+          >
+            <img
+              :src="lightboxImageSrc"
+              :alt="lightboxImageAlt"
+              :style="{
+                transform: `scale(${imageZoom})`,
+                transition: 'transform 0.2s ease',
+                cursor: imageZoom > 1 ? 'grab' : 'default'
+              }"
+              class="w-full h-auto max-h-[90vh] object-contain border-2 border-orange-500/30"
+              @mousedown="startDrag"
+              @mousemove="onDrag"
+              @mouseup="stopDrag"
+              @mouseleave="stopDrag"
+            />
+          </div>
+        </div>
+      </Transition>
+    </Teleport>
   </div>
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, onUnmounted, nextTick } from 'vue';
+import { defineProps, ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
 import Header from '../../Components/Header.vue';
-import { router } from '@inertiajs/vue3';
 import axios from 'axios';
 
 const props = defineProps({
@@ -580,6 +650,13 @@ const achievementUnlocked = ref(props.hasAchievement);
 const showAchievementNotification = ref(false);
 const itemsExpanded = ref(true);
 const showTooltip = ref(null);
+const lightboxOpen = ref(false);
+const lightboxImageSrc = ref('');
+const lightboxImageAlt = ref('');
+const imageZoom = ref(1);
+const isDragging = ref(false);
+const dragStart = ref({ x: 0, y: 0 });
+const dragOffset = ref({ x: 0, y: 0 });
 
 const sidebarClasses = ref('lg:sticky lg:top-32 lg:max-h-[calc(100vh-9rem)] lg:overflow-y-auto');
 
@@ -696,6 +773,66 @@ const updateActiveHeading = () => {
   }
 };
 
+// --- ДОБАВЛЕНО: обработка предметов в тексте гайда ---
+const processGuideItems = () => {
+  if (!contentRef.value) return;
+
+  // Поддерживаем разные варианты: .item-link[data-item-id], .game-item-link, элементы с data-item-name
+  const selectors = '.item-link[data-item-id], .game-item-link, [data-item-name]';
+  const itemLinks = contentRef.value.querySelectorAll(selectors);
+
+  itemLinks.forEach(el => {
+    // Пометить как интерактивный (если не помечен)
+    if (!el.getAttribute('tabindex')) el.setAttribute('tabindex', '0');
+    if (!el.getAttribute('role')) el.setAttribute('role', 'button');
+
+    // Убедиться, что он имеет класс guide-item (для стилизации)
+    el.classList.add('guide-item');
+
+    // Снять старые слушатели, если были
+    if (el._onMouseEnter) el.removeEventListener('mouseenter', el._onMouseEnter);
+    if (el._onMouseMove) el.removeEventListener('mousemove', el._onMouseMove);
+    if (el._onMouseLeave) el.removeEventListener('mouseleave', el._onMouseLeave);
+    if (el._onKeyDown) el.removeEventListener('keydown', el._onKeyDown);
+    if (el._onFocusOut) el.removeEventListener('focusout', el._onFocusOut);
+
+    // Обработчики
+    el._onMouseEnter = (e) => {
+      const id = el.getAttribute('data-item-id') || el.getAttribute('data-item-name');
+      if (id) {
+        showTooltip.value = id;
+        updateTooltipPosition(e);
+      }
+    };
+
+    el._onMouseMove = (e) => updateTooltipPosition(e);
+
+    el._onMouseLeave = () => { showTooltip.value = null; };
+
+    el._onKeyDown = (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        const id = el.getAttribute('data-item-id') || el.getAttribute('data-item-name');
+        if (id) {
+          showTooltip.value = id;
+          // позиционируем тултип относительно элемента
+          updateTooltipPosition({ currentTarget: el });
+        }
+      }
+    };
+
+    el._onFocusOut = () => { showTooltip.value = null; };
+
+    // Навешиваем
+    el.addEventListener('mouseenter', el._onMouseEnter);
+    el.addEventListener('mousemove', el._onMouseMove);
+    el.addEventListener('mouseleave', el._onMouseLeave);
+    el.addEventListener('keydown', el._onKeyDown);
+    el.addEventListener('focusout', el._onFocusOut);
+  });
+};
+
+// --- Вызов обработки после вставки контента ---
 onMounted(() => {
   nextTick(() => {
     generateTableOfContents();
@@ -706,6 +843,20 @@ onMounted(() => {
     // Добавляем обработчик кликов на якорные ссылки в контенте
     if (contentRef.value) {
       contentRef.value.addEventListener('click', handleContentClick);
+
+      // Добавляем обработчики кликов на все изображения в контенте
+      const images = contentRef.value.querySelectorAll('img');
+      images.forEach((img) => {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', () => {
+          openLightbox(img.src, img.alt || 'Изображение из гайда');
+        });
+      });
+
+      // Инициализуем tooltips для игровых предметов
+      initGameItemTooltips();
+      // Инициализуем обработчики для встроенных item-link (если используются в контенте)
+      processGuideItems();
     }
   });
 });
@@ -751,7 +902,8 @@ const getTooltipData = (id) => {
     ...props.recommendedTalismans
   ];
 
-  const item = allItems.find(i => i.id === id);
+  // Сравниваем id как строки, чтобы избежать несоответствия типов (number vs string)
+  const item = allItems.find(i => String(i.id) === String(id));
   if (item && item.description) {
     return {
       name: item.name,
@@ -769,15 +921,85 @@ const tooltipStyle = ref({
   transform: 'translate(-50%, calc(-100% - 10px))'
 });
 
-// Обновить позицию tooltip'а
-const updateTooltipPosition = (event) => {
-  const { clientX, clientY } = event;
-  tooltipStyle.value = {
-    top: `${clientY}px`,
-    left: `${clientX}px`,
-    transform: 'translate(-50%, calc(-100% - 10px))'
-  };
-};
+// --- Обновлено: позиционирование тултипа при движении мыши/тача или фокусе элемента ---
+function updateTooltipPosition(event) {
+  if (!event) return;
+
+  let clientX = null;
+  let clientY = null;
+  let targetEl = null;
+
+  // Mouse/touch event with coordinates
+  if (typeof event.clientX === 'number' || (event.touches && event.touches[0])) {
+    clientX = (event.touches && event.touches[0] && event.touches[0].clientX) || event.clientX;
+    clientY = (event.touches && event.touches[0] && event.touches[0].clientY) || event.clientY;
+  } else if (event.currentTarget && typeof event.currentTarget.getBoundingClientRect === 'function') {
+    // Если передан объект с currentTarget (например при фокусе), используем его
+    targetEl = event.currentTarget;
+  } else if (event.target && typeof event.target.getBoundingClientRect === 'function') {
+    targetEl = event.target;
+  }
+
+  const offsetX = 12;
+  const offsetY = 18;
+
+  let left, top;
+
+  if (clientX !== null && clientY !== null) {
+    left = clientX + offsetX;
+    top = clientY + offsetY;
+  } else if (targetEl) {
+    const rect = targetEl.getBoundingClientRect();
+    // Ставим тултип по центру элемента и выше
+    left = rect.left + rect.width / 2;
+    top = rect.top - offsetY;
+  } else {
+    return; // Нечего позиционировать
+  }
+
+  try {
+    const tooltipEl = document.querySelector('div.fixed.pointer-events-none');
+    if (tooltipEl) {
+      const box = tooltipEl.getBoundingClientRect();
+
+      // если передавали координаты центра элемента (left может быть центр), пытаемся учесть ширину тултипа
+      let computedLeft = left;
+      // Если left — center coordinate (при фокусе), сделаем сдвиг чтобы центрировать тултип
+      if (targetEl) {
+        computedLeft = left; // left уже центр
+        // для трансформа translate(-50%, ...) мы хотим указать позицию по центру
+      }
+
+      // Если тултип выходит за правую границу — сдвигаем влево
+      if (computedLeft + box.width > window.innerWidth - 10) {
+        computedLeft = window.innerWidth - box.width - 10;
+        tooltipStyle.value.transform = 'translate(0, calc(-100% - 10px))';
+      } else if (computedLeft < 10) {
+        computedLeft = 10;
+        tooltipStyle.value.transform = 'translate(0, calc(-100% - 10px))';
+      } else {
+        // Центрируем горизонтально относительно точки
+        tooltipStyle.value.transform = 'translate(-50%, calc(-100% - 10px))';
+      }
+
+      // Для вертикали скорректируем если выходим за нижнюю границу
+      let computedTop = top;
+      if (computedTop + box.height > window.innerHeight - 10) {
+        computedTop = (clientY || (targetEl && targetEl.getBoundingClientRect().bottom)) - box.height - 10;
+      }
+
+      tooltipStyle.value.left = computedLeft + 'px';
+      tooltipStyle.value.top = computedTop + 'px';
+      return;
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  // Фолбэк: записываем без учёта размеров тултипа
+  tooltipStyle.value.left = left + 'px';
+  tooltipStyle.value.top = top + 'px';
+}
 
 // Получить название редкости
 const getRarityName = (rarity) => {
@@ -823,6 +1045,207 @@ const getTalismanRarityClasses = (rarity) => {
     legendary: 'bg-amber-500 text-black'
   };
   return rarityClasses[rarity] || 'bg-gray-500 text-white';
+};
+
+// Открыть лайтбокс
+const openLightbox = (src, alt) => {
+  lightboxImageSrc.value = src;
+  lightboxImageAlt.value = alt;
+  lightboxOpen.value = true;
+};
+
+// Закрыть лайтбокс
+const closeLightbox = () => {
+  lightboxOpen.value = false;
+};
+
+// Приблизить изображение
+const zoomIn = () => {
+  imageZoom.value = Math.min(imageZoom.value * 1.2, 5);
+};
+
+// Отдалить изображение
+const zoomOut = () => {
+  imageZoom.value = Math.max(imageZoom.value / 1.2, 1);
+};
+
+// Сбросить зум
+const resetZoom = () => {
+  imageZoom.value = 1;
+};
+
+// Обработка прокрутки мыши для зума
+const handleWheel = (event) => {
+  if (event.deltaY < 0) {
+    zoomIn();
+  } else {
+    zoomOut();
+  }
+};
+
+// Начало перетаскивания
+const startDrag = (event) => {
+  if (imageZoom.value <= 1) return;
+  isDragging.value = true;
+  dragStart.value = { x: event.clientX, y: event.clientY };
+};
+
+// Перетаскивание
+const onDrag = (event) => {
+  if (!isDragging.value) return;
+  event.preventDefault();
+  const dx = event.clientX - dragStart.value.x;
+  const dy = event.clientY - dragStart.value.y;
+  dragOffset.value = { x: dragOffset.value.x + dx, y: dragOffset.value.y + dy };
+  dragStart.value = { x: event.clientX, y: event.clientY };
+};
+
+// Окончание перетаскивания
+const stopDrag = () => {
+  isDragging.value = false;
+};
+
+// Обновление позиции изображения при изменении зума или смещения
+watch([imageZoom, dragOffset], () => {
+  const img = document.querySelector('.lightbox-image');
+  if (img) {
+    img.style.transform = `scale(${imageZoom.value}) translate(${dragOffset.value.x}px, ${dragOffset.value.y}px)`;
+  }
+});
+
+// Initialize game item tooltips
+const initGameItemTooltips = () => {
+  if (!contentRef.value) return;
+
+  // Create tooltip container if it doesn't exist
+  let tooltipContainer = document.getElementById('game-item-tooltip');
+  if (!tooltipContainer) {
+    tooltipContainer = document.createElement('div');
+    tooltipContainer.id = 'game-item-tooltip';
+    tooltipContainer.className = 'game-item-tooltip-container';
+    tooltipContainer.style.position = 'fixed';
+    tooltipContainer.style.pointerEvents = 'none';
+    tooltipContainer.style.zIndex = '10000';
+    tooltipContainer.style.opacity = '0';
+    tooltipContainer.style.transition = 'opacity 0.3s ease';
+    document.body.appendChild(tooltipContainer);
+  }
+
+  // Find all game item links in content (они могут быть добавлены через v-html)
+  const gameItemLinks = contentRef.value.querySelectorAll('.game-item-link, [data-item-name]');
+
+  gameItemLinks.forEach((link) => {
+    // Удаляем старые обработчики, если они есть
+    link.removeEventListener('mouseenter', handleGameItemMouseEnter);
+    link.removeEventListener('mouseleave', handleGameItemMouseLeave);
+    link.removeEventListener('mousemove', handleGameItemMouseMove);
+
+    // Добавляем новые обработчики
+    link.addEventListener('mouseenter', handleGameItemMouseEnter);
+    link.addEventListener('mouseleave', handleGameItemMouseLeave);
+    link.addEventListener('mousemove', handleGameItemMouseMove);
+  });
+};
+
+// Обработчик наведения на игровой предмет
+const handleGameItemMouseEnter = (event) => {
+  const element = event.currentTarget;
+  const tooltipContainer = document.getElementById('game-item-tooltip');
+  if (!tooltipContainer) return;
+
+  showGameItemTooltip(element, tooltipContainer);
+};
+
+// Обработчик ухода курсора с игрового предмета
+const handleGameItemMouseLeave = () => {
+  const tooltipContainer = document.getElementById('game-item-tooltip');
+  if (!tooltipContainer) return;
+
+  hideGameItemTooltip(tooltipContainer);
+};
+
+// Обработчик движения мыши для позиционирования tooltip
+const handleGameItemMouseMove = (event) => {
+  const tooltipContainer = document.getElementById('game-item-tooltip');
+  if (!tooltipContainer || !tooltipContainer.classList.contains('active')) return;
+
+  positionTooltip(event, tooltipContainer);
+};
+
+// Позиционирование tooltip
+const positionTooltip = (event, container) => {
+  const tooltipBox = container.querySelector('.game-item-tooltip-box');
+  if (!tooltipBox) return;
+
+  const rect = event.currentTarget.getBoundingClientRect();
+  const tooltipRect = tooltipBox.getBoundingClientRect();
+
+  // Position above the element, centered
+  let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+  let top = rect.top - tooltipRect.height - 10;
+
+  // Adjust if tooltip goes off screen
+  if (left < 10) left = 10;
+  if (left + tooltipRect.width > window.innerWidth - 10) {
+    left = window.innerWidth - tooltipRect.width - 10;
+  }
+
+  // If tooltip goes above viewport, show below element
+  if (top < 10) {
+    top = rect.bottom + 10;
+  }
+
+  container.style.left = left + 'px';
+  container.style.top = top + 'px';
+};
+
+// Show game item tooltip
+const showGameItemTooltip = (element, container) => {
+  const name = element.getAttribute('data-item-name');
+  const image = element.getAttribute('data-item-image');
+  const description = element.getAttribute('data-item-description');
+  const rarity = element.getAttribute('data-item-rarity');
+  const rarityColor = element.getAttribute('data-item-rarity-color');
+
+  if (!name) return;
+
+  // Create tooltip HTML
+  let tooltipHTML = '<div class="game-item-tooltip-box">';
+
+  if (image && image !== '' && image !== '/storage/' && image !== 'null') {
+    tooltipHTML += `<img src="${image}" alt="${name}" class="game-item-tooltip-image" onerror="this.style.display='none'">`;
+  }
+
+  tooltipHTML += '<div class="game-item-tooltip-content">';
+  tooltipHTML += `<span class="game-item-tooltip-name">${name}</span>`;
+
+  if (description && description !== 'Нет описания' && description !== 'null') {
+    tooltipHTML += `<span class="game-item-tooltip-description">${description}</span>`;
+  }
+
+  if (rarity && rarity !== 'null') {
+    const style = rarityColor ? `background-color: ${rarityColor}` : '';
+    tooltipHTML += `<span class="game-item-tooltip-rarity" style="${style}">${rarity}</span>`;
+  }
+
+  tooltipHTML += '</div></div>';
+
+  container.innerHTML = tooltipHTML;
+
+  // Wait for next frame to get correct dimensions
+  requestAnimationFrame(() => {
+    container.style.opacity = '1';
+    container.classList.add('active');
+  });
+};
+
+// Hide game item tooltip
+const hideGameItemTooltip = (container) => {
+  container.style.opacity = '0';
+  container.classList.remove('active');
+  setTimeout(() => {
+    container.innerHTML = '';
+  }, 300);
 };
 </script>
 
@@ -914,6 +1337,13 @@ const getTalismanRarityClasses = (rarity) => {
   height: auto;
   border: 2px solid rgba(249, 115, 22, 0.3);
   margin: 1.5rem 0;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+:deep(.guide-content img:hover) {
+  border-color: rgba(249, 115, 22, 0.6);
+  transform: scale(1.02);
 }
 
 :deep(.guide-content blockquote) {
@@ -925,6 +1355,107 @@ const getTalismanRarityClasses = (rarity) => {
   font-style: italic;
   background-color: rgba(249, 115, 22, 0.05);
   padding: 1rem;
+}
+
+/* Стили для встроенных предметов в гайде */
+:deep(.guide-content .guide-item),
+:deep(.guide-content .item-link),
+:deep(.guide-content [data-item-name]),
+:deep(.guide-content .game-item-link) {
+  display: inline;
+  color: #f97316;
+  text-decoration: underline dotted;
+  text-underline-offset: 3px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: color 0.12s ease, transform 0.12s ease;
+}
+
+:deep(.guide-content .guide-item:hover),
+:deep(.guide-content .item-link:hover),
+:deep(.guide-content [data-item-name]:hover),
+:deep(.guide-content .game-item-link:hover) {
+  color: #fb923c;
+  transform: translateY(-1px);
+}
+
+:deep(.guide-content .guide-item-icon) {
+  display: none;
+}
+
+:deep(.guide-content .guide-item-name) {
+  color: inherit;
+}
+
+/* Tooltip для встроенных предметов */
+:deep(.guide-content .guide-item-tooltip) {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #1a1a1a 0%, #0a0a0a 100%);
+  border: 2px solid #f97316;
+  padding: 12px;
+  min-width: 250px;
+  max-width: 350px;
+  z-index: 1000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+  box-shadow: 0 8px 32px rgba(249, 115, 22, 0.4);
+  font-family: monospace;
+}
+
+:deep(.guide-content .guide-item:hover .guide-item-tooltip) {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-5px);
+}
+
+/* Стрелочка tooltip */
+:deep(.guide-content .guide-item-tooltip::after) {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-top-color: #f97316;
+}
+
+:deep(.guide-content .guide-item-tooltip-image) {
+  width: 64px;
+  height: 64px;
+  object-fit: contain;
+  border: 2px solid #f97316;
+  background: rgba(0, 0, 0, 0.5);
+  margin-bottom: 8px;
+  display: block;
+}
+
+:deep(.guide-content .guide-item-tooltip-name) {
+  color: #f97316;
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 6px;
+  display: block;
+  text-transform: uppercase;
+}
+
+:deep(.guide-content .guide-item-tooltip-description) {
+  color: #d1d5db;
+  font-size: 12px;
+  line-height: 1.4;
+  display: block;
+}
+
+:deep(.guide-content .guide-item-tooltip-rarity) {
+  display: inline-block;
+  padding: 2px 6px;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 2px;
+  margin-top: 6px;
+  text-transform: uppercase;
 }
 
 @media (max-width: 1024px) {
@@ -939,5 +1470,85 @@ const getTalismanRarityClasses = (rarity) => {
   :deep(.guide-content h4) {
     font-size: 1.1rem;
   }
+}
+
+/* Lightbox Styles */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
+/* Image Dragging */
+.lightbox-image {
+  cursor: grab;
+}
+.lightbox-image:active {
+  cursor: grabbing;
+}
+
+/* Game Item Tooltip Styles */
+.game-item-tooltip-container {
+  position: fixed;
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.game-item-tooltip-box {
+  background: rgba(0, 0, 0, 0.8);
+  border: 2px solid #f97316;
+  border-radius: 0.375rem;
+  padding: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  max-width: 300px;
+  width: max-content;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.game-item-tooltip-image {
+  width: 48px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 0.375rem;
+  border: 2px solid #f97316;
+}
+
+.game-item-tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.game-item-tooltip-name {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #f97316;
+}
+
+.game-item-tooltip-description {
+  font-size: 0.75rem;
+  color: #d1d5db;
+  line-height: 1.25;
+}
+
+.game-item-tooltip-rarity {
+  display: inline-block;
+  padding: 0.125rem 0.5rem;
+  font-size: 0.625rem;
+  font-weight: 500;
+  border-radius: 0.375rem;
+  margin-top: 0.25rem;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+/* Active state for tooltips */
+.game-item-tooltip-container.active {
+  opacity: 1;
+  transform: translateY(0);
 }
 </style>

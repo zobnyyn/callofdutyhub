@@ -1,12 +1,18 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Http\Request;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ZombiesController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ZombieGuideController;
 use App\Http\Controllers\CommunityController;
+use App\Http\Controllers\Api\ItemController;
 use Inertia\Inertia;
+
+// API маршруты для получения предметов
+Route::get('/api/items/{category}', [ItemController::class, 'index']);
+Route::get('/api/game-items', [ItemController::class, 'getGameItems']);
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/about', function () {
@@ -199,8 +205,33 @@ Route::get('/profile/{user}', function ($userId) {
 Route::post('/register', [AuthController::class, 'register'])->name('register');
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth')->name('logout');
-Route::get('/user', [AuthController::class, 'user'])->middleware('auth')->name('user');
-Route::post('/profile', [AuthController::class, 'updateProfile'])->middleware('auth')->name('profile.update');
+
+// Email Verification Routes
+Route::get('/email/verify', function () {
+    return Inertia::render('Auth/VerifyEmail');
+})->middleware('auth')->name('verification.notice');
+
+Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) {
+    $user = \App\Models\User::findOrFail($id);
+
+    if (!hash_equals((string) $hash, sha1($user->getEmailForVerification()))) {
+        abort(403, 'Invalid verification link');
+    }
+
+    if ($user->hasVerifiedEmail()) {
+        return redirect('/')->with('message', 'Email уже подтвержден');
+    }
+
+    $user->markEmailAsVerified();
+
+    return redirect('/')->with('message', 'Email успешно подтвержден!');
+})->middleware(['auth', 'signed'])->name('verification.verify');
+
+Route::post('/email/verification-notification', function (Request $request) {
+    $request->user()->sendEmailVerificationNotification();
+
+    return back()->with('message', 'Письмо с подтверждением отправлено!');
+})->middleware(['auth', 'throttle:6,1'])->name('verification.send');
 
 // Admin Routes - Управление гайдами
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
@@ -241,8 +272,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 Route::get('/articles', [\AppHttp\Controllers\ArticleController::class, 'publicIndex'])->name('articles.public.index');
 Route::get('/articles/{article:slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('articles.show');
 
-// API для получения предметов (для использования в редакторах)
-Route::get('/api/game-items', [\App\Http\Controllers\GameItemController::class, 'apiList'])->name('api.items.list');
 
 // API для Wiki-контента
 Route::prefix('api/wiki')->name('api.wiki.')->group(function () {
@@ -256,24 +285,24 @@ Route::prefix('api/wiki')->name('api.wiki.')->group(function () {
 Route::middleware(['auth','admin'])->prefix('admin/warzone')->name('admin.warzone.')->group(function() {
     Route::get('weapons', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'index'])->name('weapons.index');
     Route::get('weapons/create', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'create'])->name('weapons.create');
-    Route::post('weapons', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'store'])->name('weapons.store');
-    Route::get('weapons/{weapon}/edit', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'edit'])->name('weapons.edit');
-    Route::put('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'update'])->name('weapons.update');
-    Route::post('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'update']); // Для загрузки файлов
-    Route::delete('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'destroy'])->name('weapons.destroy');
+    Route::post('weapons', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'store'])->name('weapons.store');
+    Route::get('weapons/{weapon}/edit', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'edit'])->name('weapons.edit');
+    Route::put('weapons/{weapon}', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'update'])->name('weapons.update');
+    Route::post('weapons/{weapon}', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'update']); // Для загрузки файлов
+    Route::delete('weapons/{weapon}', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'destroy'])->name('weapons.destroy');
 
     // Builds Management Page
-    Route::get('weapons/{weapon}/builds', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'manageBuilds'])->name('weapons.builds');
+    Route::get('weapons/{weapon}/builds', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'manageBuilds'])->name('weapons.builds');
 
     // Builds
-    Route::post('weapons/{weapon}/builds', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'store'])->name('builds.store');
-    Route::put('builds/{build}', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'update'])->name('builds.update');
-    Route::delete('builds/{build}', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'destroy'])->name('builds.destroy');
+    Route::post('weapons/{weapon}/builds', [\AppHttp\Controllers\Admin\WarzoneWeaponBuildController::class,'store'])->name('builds.store');
+    Route::put('builds/{build}', [\AppHttp\Controllers\Admin\WarzoneWeaponBuildController::class,'update'])->name('builds.update');
+    Route::delete('builds/{build}', [\AppHttp\Controllers\Admin\WarzoneWeaponBuildController::class,'destroy'])->name('builds.destroy');
 
     // Attachments
-    Route::post('builds/{build}/attachments', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'store'])->name('attachments.store');
-    Route::put('attachments/{attachment}', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'update'])->name('attachments.update');
-    Route::delete('attachments/{attachment}', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'destroy'])->name('attachments.destroy');
+    Route::post('builds/{build}/attachments', [\AppHttp\Controllers\Admin\WarzoneWeaponAttachmentController::class,'store'])->name('attachments.store');
+    Route::put('attachments/{attachment}', [\AppHttp\Controllers\Admin\WarzoneWeaponAttachmentController::class,'update'])->name('attachments.update');
+    Route::delete('attachments/{attachment}', [\AppHttp\Controllers\Admin\WarzoneWeaponAttachmentController::class,'destroy'])->name('attachments.destroy');
 });
 
 // Warzone Meta Hub - Public Routes

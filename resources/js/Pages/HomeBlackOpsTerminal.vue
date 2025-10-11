@@ -289,7 +289,7 @@
           <div class="h-px bg-gradient-to-r from-orange-500 via-red-500 to-transparent max-w-2xl"></div>
         </div>
 
-        <div class="grid md:grid-cols-4 gap-6 max-w-6xl mx-auto">
+        <div class="grid md:grid-cols-5 gap-6 max-w-7xl mx-auto">
           <!-- Discord -->
           <div class="group relative bg-gradient-to-br from-zinc-900 to-black border-2 border-[#5865F2]/30 hover:border-[#5865F2] p-8 transition-all overflow-hidden flex flex-col h-full">
             <div class="absolute inset-0 terminal-grid opacity-5"></div>
@@ -315,9 +315,9 @@
               </p>
 
               <div class="flex justify-end mt-auto">
-                <button class="w-full py-3 bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold font-mono transition-all border border-[#5865F2]/50">
+                <a href="https://discord.gg/dsdkKyKPUB" target="_blank" class="w-full py-3 bg-[#5865F2] hover:bg-[#4752C4] text-white font-bold font-mono transition-all border border-[#5865F2]/50 text-center">
                   <span class="text-white/60">&gt;</span> CONNECT_
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -379,9 +379,9 @@
               </p>
 
               <div class="flex justify-end mt-auto">
-                <button class="w-full py-3 bg-[#9146FF] hover:bg-[#7d3dd1] text-white font-bold font-mono transition-all border border-[#9146FF]/50">
+                <a href="https://www.twitch.tv/zobnyyn" target="_blank" class="w-full py-3 bg-[#9146FF] hover:bg-[#7d3dd1] text-white font-bold font-mono transition-all border border-[#9146FF]/50 text-center">
                   <span class="text-white/60">&gt;</span> STREAM_
-                </button>
+                </a>
               </div>
             </div>
           </div>
@@ -411,9 +411,41 @@
               </p>
 
               <div class="flex justify-end mt-auto">
-                <button class="w-full py-3 bg-[#0088cc] hover:bg-[#006699] text-white font-bold font-mono transition-all border border-[#0088cc]/50">
+                <a href="https://t.me/teoryaigr" target="_blank" class="w-full py-3 bg-[#0088cc] hover:bg-[#006699] text-white font-bold font-mono transition-all border border-[#0088cc]/50 text-center">
                   <span class="text-white/60">&gt;</span> JOIN_
-                </button>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Donation Alerts -->
+          <div class="group relative bg-gradient-to-br from-zinc-900 to-black border-2 border-[#F7931E]/30 hover:border-[#F7931E] p-8 transition-all overflow-hidden flex flex-col h-full">
+            <div class="absolute inset-0 terminal-grid opacity-5"></div>
+            <div class="absolute top-3 right-3 font-mono text-[10px] text-[#F7931E] flex items-center space-x-1">
+              <div class="w-2 h-2 bg-[#F7931E]"></div>
+              <span>ONLINE</span>
+            </div>
+
+            <div class="relative z-10 flex flex-col h-full">
+              <div class="font-mono text-xs text-orange-600 mb-4">
+                <span class="text-orange-600">&gt;</span> CHANNEL_05
+              </div>
+
+              <svg class="w-16 h-16 text-[#F7931E] mb-6" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm.31-8.86c-1.77-.45-2.34-.94-2.34-1.67 0-.84.79-1.43 2.1-1.43 1.38 0 1.9.66 1.94 1.64h1.71c-.05-1.34-.87-2.57-2.49-2.97V5H10.9v1.69c-1.51.32-2.72 1.3-2.72 2.81 0 1.79 1.49 2.69 3.66 3.21 1.95.46 2.34 1.15 2.34 1.87 0 .53-.39 1.39-2.1 1.39-1.6 0-2.23-.72-2.32-1.64H8.04c.1 1.7 1.36 2.66 2.86 2.97V19h2.34v-1.67c1.52-.29 2.72-1.16 2.73-2.77-.01-2.2-1.9-2.96-3.66-3.42z"/>
+              </svg>
+
+              <h3 class="text-2xl font-black text-white mb-3 uppercase font-mono">
+                <span class="text-[#F7931E]">&gt;</span> ДОНАТ
+              </h3>
+              <p class="text-gray-400 text-sm mb-6 leading-relaxed">
+                Поддержите проект и помогите в развитии комьюнити и улучшении контента
+              </p>
+
+              <div class="flex justify-end mt-auto">
+                <a href="https://www.donationalerts.com/r/zobnyyn" target="_blank" class="w-full py-3 bg-[#F7931E] hover:bg-[#e08519] text-white font-bold font-mono transition-all border border-[#F7931E]/50 text-center">
+                  <span class="text-white/60">&gt;</span> DONATE_
+                </a>
               </div>
             </div>
           </div>

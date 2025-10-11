@@ -94,6 +94,16 @@
           ▶️
         </button>
 
+        <!-- NEW: Insert Game Item Button -->
+        <button
+          type="button"
+          @click="openItemPicker"
+          class="p-2 border border-orange-500/30 hover:bg-orange-500/30 text-white font-mono text-sm transition-all rounded bg-orange-600/20"
+          title="Вставить предмет из игры"
+        >
+          🎮
+        </button>
+
         <!-- Link -->
         <button
           type="button"
@@ -399,6 +409,14 @@
         </div>
       </div>
     </div>
+
+    <!-- Item Picker Modal -->
+    <ItemPickerModal
+      :isOpen="showItemPicker"
+      :game="currentGame"
+      @close="showItemPicker = false"
+      @select="insertGameItem"
+    />
   </div>
 </template>
 
@@ -413,9 +431,68 @@ import TextAlign from '@tiptap/extension-text-align';
 import Placeholder from '@tiptap/extension-placeholder';
 import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
+import ItemPickerModal from './ItemPickerModal.vue';
+import { Mark } from '@tiptap/core';
+
+// Custom Game Item Mark Extension
+const GameItemMark = Mark.create({
+  name: 'gameItem',
+
+  addOptions() {
+    return {
+      HTMLAttributes: {},
+    };
+  },
+
+  addAttributes() {
+    return {
+      'data-item-name': {
+        default: null,
+      },
+      'data-item-image': {
+        default: null,
+      },
+      'data-item-description': {
+        default: null,
+      },
+      'data-item-rarity': {
+        default: null,
+      },
+      'data-item-rarity-color': {
+        default: null,
+      },
+    };
+  },
+
+  parseHTML() {
+    return [
+      {
+        tag: 'span.game-item-link',
+        getAttrs: (dom) => {
+          if (typeof dom === 'string') return false;
+          return {
+            'data-item-name': dom.getAttribute('data-item-name'),
+            'data-item-image': dom.getAttribute('data-item-image'),
+            'data-item-description': dom.getAttribute('data-item-description'),
+            'data-item-rarity': dom.getAttribute('data-item-rarity'),
+            'data-item-rarity-color': dom.getAttribute('data-item-rarity-color'),
+          };
+        },
+      },
+    ];
+  },
+
+  renderHTML({ HTMLAttributes }) {
+    return ['span', { class: 'game-item-link', ...HTMLAttributes }, 0];
+  },
+});
 
 const props = defineProps({
   modelValue: {
+    type: String,
+    default: ''
+  },
+  game: {
     type: String,
     default: ''
   }
@@ -434,6 +511,65 @@ const toolbarTop = ref(0);
 const editorTop = ref(0);
 const showChapterMenu = ref(false);
 const chapters = ref([]);
+const showItemPicker = ref(false);
+const currentGame = ref(props.game);
+
+// Watch for game prop changes
+watch(() => props.game, (newGame) => {
+  currentGame.value = newGame;
+});
+
+// Open item picker modal
+const openItemPicker = () => {
+  if (!currentGame.value) {
+    alert('Пожалуйста, сначала выберите игру');
+    return;
+  }
+  showItemPicker.value = true;
+};
+
+// Insert game item into editor
+const insertGameItem = (item) => {
+  if (!editor.value) return;
+
+  const imageSrc = item.image ? `/storage/${item.image}` : '';
+  const description = (item.description || 'Нет описания').replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+  const rarityColor = item.rarity ? getRarityColor(item.rarity) : '#6b7280';
+  const rarityLabel = item.rarity ? getRarityLabel(item.rarity) : '';
+  const itemName = item.name.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
+  // Create HTML for the item link
+  const itemHtml = `<span class="game-item-link" data-item-name="${itemName}" data-item-image="${imageSrc}" data-item-description="${description}" data-item-rarity="${rarityLabel}" data-item-rarity-color="${rarityColor}">${item.name}</span>&nbsp;`;
+
+  // Insert as HTML content
+  editor.value.chain().focus().insertContent(itemHtml).run();
+};
+
+// Get rarity color for tooltip
+const getRarityColor = (rarity) => {
+  const colors = {
+    common: '#9ca3af',
+    rare: '#3b82f6',
+    epic: '#a855f7',
+    legendary: '#f59e0b',
+    ultra: '#dc2626',
+    whimsical: '#10b981'
+  };
+  return colors[rarity] || '#6b7280';
+};
+
+// Get rarity label
+const getRarityLabel = (rarity) => {
+  const labels = {
+    common: 'Обычная',
+    rare: 'Редкая',
+    epic: 'Эпическая',
+    legendary: 'Легендарная',
+    ultra: 'Ультра',
+    whimsical: 'Причудливая'
+  };
+  return labels[rarity] || rarity;
+};
 
 // Вычисляем стиль для панели инструментов
 const toolbarStyle = computed(() => {
@@ -606,6 +742,7 @@ const editor = useEditor({
       placeholder: 'Начните писать свой гайд здесь...\n\nВы можете вставлять изображения, видео, форматировать текст и многое другое!'
     }),
     HeadingWithId, // Добавляем расширение для заголовков с ID
+    GameItemMark, // Добавляем расширение для игровых предметов
   ],
   editorProps: {
     attributes: {
@@ -674,6 +811,7 @@ onMounted(() => {
   // Инициализируем позиции
   setTimeout(() => {
     handleScroll();
+    initGameItemTooltips();
   }, 100);
 });
 
@@ -682,26 +820,120 @@ onBeforeUnmount(() => {
   document.removeEventListener('keyup', handleMouseUp);
   window.removeEventListener('scroll', handleScroll);
   window.removeEventListener('resize', handleScroll);
+
+  // Clean up tooltip container
+  const tooltipContainer = document.getElementById('game-item-tooltip');
+  if (tooltipContainer) {
+    tooltipContainer.remove();
+  }
+
   if (editor.value) {
     editor.value.destroy();
   }
 });
+
+// Initialize game item tooltips
+const initGameItemTooltips = () => {
+  // Create tooltip container if it doesn't exist
+  let tooltipContainer = document.getElementById('game-item-tooltip');
+  if (!tooltipContainer) {
+    tooltipContainer = document.createElement('div');
+    tooltipContainer.id = 'game-item-tooltip';
+    tooltipContainer.className = 'game-item-tooltip-container';
+    document.body.appendChild(tooltipContainer);
+  }
+
+  // Add event listeners to game item links using event delegation
+  const editorElement = editorContainer.value;
+  if (!editorElement) return;
+
+  editorElement.addEventListener('mouseover', (e) => {
+    const target = e.target;
+    if (target.classList.contains('game-item-link')) {
+      showGameItemTooltip(target, tooltipContainer);
+    }
+  });
+
+  editorElement.addEventListener('mouseout', (e) => {
+    const target = e.target;
+    if (target.classList.contains('game-item-link')) {
+      hideGameItemTooltip(tooltipContainer);
+    }
+  });
+};
+
+// Show game item tooltip
+const showGameItemTooltip = (element, container) => {
+  const name = element.getAttribute('data-item-name');
+  const image = element.getAttribute('data-item-image');
+  const description = element.getAttribute('data-item-description');
+  const rarity = element.getAttribute('data-item-rarity');
+  const rarityColor = element.getAttribute('data-item-rarity-color');
+
+  // Create tooltip HTML
+  let tooltipHTML = '<div class="game-item-tooltip-box">';
+
+  if (image && image !== '' && image !== '/storage/') {
+    tooltipHTML += `<img src="${image}" alt="${name}" class="game-item-tooltip-image" onerror="this.style.display='none'">`;
+  }
+
+  tooltipHTML += '<div class="game-item-tooltip-content">';
+  tooltipHTML += `<span class="game-item-tooltip-name">${name}</span>`;
+
+  if (description && description !== 'Нет описания') {
+    tooltipHTML += `<span class="game-item-tooltip-description">${description}</span>`;
+  }
+
+  if (rarity) {
+    tooltipHTML += `<span class="game-item-tooltip-rarity" style="background-color: ${rarityColor}">${rarity}</span>`;
+  }
+
+  tooltipHTML += '</div></div>';
+
+  container.innerHTML = tooltipHTML;
+  container.classList.add('active');
+
+  // Position tooltip
+  const rect = element.getBoundingClientRect();
+  const tooltipBox = container.querySelector('.game-item-tooltip-box');
+
+  // Wait for next frame to get correct dimensions
+  requestAnimationFrame(() => {
+    const tooltipRect = tooltipBox.getBoundingClientRect();
+
+    // Position above the element, centered
+    let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+    let top = rect.top - tooltipRect.height - 10;
+
+    // Adjust if tooltip goes off screen
+    if (left < 10) left = 10;
+    if (left + tooltipRect.width > window.innerWidth - 10) {
+      left = window.innerWidth - tooltipRect.width - 10;
+    }
+
+    // If tooltip goes above viewport, show below element
+    if (top < 10) {
+      top = rect.bottom + 10;
+    }
+
+    container.style.left = left + 'px';
+    container.style.top = top + 'px';
+  });
+};
+
+// Hide game item tooltip
+const hideGameItemTooltip = (container) => {
+  container.classList.remove('active');
+  setTimeout(() => {
+    container.innerHTML = '';
+  }, 300);
+};
 
 // Add image by URL
 function addImage() {
   if (!editor.value) return;
 
   const url = window.prompt('Введите URL изображения (или загрузите файл через кнопку Upload):');
-  if (url) {
-    editor.value.chain().focus().setImage({ src: url }).run();
-  }
-}
-
-// Add GIF by URL
-function addGif() {
-  if (!editor.value) return;
-
-  const url = window.prompt('Введите URL GIF изображения:');
   if (url) {
     editor.value.chain().focus().setImage({ src: url }).run();
   }
@@ -996,5 +1228,104 @@ watch(() => props.modelValue, (value) => {
 .fixed {
   position: fixed;
   transition: transform 0.2s ease;
+}
+
+/* Game Item Link Styles */
+.tiptap .game-item-link {
+  position: relative;
+  color: #f59e0b;
+  font-weight: 600;
+  cursor: help;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: #f59e0b;
+  text-underline-offset: 3px;
+  transition: all 0.2s ease;
+  display: inline-block;
+  padding: 0 2px;
+}
+
+.tiptap .game-item-link:hover {
+  color: #fbbf24;
+  text-decoration-color: #fbbf24;
+  background-color: rgba(245, 158, 11, 0.1);
+}
+
+/* Custom Tooltip using JavaScript */
+.game-item-tooltip-container {
+  position: fixed;
+  z-index: 10000;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-item-tooltip-container.active {
+  opacity: 1;
+}
+
+.game-item-tooltip-box {
+  background: linear-gradient(135deg, rgba(17, 24, 39, 0.98) 0%, rgba(31, 41, 55, 0.98) 100%);
+  border: 2px solid rgba(249, 115, 22, 0.6);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(249, 115, 22, 0.3);
+  backdrop-filter: blur(10px);
+  min-width: 300px;
+  max-width: 360px;
+  animation: tooltipSlideIn 0.3s ease;
+}
+
+@keyframes tooltipSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.game-item-tooltip-image {
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border-bottom: 2px solid rgba(249, 115, 22, 0.3);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.1) 0%, rgba(220, 38, 38, 0.1) 100%);
+}
+
+.game-item-tooltip-content {
+  padding: 16px;
+}
+
+.game-item-tooltip-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fbbf24;
+  margin-bottom: 8px;
+  display: block;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.game-item-tooltip-description {
+  font-size: 14px;
+  color: #d1d5db;
+  line-height: 1.6;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.game-item-tooltip-rarity {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-top: 8px;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
 }
 </style>

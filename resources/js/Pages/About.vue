@@ -105,22 +105,22 @@
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="text-xs text-orange-600 mb-2">ИГРОКОВ:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">1K+</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">100+</div>
               </div>
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="text-xs text-orange-600 mb-2">ГАЙДОВ:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">200+</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">20+</div>
               </div>
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="text-xs text-orange-600 mb-2">WIKI СТАТЕЙ:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">500+</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">10+</div>
               </div>
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="text-xs text-orange-600 mb-2">META СБОРОК:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">100+</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">50+</div>
               </div>
             </div>
           </div>

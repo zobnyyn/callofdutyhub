@@ -557,15 +557,9 @@ import Footer from '@/Components/Footer.vue';
 
 // Список всех доступных видео
 const backgroundVideos = [
-  '/backgroundvideo/3.mp4',
-  '/backgroundvideo/4.mp4',
-  '/backgroundvideo/5.mp4',
-  '/backgroundvideo/6.mp4',
-  '/backgroundvideo/7.mp4',
-  '/backgroundvideo/8.mp4',
-  '/backgroundvideo/9.mp4',
-  '/backgroundvideo/10.mp4',
-  '/backgroundvideo/test2.mp4'
+  '/backgroundvideo/homepage/cod_main_page_1.mp4',
+  '/backgroundvideo/homepage/cod_main_page_2.mp4',
+  '/backgroundvideo/homepage/cod_main_page_3.mp4',
 ];
 
 // Выбираем случайное видео

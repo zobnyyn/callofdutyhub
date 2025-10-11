@@ -211,11 +211,11 @@
             <h3 class="text-2xl font-black text-orange-500 mb-6 font-mono uppercase">НАША АУДИТОРИЯ</h3>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
               <div class="text-center">
-                <div class="text-4xl font-black text-orange-500 mb-2 font-mono">1000+</div>
+                <div class="text-4xl font-black text-orange-500 mb-2 font-mono">100+</div>
                 <div class="text-sm text-gray-400 font-mono">Пользователей</div>
               </div>
               <div class="text-center">
-                <div class="text-4xl font-black text-orange-500 mb-2 font-mono">500+</div>
+                <div class="text-4xl font-black text-orange-500 mb-2 font-mono">20+</div>
                 <div class="text-sm text-gray-400 font-mono">Гайдов</div>
               </div>
               <div class="text-center">

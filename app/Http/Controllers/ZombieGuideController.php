@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ZombieGuide;
 use App\Models\GuideAchievement;
+use App\Services\GuideContentProcessor;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
@@ -46,6 +47,9 @@ class ZombieGuideController extends Controller
 
         // Увеличиваем счетчик просмотров
         $guide->increment('views');
+
+        // Обрабатываем контент гайда, добавляя data-атрибуты к игровым предметам
+        $guide->content = GuideContentProcessor::processContent($guide->content);
 
         // Проверяем, есть ли у пользователя уже это достижение
         $hasAchievement = false;

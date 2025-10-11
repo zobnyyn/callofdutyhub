@@ -273,7 +273,7 @@ import { ref, onMounted, onUnmounted } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import Header from '@/Components/Header.vue';
 
-defineProps({
+const props = defineProps({
   zombieMap: {
     type: Object,
     required: true
@@ -296,7 +296,7 @@ const closeLightbox = () => {
 };
 
 const nextImage = () => {
-  if (currentImageIndex.value < zombieMap.images.length - 1) {
+  if (currentImageIndex.value < props.zombieMap.images.length - 1) {
     currentImageIndex.value++;
   }
 };

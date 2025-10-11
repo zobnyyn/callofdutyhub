@@ -123,9 +123,10 @@
               <label class="text-orange-600 font-mono text-sm mb-3 block">
                 <span class="text-orange-600">&gt;</span> CONTENT:
               </label>
-              <TiptapEditor v-model="form.content" />
+              <TiptapEditor v-model="form.content" :game="form.game" />
               <div class="mt-2 text-xs text-gray-500 font-mono">
-                <span class="text-orange-600">&gt;</span> Используйте панель инструментов для форматирования текста, вставки изображений и видео
+                <span class="text-orange-600">&gt;</span> Используйте панель инструментов для форматирования текста, вставки изображений и видео.
+                <span class="text-orange-400">Кнопка 🎮 позволяет вставлять предметы из игры прямо в текст!</span>
               </div>
             </div>
 
