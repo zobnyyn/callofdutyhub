@@ -79,8 +79,13 @@
                 >
                   <option value="all">Все типы</option>
                   <option value="weapon">Оружие</option>
+                  <option value="wonder_weapon">Чудо-оружие</option>
+                  <option value="special_weapon">Спец. оружие</option>
                   <option value="perk">Перки</option>
                   <option value="gum">Жвачки</option>
+                  <option value="elixir">Элексиры</option>
+                  <option value="field_upgrade">Полевые модификации</option>
+                  <option value="talisman">Талисманы</option>
                 </select>
               </div>
 
@@ -289,10 +294,15 @@ const itemToDelete = ref(null);
 function getTypeName(type) {
   const types = {
     weapon: 'ОРУЖИЕ',
+    wonder_weapon: 'ЧУДО-ОРУЖИЕ',
+    special_weapon: 'СПЕЦ. ОРУЖИЕ',
     perk: 'ПЕРК',
     gum: 'ЖВАЧКА',
+    elixir: 'ЭЛЕКСИР',
+    field_upgrade: 'ПОЛ. МОД.',
+    talisman: 'ТАЛИСМАН',
   };
-  return types[type] || type;
+  return types[type] || type.toUpperCase();
 }
 
 function applyFilters() {

@@ -59,6 +59,11 @@
             <span class="group-hover:text-orange-400">ZOMBIES</span>
           </a>
           <span class="text-orange-900">|</span>
+          <a href="/warzone/meta" class="terminal-nav-item group">
+            <span class="text-orange-600 font-mono mr-1">&gt;</span>
+            <span class="group-hover:text-orange-400">WARZONE META</span>
+          </a>
+          <span class="text-orange-900">|</span>
           <div class="relative"
              @mouseenter="openCodWikiDropdown"
              @mouseleave="closeCodWikiDropdown"
@@ -66,7 +71,7 @@
              @focusout="closeCodWikiDropdown">
             <a href="/cod-wiki" class="terminal-nav-item flex items-center group">
               <span class="text-orange-600 font-mono mr-1">&gt;</span>
-              <span class="group-hover:text-orange-400">COD WIKI</span>
+              <span class="group-hover:text-orange-400">COD INFO</span>
             </a>
             <!-- Combined Dropdown -->
             <div v-show="showCodWikiDropdown" class="absolute left-0 mt-2 w-72 bg-black border border-orange-600/30 rounded-md shadow-lg opacity-100 pointer-events-auto transform translate-y-0 transition-all duration-150 z-50"
@@ -77,43 +82,43 @@
                   Black Ops Series
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/world-at-war" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="worldatwar" alt="World at War" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>World at War (2008)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/black-ops" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="blackops1" alt="Black Ops" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>Black Ops (2010)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/black-ops-2" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="blackops2" alt="Black Ops II" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>Black Ops II (2012)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/black-ops-3" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="blackops3" alt="Black Ops III" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>Black Ops III (2015)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/black-ops-4" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="blackops4" alt="Black Ops 4" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>Black Ops 4 (2018)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/black-ops-cold-war" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="coldwar" alt="Cold War" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>Cold War (2020)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/black-ops-6" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="blackops6" alt="Black Ops 6" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>Black Ops 6 (2024)</span>
                   </a>
@@ -130,37 +135,37 @@
                   Modern Warfare Series
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/cod4-modern-warfare" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="mw2007" alt="COD 4: MW" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>COD 4: MW (2007)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/modern-warfare-2" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="mw2009" alt="MW 2" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>MW 2 (2009)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/modern-warfare-3" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="mw2011" alt="MW 3" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>MW 3 (2011)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/modern-warfare-2019" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="mw2019" alt="MW" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>MW (2019)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/modern-warfare-2022" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="mw2022" alt="MW II" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>MW II (2022)</span>
                   </a>
                 </li>
                 <li>
-                  <a href="/cod-wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                  <a href="/wiki/modern-warfare-2023" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                     <img :src="mw2023" alt="MW III" class="w-8 h-8 rounded object-cover border border-orange-500/30" />
                     <span>MW III (2023)</span>
                   </a>
@@ -210,6 +215,22 @@
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                       </svg>
                       <span>Управление статьями</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/admin/wiki" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                      </svg>
+                      <span>Управление Wiki</span>
+                    </a>
+                  </li>
+                  <li>
+                    <a href="/admin/warzone/weapons" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                      </svg>
+                      <span>Warzone Meta Hub</span>
                     </a>
                   </li>
                 </ul>
@@ -275,7 +296,7 @@
               @click="toggleCodWikiMenu"
               class="w-full px-4 py-3 text-sm font-mono text-orange-500 hover:bg-orange-500/20 transition-all flex items-center justify-between"
             >
-              <span><span class="text-orange-600 mr-2">&gt;</span>COD WIKI</span>
+              <span><span class="text-orange-600 mr-2">&gt;</span>COD INFO</span>
               <svg
                 class="w-4 h-4 transition-transform"
                 :class="{ 'rotate-180': showCodWikiMobile }"
@@ -291,31 +312,31 @@
               <div class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20">
                 Black Ops Series
               </div>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/world-at-war" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="worldatwar" alt="World at War" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>World at War (2008)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/black-ops" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="blackops1" alt="Black Ops" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>Black Ops (2010)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/black-ops-2" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="blackops2" alt="Black Ops II" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>Black Ops II (2012)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/black-ops-3" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="blackops3" alt="Black Ops III" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>Black Ops III (2015)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/black-ops-4" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="blackops4" alt="Black Ops 4" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>Black Ops 4 (2018)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/black-ops-cold-war" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="coldwar" alt="Cold War" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>Cold War (2020)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/black-ops-6" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="blackops6" alt="Black Ops 6" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>Black Ops 6 (2024)</span>
               </a>
@@ -328,27 +349,27 @@
               <div class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20 mt-2">
                 Modern Warfare Series
               </div>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/cod4-modern-warfare" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="mw2007" alt="COD 4: MW" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>COD 4: MW (2007)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/modern-warfare-2" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="mw2009" alt="MW 2" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>MW 2 (2009)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/modern-warfare-3" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="mw2011" alt="MW 3" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>MW 3 (2011)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/modern-warfare-2019" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="mw2019" alt="MW" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>MW (2019)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/modern-warfare-2022" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="mw2022" alt="MW II" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>MW II (2022)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+              <a href="/wiki/modern-warfare-2023" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                 <img :src="mw2023" alt="MW III" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
                 <span>MW III (2023)</span>
               </a>
@@ -394,6 +415,18 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path>
                   </svg>
                   <span>Управление статьями</span>
+                </a>
+                <a href="/admin/wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                  </svg>
+                  <span>Управление Wiki</span>
+                </a>
+                <a href="/admin/warzone/weapons" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9V9z"></path>
+                  </svg>
+                  <span>Warzone Meta Hub</span>
                 </a>
               </div>
             </div>

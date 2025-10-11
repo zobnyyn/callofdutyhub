@@ -229,7 +229,7 @@
 
 <script setup>
 import Header from '../Components/Header.vue';
-import backgroundImage from '../../images/blackopscoldwarbackground.jpg';
+import backgroundImage from '../../../public/images/blackopscoldwarbackground.jpg';
 import diemaschine from '../../images/blackopscoldwarzombies/diemashin.jpg';
 import firebasez from '../../images/blackopscoldwarzombies/firebazez.jpg';
 import outbreak from '../../images/blackopscoldwarzombies/outbreak.jpg';

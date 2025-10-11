@@ -257,7 +257,7 @@
 
 <script setup>
 import Header from '../Components/Header.vue';
-import backgroundImage from '../../images/blackops6background.jpg';
+import backgroundImage from '../../../public/images/blackops6background.jpg';
 import libertyfalls from '../../images/blackops6zombies/libertyfalls.jpg';
 import terminus from '../../images/blackops6zombies/terminus.jpg';
 import citadelledesmorts from '../../images/blackops6zombies/citadelledesmorts.jpg';

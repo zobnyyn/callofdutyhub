@@ -72,7 +72,7 @@
               <label class="block font-mono text-xs text-orange-600 mb-2">
                 <span class="text-orange-600">&gt;</span> TYPE*:
               </label>
-              <div class="grid grid-cols-3 gap-4">
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <label class="cursor-pointer">
                   <input
                     v-model="form.type"
@@ -89,11 +89,35 @@
                   <input
                     v-model="form.type"
                     type="radio"
-                    value="perk"
+                    value="wonder_weapon"
                     class="hidden peer"
                   />
                   <div class="border-2 border-orange-500/30 bg-black p-4 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
                     <div class="text-2xl mb-2">⚡</div>
+                    <div class="font-mono text-sm">ЧУДО-ОРУЖИЕ</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="special_weapon"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-orange-500/30 bg-black p-4 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
+                    <div class="text-2xl mb-2">💥</div>
+                    <div class="font-mono text-sm">СПЕЦ. ОРУЖИЕ</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="perk"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-orange-500/30 bg-black p-4 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
+                    <div class="text-2xl mb-2">🥤</div>
                     <div class="font-mono text-sm">ПЕРК</div>
                   </div>
                 </label>
@@ -109,17 +133,54 @@
                     <div class="font-mono text-sm">ЖВАЧКА</div>
                   </div>
                 </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="elixir"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-orange-500/30 bg-black p-4 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
+                    <div class="text-2xl mb-2">🧪</div>
+                    <div class="font-mono text-sm">ЭЛЕКСИР</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="field_upgrade"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-orange-500/30 bg-black p-4 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
+                    <div class="text-2xl mb-2">🛠️</div>
+                    <div class="font-mono text-sm">ПОЛ. МОД.</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.type"
+                    type="radio"
+                    value="talisman"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-orange-500/30 bg-black p-4 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
+                    <div class="text-2xl mb-2">🔮</div>
+                    <div class="font-mono text-sm">ТАЛИСМАН</div>
+                  </div>
+                </label>
               </div>
               <p v-if="errors.type" class="text-red-500 text-sm mt-2">{{ errors.type }}</p>
             </div>
 
-            <!-- Rarity (только для жвачек) -->
-            <div v-if="form.type === 'gum'" class="border border-orange-500/30 bg-black/50 p-6 relative">
+            <!-- Rarity (для жвачек, элексиров и талисманов) -->
+            <div v-if="form.type === 'gum' || form.type === 'elixir' || form.type === 'talisman'" class="border border-orange-500/30 bg-black/50 p-6 relative">
               <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
               <label class="block font-mono text-xs text-orange-600 mb-4">
                 <span class="text-orange-600">&gt;</span> RARITY:
               </label>
-              <div class="grid grid-cols-2 md:grid-cols-5 gap-3">
+              <!-- Для жвачек и элексиров (Black Ops 3, Black Ops 4) -->
+              <div v-if="form.type === 'gum' || form.type === 'elixir'" class="grid grid-cols-2 md:grid-cols-5 gap-3">
                 <label class="cursor-pointer">
                   <input
                     v-model="form.rarity"
@@ -178,6 +239,57 @@
                   <div class="border-2 border-orange-500/30 bg-black p-3 text-center peer-checked:border-orange-500 peer-checked:bg-orange-500/10 transition-all">
                     <div class="font-mono text-xs mb-1 bg-gradient-to-r from-green-500 via-purple-500 to-orange-500 bg-clip-text text-transparent">WHIMSICAL</div>
                     <div class="text-sm text-gray-400">Причудливая</div>
+                  </div>
+                </label>
+              </div>
+              <!-- Для талисманов (Black Ops 4) -->
+              <div v-if="form.type === 'talisman'" class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.rarity"
+                    type="radio"
+                    value="common"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-gray-400/30 bg-black p-3 text-center peer-checked:border-gray-400 peer-checked:bg-gray-400/10 transition-all">
+                    <div class="font-mono text-xs mb-1 text-gray-400">COMMON</div>
+                    <div class="text-sm text-gray-300">Обычный</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.rarity"
+                    type="radio"
+                    value="rare"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-blue-500/30 bg-black p-3 text-center peer-checked:border-blue-500 peer-checked:bg-blue-500/10 transition-all">
+                    <div class="font-mono text-xs mb-1 text-blue-500">RARE</div>
+                    <div class="text-sm text-blue-400">Редкий</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.rarity"
+                    type="radio"
+                    value="legendary"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-purple-500/30 bg-black p-3 text-center peer-checked:border-purple-500 peer-checked:bg-purple-500/10 transition-all">
+                    <div class="font-mono text-xs mb-1 text-purple-500">LEGENDARY</div>
+                    <div class="text-sm text-purple-400">Легендарный</div>
+                  </div>
+                </label>
+                <label class="cursor-pointer">
+                  <input
+                    v-model="form.rarity"
+                    type="radio"
+                    value="epic"
+                    class="hidden peer"
+                  />
+                  <div class="border-2 border-amber-500/30 bg-black p-3 text-center peer-checked:border-amber-500 peer-checked:bg-amber-500/10 transition-all">
+                    <div class="font-mono text-xs mb-1 text-amber-500">EPIC</div>
+                    <div class="text-sm text-amber-400">Эпический</div>
                   </div>
                 </label>
               </div>

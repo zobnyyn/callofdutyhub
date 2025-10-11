@@ -132,7 +132,7 @@
             </header>
 
             <!-- Recommended Items Section -->
-            <div v-if="recommendedWeapons.length > 0 || recommendedPerks.length > 0 || recommendedGums.length > 0" class="mb-8 md:mb-12">
+            <div v-if="recommendedWeapons.length > 0 || recommendedWonderWeapons.length > 0 || recommendedSpecialWeapons.length > 0 || recommendedPerks.length > 0 || recommendedGums.length > 0 || recommendedElixirs.length > 0 || recommendedFieldUpgrades.length > 0 || recommendedTalismans.length > 0" class="mb-8 md:mb-12">
               <div class="border-2 border-orange-500/50 bg-orange-500/5 p-4 md:p-6">
                 <div class="flex items-center justify-between mb-4 md:mb-6">
                   <div class="flex items-center gap-2">
@@ -162,9 +162,9 @@
                   leave-from-class="opacity-100 max-h-[2000px]"
                   leave-to-class="opacity-0 max-h-0"
                 >
-                  <div v-show="itemsExpanded" class="overflow-hidden">
+                  <div v-show="itemsExpanded" class="overflow-hidden space-y-5">
                     <!-- Weapons -->
-                    <div v-if="recommendedWeapons.length > 0" class="mb-5">
+                    <div v-if="recommendedWeapons.length > 0">
                       <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
                         <span class="text-orange-600">&gt;</span> Оружие:
                       </h3>
@@ -192,8 +192,66 @@
                       </div>
                     </div>
 
+                    <!-- Wonder Weapons -->
+                    <div v-if="recommendedWonderWeapons.length > 0">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Чудо-оружие:
+                      </h3>
+                      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
+                        <div
+                          v-for="weapon in recommendedWonderWeapons"
+                          :key="weapon.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = weapon.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-[4/3] border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black">
+                            <img
+                              v-if="weapon.image"
+                              :src="`/storage/${weapon.image}`"
+                              :alt="weapon.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center">{{ weapon.name }}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Special Weapons -->
+                    <div v-if="recommendedSpecialWeapons.length > 0">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Специальное оружие:
+                      </h3>
+                      <div class="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-2 md:gap-3">
+                        <div
+                          v-for="weapon in recommendedSpecialWeapons"
+                          :key="weapon.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = weapon.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-[4/3] border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black">
+                            <img
+                              v-if="weapon.image"
+                              :src="`/storage/${weapon.image}`"
+                              :alt="weapon.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center">{{ weapon.name }}</div>
+                        </div>
+                      </div>
+                    </div>
+
                     <!-- Perks -->
-                    <div v-if="recommendedPerks.length > 0" class="mb-5">
+                    <div v-if="recommendedPerks.length > 0">
                       <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
                         <span class="text-orange-600">&gt;</span> Перки:
                       </h3>
@@ -255,12 +313,128 @@
                           </div>
                           <div class="flex flex-col items-center gap-1">
                             <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center w-full">{{ gum.name }}</div>
-                            <!-- Rarity Tag -->
                             <div v-if="gum.rarity"
                               class="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded"
                               :class="getRarityClasses(gum.rarity)"
                             >
                               {{ getRarityName(gum.rarity).toUpperCase() }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Elixirs -->
+                    <div v-if="recommendedElixirs.length > 0">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Элексиры:
+                      </h3>
+                      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-3">
+                        <div
+                          v-for="elixir in recommendedElixirs"
+                          :key="elixir.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = elixir.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-square border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black relative">
+                            <img
+                              v-if="elixir.image"
+                              :src="`/storage/${elixir.image}`"
+                              :alt="elixir.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <div v-if="elixir.rarity" class="absolute top-1 right-1">
+                              <div
+                                class="w-2 h-2 rounded-full border border-black/50"
+                                :class="getRarityClasses(elixir.rarity)"
+                                :title="getRarityName(elixir.rarity)"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="flex flex-col items-center gap-1">
+                            <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center w-full">{{ elixir.name }}</div>
+                            <div v-if="elixir.rarity"
+                              class="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded"
+                              :class="getRarityClasses(elixir.rarity)"
+                            >
+                              {{ getRarityName(elixir.rarity).toUpperCase() }}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Field Upgrades -->
+                    <div v-if="recommendedFieldUpgrades.length > 0">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Полевые модификации:
+                      </h3>
+                      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-3">
+                        <div
+                          v-for="fieldUpgrade in recommendedFieldUpgrades"
+                          :key="fieldUpgrade.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = fieldUpgrade.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-square border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black">
+                            <img
+                              v-if="fieldUpgrade.image"
+                              :src="`/storage/${fieldUpgrade.image}`"
+                              :alt="fieldUpgrade.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                          </div>
+                          <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center">{{ fieldUpgrade.name }}</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Talismans -->
+                    <div v-if="recommendedTalismans.length > 0">
+                      <h3 class="text-xs md:text-sm font-mono text-orange-600 mb-3 uppercase">
+                        <span class="text-orange-600">&gt;</span> Талисманы:
+                      </h3>
+                      <div class="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 md:gap-3">
+                        <div
+                          v-for="talisman in recommendedTalismans"
+                          :key="talisman.id"
+                          class="border border-orange-500/30 bg-black/50 p-2 hover:bg-orange-500/10 transition-all group relative"
+                          @mouseenter="showTooltip = talisman.id"
+                          @mouseleave="showTooltip = null"
+                        >
+                          <div class="aspect-square border border-orange-500/30 mb-2 overflow-hidden flex items-center justify-center bg-black relative">
+                            <img
+                              v-if="talisman.image"
+                              :src="`/storage/${talisman.image}`"
+                              :alt="talisman.name"
+                              class="w-full h-full object-contain group-hover:scale-110 transition-transform"
+                            />
+                            <svg v-else class="w-6 h-6 text-orange-500/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                            </svg>
+                            <div v-if="talisman.rarity" class="absolute top-1 right-1">
+                              <div
+                                class="w-2 h-2 rounded-full border border-black/50"
+                                :class="getTalismanRarityClasses(talisman.rarity)"
+                                :title="getTalismanRarityName(talisman.rarity)"
+                              ></div>
+                            </div>
+                          </div>
+                          <div class="flex flex-col items-center gap-1">
+                            <div class="text-[10px] md:text-xs font-mono text-orange-500 truncate text-center w-full">{{ talisman.name }}</div>
+                            <div v-if="talisman.rarity"
+                              class="text-[8px] font-mono font-bold px-1.5 py-0.5 rounded"
+                              :class="getTalismanRarityClasses(talisman.rarity)"
+                            >
+                              {{ getTalismanRarityName(talisman.rarity).toUpperCase() }}
                             </div>
                           </div>
                         </div>
@@ -368,11 +542,31 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  recommendedWonderWeapons: {
+    type: Array,
+    default: () => []
+  },
+  recommendedSpecialWeapons: {
+    type: Array,
+    default: () => []
+  },
   recommendedPerks: {
     type: Array,
     default: () => []
   },
   recommendedGums: {
+    type: Array,
+    default: () => []
+  },
+  recommendedElixirs: {
+    type: Array,
+    default: () => []
+  },
+  recommendedFieldUpgrades: {
+    type: Array,
+    default: () => []
+  },
+  recommendedTalismans: {
     type: Array,
     default: () => []
   }
@@ -545,27 +739,23 @@ const handleContentClick = (event) => {
 
 // Получить данные для tooltip'а
 const getTooltipData = (id) => {
-  const weapon = props.recommendedWeapons.find(w => w.id === id);
-  if (weapon && weapon.description) {
-    return {
-      name: weapon.name,
-      description: weapon.description
-    };
-  }
+  // Проверяем все категории предметов
+  const allItems = [
+    ...props.recommendedWeapons,
+    ...props.recommendedWonderWeapons,
+    ...props.recommendedSpecialWeapons,
+    ...props.recommendedPerks,
+    ...props.recommendedGums,
+    ...props.recommendedElixirs,
+    ...props.recommendedFieldUpgrades,
+    ...props.recommendedTalismans
+  ];
 
-  const perk = props.recommendedPerks.find(p => p.id === id);
-  if (perk && perk.description) {
+  const item = allItems.find(i => i.id === id);
+  if (item && item.description) {
     return {
-      name: perk.name,
-      description: perk.description
-    };
-  }
-
-  const gum = props.recommendedGums.find(g => g.id === id);
-  if (gum && gum.description) {
-    return {
-      name: gum.name,
-      description: gum.description
+      name: item.name,
+      description: item.description
     };
   }
 
@@ -609,6 +799,28 @@ const getRarityClasses = (rarity) => {
     legendary: 'bg-amber-500 text-black',
     ultra: 'bg-red-600 text-white',
     whimsical: 'bg-gradient-to-r from-green-500 via-purple-500 to-orange-500 text-white'
+  };
+  return rarityClasses[rarity] || 'bg-gray-500 text-white';
+};
+
+// Получить название редкости талисмана
+const getTalismanRarityName = (rarity) => {
+  const rarityNames = {
+    common: 'Обычный',
+    rare: 'Редкий',
+    epic: 'Эпический',
+    legendary: 'Легендарный'
+  };
+  return rarityNames[rarity] || rarity;
+};
+
+// Получить CSS-классы для редкости талисмана
+const getTalismanRarityClasses = (rarity) => {
+  const rarityClasses = {
+    common: 'bg-gray-400 text-black',
+    rare: 'bg-blue-500 text-white',
+    epic: 'bg-purple-500 text-white',
+    legendary: 'bg-amber-500 text-black'
   };
   return rarityClasses[rarity] || 'bg-gray-500 text-white';
 };

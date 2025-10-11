@@ -226,6 +226,24 @@
                   v-model="selectedWeapons"
                 />
 
+                <!-- Wonder Weapons -->
+                <GuideItemSelector
+                  label="ЧУДО-ОРУЖИЕ"
+                  buttonText="ЧУДО-ОРУЖИЕ"
+                  type="wonder_weapon"
+                  :selectedGame="form.game"
+                  v-model="selectedWonderWeapons"
+                />
+
+                <!-- Special Weapons -->
+                <GuideItemSelector
+                  label="СПЕЦИАЛЬНОЕ ОРУЖИЕ"
+                  buttonText="СПЕЦ. ОРУЖИЕ"
+                  type="special_weapon"
+                  :selectedGame="form.game"
+                  v-model="selectedSpecialWeapons"
+                />
+
                 <!-- Perks -->
                 <GuideItemSelector
                   label="РЕКОМЕНДУЕМЫЕ ПЕРКИ"
@@ -242,6 +260,33 @@
                   type="gum"
                   :selectedGame="form.game"
                   v-model="selectedGums"
+                />
+
+                <!-- Elixirs -->
+                <GuideItemSelector
+                  label="РЕКОМЕНДУЕМЫЕ ЭЛЕКСИРЫ"
+                  buttonText="ЭЛЕКСИР"
+                  type="elixir"
+                  :selectedGame="form.game"
+                  v-model="selectedElixirs"
+                />
+
+                <!-- Field Upgrades -->
+                <GuideItemSelector
+                  label="ПОЛЕВЫЕ МОДИФИКАЦИИ"
+                  buttonText="ПОЛ. МОД."
+                  type="field_upgrade"
+                  :selectedGame="form.game"
+                  v-model="selectedFieldUpgrades"
+                />
+
+                <!-- Talismans -->
+                <GuideItemSelector
+                  label="ТАЛИСМАНЫ"
+                  buttonText="ТАЛИСМАН"
+                  type="talisman"
+                  :selectedGame="form.game"
+                  v-model="selectedTalismans"
                 />
               </div>
             </div>
@@ -287,6 +332,14 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  wonderWeapons: {
+    type: Array,
+    default: () => []
+  },
+  specialWeapons: {
+    type: Array,
+    default: () => []
+  },
   perks: {
     type: Array,
     default: () => []
@@ -295,7 +348,27 @@ const props = defineProps({
     type: Array,
     default: () => []
   },
+  elixirs: {
+    type: Array,
+    default: () => []
+  },
+  fieldUpgrades: {
+    type: Array,
+    default: () => []
+  },
+  talismans: {
+    type: Array,
+    default: () => []
+  },
   selectedWeapons: {
+    type: Array,
+    default: () => []
+  },
+  selectedWonderWeapons: {
+    type: Array,
+    default: () => []
+  },
+  selectedSpecialWeapons: {
     type: Array,
     default: () => []
   },
@@ -306,6 +379,18 @@ const props = defineProps({
   selectedGums: {
     type: Array,
     default: () => []
+  },
+  selectedElixirs: {
+    type: Array,
+    default: () => []
+  },
+  selectedFieldUpgrades: {
+    type: Array,
+    default: () => []
+  },
+  selectedTalismans: {
+    type: Array,
+    default: () => []
   }
 });
 
@@ -314,17 +399,32 @@ onMounted(() => {
   console.log('=== EDIT GUIDE DEBUG ===');
   console.log('Guide:', props.guide);
   console.log('Available weapons:', props.weapons);
+  console.log('Available wonder weapons:', props.wonderWeapons);
+  console.log('Available special weapons:', props.specialWeapons);
   console.log('Available perks:', props.perks);
   console.log('Available gums:', props.gums);
+  console.log('Available elixirs:', props.elixirs);
+  console.log('Available field upgrades:', props.fieldUpgrades);
+  console.log('Available talismans:', props.talismans);
   console.log('Selected weapons:', props.selectedWeapons);
+  console.log('Selected wonder weapons:', props.selectedWonderWeapons);
+  console.log('Selected special weapons:', props.selectedSpecialWeapons);
   console.log('Selected perks:', props.selectedPerks);
   console.log('Selected gums:', props.selectedGums);
+  console.log('Selected elixirs:', props.selectedElixirs);
+  console.log('Selected field upgrades:', props.selectedFieldUpgrades);
+  console.log('Selected talismans:', props.selectedTalismans);
 });
 
 // Выбранные предметы
 const selectedWeapons = ref([...props.selectedWeapons]);
+const selectedWonderWeapons = ref([...props.selectedWonderWeapons]);
+const selectedSpecialWeapons = ref([...props.selectedSpecialWeapons]);
 const selectedPerks = ref([...props.selectedPerks]);
 const selectedGums = ref([...props.selectedGums]);
+const selectedElixirs = ref([...props.selectedElixirs]);
+const selectedFieldUpgrades = ref([...props.selectedFieldUpgrades]);
+const selectedTalismans = ref([...props.selectedTalismans]);
 
 const form = useForm({
   game: props.guide.game,
@@ -469,8 +569,13 @@ function submit() {
   const formData = {
     ...form.data(),
     selected_weapons: selectedWeapons.value.map(item => item.id),
+    selected_wonder_weapons: selectedWonderWeapons.value.map(item => item.id),
+    selected_special_weapons: selectedSpecialWeapons.value.map(item => item.id),
     selected_perks: selectedPerks.value.map(item => item.id),
     selected_gums: selectedGums.value.map(item => item.id),
+    selected_elixirs: selectedElixirs.value.map(item => item.id),
+    selected_field_upgrades: selectedFieldUpgrades.value.map(item => item.id),
+    selected_talismans: selectedTalismans.value.map(item => item.id),
   };
 
   form.transform(() => formData).post(`/admin/guides/${props.guide.id}`, {

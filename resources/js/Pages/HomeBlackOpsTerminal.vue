@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
     <!-- Background Video -->
-    <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-30">
+    <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-50">
       <source :src="backgroundVideo" type="video/mp4">
     </video>
 
@@ -18,7 +18,7 @@
     <!-- Hero Section - Terminal Style -->
     <section class="pt-24 md:pt-40 pb-12 md:pb-24 px-3 md:px-6 relative min-h-screen flex items-center">
       <!-- Background -->
-      <div class="absolute inset-0 bg-gradient-to-br from-zinc-950 via-black to-orange-950/20"></div>
+      <div class="absolute inset-0 bg-gradient-to-br from-zinc-950/70 via-black/60 to-orange-950/30"></div>
 
       <!-- Terminal Grid Pattern -->
       <div class="absolute inset-0 opacity-[0.03]">

@@ -56,16 +56,26 @@ class ZombieGuideController extends Controller
         }
 
         // Разделяем предметы по категориям
-        $weapons = $guide->items->where('pivot.category', 'weapon')->values();
-        $perks = $guide->items->where('pivot.category', 'perk')->values();
-        $gums = $guide->items->where('pivot.category', 'gum')->values();
+        $weapons = $guide->items->filter(fn($item) => $item->pivot->category === 'weapon')->values();
+        $wonderWeapons = $guide->items->filter(fn($item) => $item->pivot->category === 'wonder_weapon')->values();
+        $specialWeapons = $guide->items->filter(fn($item) => $item->pivot->category === 'special_weapon')->values();
+        $perks = $guide->items->filter(fn($item) => $item->pivot->category === 'perk')->values();
+        $gums = $guide->items->filter(fn($item) => $item->pivot->category === 'gum')->values();
+        $elixirs = $guide->items->filter(fn($item) => $item->pivot->category === 'elixir')->values();
+        $fieldUpgrades = $guide->items->filter(fn($item) => $item->pivot->category === 'field_upgrade')->values();
+        $talismans = $guide->items->filter(fn($item) => $item->pivot->category === 'talisman')->values();
 
         return Inertia::render('ZombieGuides/ShowGuide', [
             'guide' => $guide,
             'hasAchievement' => $hasAchievement,
             'recommendedWeapons' => $weapons,
+            'recommendedWonderWeapons' => $wonderWeapons,
+            'recommendedSpecialWeapons' => $specialWeapons,
             'recommendedPerks' => $perks,
             'recommendedGums' => $gums,
+            'recommendedElixirs' => $elixirs,
+            'recommendedFieldUpgrades' => $fieldUpgrades,
+            'recommendedTalismans' => $talismans,
         ]);
     }
 

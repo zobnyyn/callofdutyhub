@@ -49,7 +49,7 @@
               CALL OF DUTY
             </span>
             <span class="flex items-center text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.9)]">
-              <span>WIKI</span>
+              <span>INFO</span>
               <span class="inline-block w-3 h-8 sm:h-10 md:h-12 lg:h-20 bg-orange-500 ml-2 md:ml-4 cursor-blink"></span>
             </span>
           </h1>
@@ -79,7 +79,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 max-w-7xl mb-12">
 
           <!-- World at War -->
-          <div class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/world-at-war')" class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-orange-900/40 to-red-900/40 overflow-hidden" style="background-image: url('/images/worldatwar.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -108,7 +108,7 @@
           </div>
 
           <!-- Black Ops 1 -->
-          <div class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/black-ops')" class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-black to-gray-900 overflow-hidden" style="background-image: url('/images/blackops1.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -137,7 +137,7 @@
           </div>
 
           <!-- Black Ops 2 -->
-          <div class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/black-ops-2')" class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black overflow-hidden" style="background-image: url('/images/blackops2.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -166,7 +166,7 @@
           </div>
 
           <!-- Black Ops 3 -->
-          <div class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/black-ops-3')" class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-purple-900/40 to-black overflow-hidden" style="background-image: url('/images/blackops3.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -195,7 +195,7 @@
           </div>
 
           <!-- Black Ops 4 -->
-          <div class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/black-ops-4')" class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-r from-orange-900/40 via-red-900/40 to-black overflow-hidden" style="background-image: url('/images/blackops4.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -224,7 +224,7 @@
           </div>
 
           <!-- Cold War -->
-          <div class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/black-ops-cold-war')" class="group relative border-2 border-orange-500/30 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-b from-red-900/40 to-black overflow-hidden" style="background-image: url('/images/coldwar.jpeg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -253,7 +253,7 @@
           </div>
 
           <!-- Black Ops 6 -->
-          <div class="group relative border-2 border-orange-500/50 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/black-ops-6')" class="group relative border-2 border-orange-500/50 hover:border-orange-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-orange-600/50 to-black overflow-hidden" style="background-image: url('/images/blackops6.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -282,7 +282,7 @@
           </div>
 
           <!-- Black Ops 7 -->
-          <div class="group relative border-2 border-orange-400/60 hover:border-orange-400 transition-all duration-300 cursor-pointer h-64">
+          <div class="group relative border-2 border-orange-400/60 hover:border-orange-400 transition-all duration-300 cursor-not-allowed h-64 opacity-60">
             <div class="absolute inset-0 bg-gradient-to-br from-orange-500/60 via-red-600/50 to-black overflow-hidden" style="background-image: url('/images/blackops7.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -334,7 +334,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-4 max-w-7xl">
 
           <!-- COD 4: Modern Warfare (2007) -->
-          <div class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/cod4-modern-warfare')" class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-green-900/40 to-emerald-900/40 overflow-hidden" style="background-image: url('/images/callofduty2007background.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -363,7 +363,7 @@
           </div>
 
           <!-- Modern Warfare 2 (2009) -->
-          <div class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/modern-warfare-2')" class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-black to-gray-900 overflow-hidden" style="background-image: url('/images/callofduty2009background.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -392,7 +392,7 @@
           </div>
 
           <!-- Modern Warfare 3 (2011) -->
-          <div class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/modern-warfare-3')" class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-blue-900/40 to-black overflow-hidden" style="background-image: url('/images/callofduty2011background.jpeg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -421,7 +421,7 @@
           </div>
 
           <!-- Modern Warfare (2019) -->
-          <div class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/modern-warfare-2019')" class="group relative border-2 border-green-500/30 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-green-900/40 to-black overflow-hidden" style="background-image: url('/images/callofduty2019background.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -450,7 +450,7 @@
           </div>
 
           <!-- Modern Warfare II (2022) -->
-          <div class="group relative border-2 border-green-500/50 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/modern-warfare-2022')" class="group relative border-2 border-green-500/50 hover:border-green-500 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-r from-green-900/40 via-emerald-900/40 to-black overflow-hidden" style="background-image: url('/images/callofduty2022background.webp'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>
@@ -479,7 +479,7 @@
           </div>
 
           <!-- Modern Warfare III (2023) - Latest -->
-          <div class="group relative border-2 border-green-400/60 hover:border-green-400 transition-all duration-300 cursor-pointer h-64">
+          <div @click="$inertia.visit('/wiki/modern-warfare-2023')" class="group relative border-2 border-green-400/60 hover:border-green-400 transition-all duration-300 cursor-pointer h-64">
             <div class="absolute inset-0 bg-gradient-to-br from-green-500/60 via-emerald-600/50 to-black overflow-hidden" style="background-image: url('/images/callofduty2023background.jpg'); background-size: cover; background-position: center;">
               <div class="absolute inset-0 bg-black/60 group-hover:bg-black/40 transition-all duration-300"></div>
               <div class="absolute inset-0 terminal-grid opacity-10"></div>

@@ -102,7 +102,7 @@ class GameItemController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'type' => 'required|in:weapon,perk,gum',
+            'type' => 'required|in:weapon,perk,gum,wonder_weapon,special_weapon,elixir,field_upgrade,talisman',
             'game' => 'nullable|string',
             'games' => 'nullable|array', // Добавляем валидацию для массива игр
             'rarity' => 'nullable|in:rare,epic,legendary,ultra,whimsical',

@@ -26,13 +26,23 @@ class GuideController extends Controller
     {
         // Загружаем все активные предметы для выбора
         $weapons = \App\Models\GameItem::active()->ofType('weapon')->ordered()->get();
+        $wonderWeapons = \App\Models\GameItem::active()->ofType('wonder_weapon')->ordered()->get();
+        $specialWeapons = \App\Models\GameItem::active()->ofType('special_weapon')->ordered()->get();
         $perks = \App\Models\GameItem::active()->ofType('perk')->ordered()->get();
         $gums = \App\Models\GameItem::active()->ofType('gum')->ordered()->get();
+        $elixirs = \App\Models\GameItem::active()->ofType('elixir')->ordered()->get();
+        $fieldUpgrades = \App\Models\GameItem::active()->ofType('field_upgrade')->ordered()->get();
+        $talismans = \App\Models\GameItem::active()->ofType('talisman')->ordered()->get();
 
         return Inertia::render('Admin/Guides/Create', [
             'weapons' => $weapons,
+            'wonderWeapons' => $wonderWeapons,
+            'specialWeapons' => $specialWeapons,
             'perks' => $perks,
             'gums' => $gums,
+            'elixirs' => $elixirs,
+            'fieldUpgrades' => $fieldUpgrades,
+            'talismans' => $talismans,
         ]);
     }
 
@@ -49,10 +59,20 @@ class GuideController extends Controller
             'gives_achievement' => 'boolean',
             'selected_weapons' => 'nullable|array',
             'selected_weapons.*' => 'exists:game_items,id',
+            'selected_wonder_weapons' => 'nullable|array',
+            'selected_wonder_weapons.*' => 'exists:game_items,id',
+            'selected_special_weapons' => 'nullable|array',
+            'selected_special_weapons.*' => 'exists:game_items,id',
             'selected_perks' => 'nullable|array',
             'selected_perks.*' => 'exists:game_items,id',
             'selected_gums' => 'nullable|array',
             'selected_gums.*' => 'exists:game_items,id',
+            'selected_elixirs' => 'nullable|array',
+            'selected_elixirs.*' => 'exists:game_items,id',
+            'selected_field_upgrades' => 'nullable|array',
+            'selected_field_upgrades.*' => 'exists:game_items,id',
+            'selected_talismans' => 'nullable|array',
+            'selected_talismans.*' => 'exists:game_items,id',
         ]);
 
         $validated['user_id'] = auth()->id();
@@ -74,8 +94,13 @@ class GuideController extends Controller
     {
         // Загружаем все активные предметы
         $weapons = \App\Models\GameItem::active()->ofType('weapon')->ordered()->get();
+        $wonderWeapons = \App\Models\GameItem::active()->ofType('wonder_weapon')->ordered()->get();
+        $specialWeapons = \App\Models\GameItem::active()->ofType('special_weapon')->ordered()->get();
         $perks = \App\Models\GameItem::active()->ofType('perk')->ordered()->get();
         $gums = \App\Models\GameItem::active()->ofType('gum')->ordered()->get();
+        $elixirs = \App\Models\GameItem::active()->ofType('elixir')->ordered()->get();
+        $fieldUpgrades = \App\Models\GameItem::active()->ofType('field_upgrade')->ordered()->get();
+        $talismans = \App\Models\GameItem::active()->ofType('talisman')->ordered()->get();
 
         // Загружаем уже выбранные предметы
         $guide->load('items');
@@ -83,11 +108,21 @@ class GuideController extends Controller
         return Inertia::render('Admin/Guides/Edit', [
             'guide' => $guide,
             'weapons' => $weapons,
+            'wonderWeapons' => $wonderWeapons,
+            'specialWeapons' => $specialWeapons,
             'perks' => $perks,
             'gums' => $gums,
-            'selectedWeapons' => $guide->items->where('pivot.category', 'weapon')->values(),
-            'selectedPerks' => $guide->items->where('pivot.category', 'perk')->values(),
-            'selectedGums' => $guide->items->where('pivot.category', 'gum')->values(),
+            'elixirs' => $elixirs,
+            'fieldUpgrades' => $fieldUpgrades,
+            'talismans' => $talismans,
+            'selectedWeapons' => $guide->items->filter(fn($item) => $item->pivot->category === 'weapon')->values(),
+            'selectedWonderWeapons' => $guide->items->filter(fn($item) => $item->pivot->category === 'wonder_weapon')->values(),
+            'selectedSpecialWeapons' => $guide->items->filter(fn($item) => $item->pivot->category === 'special_weapon')->values(),
+            'selectedPerks' => $guide->items->filter(fn($item) => $item->pivot->category === 'perk')->values(),
+            'selectedGums' => $guide->items->filter(fn($item) => $item->pivot->category === 'gum')->values(),
+            'selectedElixirs' => $guide->items->filter(fn($item) => $item->pivot->category === 'elixir')->values(),
+            'selectedFieldUpgrades' => $guide->items->filter(fn($item) => $item->pivot->category === 'field_upgrade')->values(),
+            'selectedTalismans' => $guide->items->filter(fn($item) => $item->pivot->category === 'talisman')->values(),
         ]);
     }
 
@@ -104,10 +139,20 @@ class GuideController extends Controller
             'gives_achievement' => 'boolean',
             'selected_weapons' => 'nullable|array',
             'selected_weapons.*' => 'exists:game_items,id',
+            'selected_wonder_weapons' => 'nullable|array',
+            'selected_wonder_weapons.*' => 'exists:game_items,id',
+            'selected_special_weapons' => 'nullable|array',
+            'selected_special_weapons.*' => 'exists:game_items,id',
             'selected_perks' => 'nullable|array',
             'selected_perks.*' => 'exists:game_items,id',
             'selected_gums' => 'nullable|array',
             'selected_gums.*' => 'exists:game_items,id',
+            'selected_elixirs' => 'nullable|array',
+            'selected_elixirs.*' => 'exists:game_items,id',
+            'selected_field_upgrades' => 'nullable|array',
+            'selected_field_upgrades.*' => 'exists:game_items,id',
+            'selected_talismans' => 'nullable|array',
+            'selected_talismans.*' => 'exists:game_items,id',
         ]);
 
         // Обрабатываем изображение только если загружено новое
@@ -164,6 +209,26 @@ class GuideController extends Controller
             }
         }
 
+        // Прикрепляем чудо-оружие
+        if ($request->has('selected_wonder_weapons')) {
+            foreach ($request->selected_wonder_weapons as $weaponId) {
+                $attachData[$weaponId] = [
+                    'category' => 'wonder_weapon',
+                    'sort_order' => $sortOrder++,
+                ];
+            }
+        }
+
+        // Прикрепляем спец. оружие
+        if ($request->has('selected_special_weapons')) {
+            foreach ($request->selected_special_weapons as $weaponId) {
+                $attachData[$weaponId] = [
+                    'category' => 'special_weapon',
+                    'sort_order' => $sortOrder++,
+                ];
+            }
+        }
+
         // Прикрепляем перки
         if ($request->has('selected_perks')) {
             foreach ($request->selected_perks as $perkId) {
@@ -179,6 +244,36 @@ class GuideController extends Controller
             foreach ($request->selected_gums as $gumId) {
                 $attachData[$gumId] = [
                     'category' => 'gum',
+                    'sort_order' => $sortOrder++,
+                ];
+            }
+        }
+
+        // Прикрепляем элексиры
+        if ($request->has('selected_elixirs')) {
+            foreach ($request->selected_elixirs as $elixirId) {
+                $attachData[$elixirId] = [
+                    'category' => 'elixir',
+                    'sort_order' => $sortOrder++,
+                ];
+            }
+        }
+
+        // Прикрепляем полевые модификации
+        if ($request->has('selected_field_upgrades')) {
+            foreach ($request->selected_field_upgrades as $fieldUpgradeId) {
+                $attachData[$fieldUpgradeId] = [
+                    'category' => 'field_upgrade',
+                    'sort_order' => $sortOrder++,
+                ];
+            }
+        }
+
+        // Прикрепляем талисманы
+        if ($request->has('selected_talismans')) {
+            foreach ($request->selected_talismans as $talismanId) {
+                $attachData[$talismanId] = [
+                    'category' => 'talisman',
                     'sort_order' => $sortOrder++,
                 ];
             }

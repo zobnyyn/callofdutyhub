@@ -36,6 +36,62 @@ Route::get('/modern-warfare', function () {
 Route::get('/cod-wiki', function () {
     return Inertia::render('CodWiki');
 })->name('codwiki');
+
+// Прямые маршруты для новых Modern Warfare Wiki-страниц (должны быть ПЕРЕД динамическим маршрутом)
+Route::get('/wiki/cod4-modern-warfare', function () {
+    return Inertia::render('ModernWarfare2007Wiki');
+})->name('wiki.cod4');
+
+Route::get('/wiki/modern-warfare-2', function () {
+    return Inertia::render('ModernWarfare2009Wiki');
+})->name('wiki.mw2');
+
+Route::get('/wiki/modern-warfare-3', function () {
+    return Inertia::render('ModernWarfare2011Wiki');
+})->name('wiki.mw3');
+
+Route::get('/wiki/modern-warfare-2019', function () {
+    return Inertia::render('ModernWarfare2019Wiki');
+})->name('wiki.mw2019');
+
+Route::get('/wiki/modern-warfare-2022', function () {
+    return Inertia::render('ModernWarfare2022Wiki');
+})->name('wiki.mw2022');
+
+Route::get('/wiki/modern-warfare-2023', function () {
+    return Inertia::render('ModernWarfare2023Wiki');
+})->name('wiki.mw2023');
+
+Route::get('/wiki/black-ops', function () {
+    return Inertia::render('BlackOpsWiki');
+})->name('wiki.blackops');
+
+Route::get('/wiki/black-ops-2', function () {
+    return Inertia::render('BlackOps2Wiki');
+})->name('wiki.blackops2');
+
+Route::get('/wiki/black-ops-3', function () {
+    return Inertia::render('BlackOps3Wiki');
+})->name('wiki.blackops3');
+
+Route::get('/wiki/black-ops-4', function () {
+    return Inertia::render('BlackOps4Wiki');
+})->name('wiki.blackops4');
+
+Route::get('/wiki/black-ops-cold-war', function () {
+    return Inertia::render('BlackOpsColdWarWiki');
+})->name('wiki.blackopscoldwar');
+
+Route::get('/wiki/black-ops-6', function () {
+    return Inertia::render('BlackOps6Wiki');
+})->name('wiki.blackops6');
+
+// Wiki страницы для отдельных игр (динамический маршрут должен быть ПОСЛЕ конкретных)
+Route::get('/wiki/{game}', [\App\Http\Controllers\WikiPageController::class, 'show'])->name('wiki.show');
+
+// Детальные страницы зомби-карт
+Route::get('/wiki/zombie-maps/{slug}', [\App\Http\Controllers\ZombieMapController::class, 'show'])->name('wiki.zombie-map.show');
+
 Route::get('/zombies', [ZombiesController::class, 'index'])->name('zombies');
 Route::get('/zombies/world-at-war', function () {
     return Inertia::render('WorldAtWarZombies');
@@ -170,11 +226,59 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('/articles/{article}/edit', [\App\Http\Controllers\ArticleController::class, 'edit'])->name('articles.edit');
     Route::put('/articles/{article}', [\App\Http\Controllers\ArticleController::class, 'update'])->name('articles.update');
     Route::delete('/articles/{article}', [\App\Http\Controllers\ArticleController::class, 'destroy'])->name('articles.destroy');
+
+    // Управление Wiki-контентом
+    Route::prefix('wiki')->name('wiki.')->group(function () {
+        Route::get('/', [\App\Http\Controllers\Admin\WikiController::class, 'index'])->name('index');
+        Route::resource('pages', \App\Http\Controllers\Admin\WikiPageController::class);
+        Route::resource('weapons', \App\Http\Controllers\Admin\WikiWeaponController::class);
+        Route::resource('maps', \App\Http\Controllers\Admin\WikiMapController::class);
+        Route::resource('zombie-maps', \App\Http\Controllers\Admin\WikiZombieMapController::class);
+    });
 });
 
 // Публичные роуты для статей
-Route::get('/articles', [\App\Http\Controllers\ArticleController::class, 'publicIndex'])->name('articles.public.index');
+Route::get('/articles', [\AppHttp\Controllers\ArticleController::class, 'publicIndex'])->name('articles.public.index');
 Route::get('/articles/{article:slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('articles.show');
 
 // API для получения предметов (для использования в редакторах)
 Route::get('/api/game-items', [\App\Http\Controllers\GameItemController::class, 'apiList'])->name('api.items.list');
+
+// API для Wiki-контента
+Route::prefix('api/wiki')->name('api.wiki.')->group(function () {
+    Route::get('/{game}/weapons', [\AppHttp\Controllers\WikiController::class, 'getWeapons'])->name('weapons');
+    Route::get('/{game}/maps', [\App\Http\Controllers\WikiController::class, 'getMaps'])->name('maps');
+    Route::get('/{game}/zombie-maps', [\App\Http\Controllers\WikiController::class, 'getZombieMaps'])->name('zombie-maps');
+    Route::get('/{game}/zombie-maps/{slug}', [\App\Http\Controllers\WikiController::class, 'getZombieMap'])->name('zombie-map');
+});
+
+// Warzone Meta Hub - Admin Routes
+Route::middleware(['auth','admin'])->prefix('admin/warzone')->name('admin.warzone.')->group(function() {
+    Route::get('weapons', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'index'])->name('weapons.index');
+    Route::get('weapons/create', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'create'])->name('weapons.create');
+    Route::post('weapons', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'store'])->name('weapons.store');
+    Route::get('weapons/{weapon}/edit', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'edit'])->name('weapons.edit');
+    Route::put('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'update'])->name('weapons.update');
+    Route::post('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'update']); // Для загрузки файлов
+    Route::delete('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'destroy'])->name('weapons.destroy');
+
+    // Builds Management Page
+    Route::get('weapons/{weapon}/builds', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'manageBuilds'])->name('weapons.builds');
+
+    // Builds
+    Route::post('weapons/{weapon}/builds', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'store'])->name('builds.store');
+    Route::put('builds/{build}', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'update'])->name('builds.update');
+    Route::delete('builds/{build}', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'destroy'])->name('builds.destroy');
+
+    // Attachments
+    Route::post('builds/{build}/attachments', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'store'])->name('attachments.store');
+    Route::put('attachments/{attachment}', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'update'])->name('attachments.update');
+    Route::delete('attachments/{attachment}', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'destroy'])->name('attachments.destroy');
+});
+
+// Warzone Meta Hub - Public Routes
+Route::get('/warzone/meta', [\App\Http\Controllers\WarzoneMetaController::class,'index'])->name('warzone.meta');
+Route::get('/warzone/meta/{slug}', [\App\Http\Controllers\WarzoneMetaController::class,'show'])->name('warzone.meta.show');
+
+// Warzone Meta Hub - API для поиска (AJAX)
+Route::get('/api/warzone/meta/weapons', [\App\Http\Controllers\WarzoneMetaController::class,'search'])->name('api.warzone.meta.search');
