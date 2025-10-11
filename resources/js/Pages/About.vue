@@ -50,32 +50,47 @@
                 <span class="text-orange-600">&gt;</span> MISSION_BRIEF:
               </div>
               <p class="text-lg md:text-xl text-gray-300 leading-relaxed">
-                <span class="text-orange-500 font-bold">COD Terminal</span> — это крупнейшее русскоязычное сообщество фанатов серии игр Call of Duty.
-                Мы объединяем тысячи игроков, которые разделяют страсть к этой легендарной франшизе.
+                <span class="text-orange-500 font-bold">COD Terminal</span> — это мощнейший русскоязычный портал по Call of Duty, объединяющий
+                <span class="text-orange-500 font-bold">краткую энциклопедию COD Wiki</span>,
+                <span class="text-orange-500 font-bold">актуальные мета-сборки для Warzone</span> и
+                <span class="text-orange-500 font-bold">детальные гайды по зомби-картам всех частей Treyarch</span>.
+                Мы создаём место, где тысячи игроков находят всё необходимое для доминирования в Call of Duty.
               </p>
             </div>
 
             <div class="border border-orange-500/30 bg-orange-500/5 p-6 md:p-8 relative">
               <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
               <div class="font-mono text-xs text-orange-600 mb-4">
-                <span class="text-orange-600">&gt;</span> OBJECTIVES:
+                <span class="text-orange-600">&gt;</span> CORE_MODULES:
               </div>
               <ul class="space-y-4 text-gray-300">
                 <li class="flex items-start">
-                  <span class="text-orange-500 mr-3 mt-1">▸</span>
-                  <span class="text-base md:text-lg">Создание активного комьюнити для общения и поиска тиммейтов</span>
+                  <span class="text-orange-500 mr-3 mt-1 text-xl">▸</span>
+                  <div>
+                    <span class="text-base md:text-lg font-bold text-orange-400">COD Wiki</span>
+                    <span class="text-base md:text-lg"> — Энциклопедия Call of Duty: оружие, операторы, карты, перки, killstreaks и игровая механика</span>
+                  </div>
                 </li>
                 <li class="flex items-start">
-                  <span class="text-orange-500 mr-3 mt-1">▸</span>
-                  <span class="text-base md:text-lg">Публикация детальных гайдов по зомби-режимам всех частей игры</span>
+                  <span class="text-orange-500 mr-3 mt-1 text-xl">▸</span>
+                  <div>
+                    <span class="text-base md:text-lg font-bold text-orange-400">Warzone Meta Hub</span>
+                    <span class="text-base md:text-lg"> — Актуальные мета-сборки оружия для Warzone с детальным разбором аксессуаров для MW2, MW3 и Black Ops 6</span>
+                  </div>
                 </li>
                 <li class="flex items-start">
-                  <span class="text-orange-500 mr-3 mt-1">▸</span>
-                  <span class="text-base md:text-lg">Актуальные новости, обзоры оружия и мета-аналитика</span>
+                  <span class="text-orange-500 mr-3 mt-1 text-xl">▸</span>
+                  <div>
+                    <span class="text-base md:text-lg font-bold text-orange-400">Zombies Archive</span>
+                    <span class="text-base md:text-lg"> — Профессиональные гайды по всем зомби-картам Treyarch: от World at War до Black Ops 6. Пошаговые прохождения Easter Eggs, тактики выживания, секретные комнаты</span>
+                  </div>
                 </li>
                 <li class="flex items-start">
-                  <span class="text-orange-500 mr-3 mt-1">▸</span>
-                  <span class="text-base md:text-lg">Организация турниров и совместных игровых сессий</span>
+                  <span class="text-orange-500 mr-3 mt-1 text-xl">▸</span>
+                  <div>
+                    <span class="text-base md:text-lg font-bold text-orange-400">Tactical Community</span>
+                    <span class="text-base md:text-lg"> — Активное комьюнити с системой поиска тиммейтов, личными профилями и достижениями</span>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -84,28 +99,28 @@
           <!-- Stats Section -->
           <div class="mb-12 font-mono">
             <div class="text-orange-600 text-sm mb-4">
-              <span class="text-orange-600">&gt;</span> PROJECT_STATISTICS:
+              <span class="text-orange-600">&gt;</span> OPERATIONAL_STATISTICS:
             </div>
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-2">УЧАСТНИКОВ:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">1000+</div>
+                <div class="text-xs text-orange-600 mb-2">ИГРОКОВ:</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">1K+</div>
               </div>
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="text-xs text-orange-600 mb-2">ГАЙДОВ:</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">200+</div>
+              </div>
+              <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
+                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
+                <div class="text-xs text-orange-600 mb-2">WIKI СТАТЕЙ:</div>
                 <div class="text-3xl md:text-4xl font-black text-orange-500">500+</div>
               </div>
               <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-2">АКТИВНОСТЬ:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">24/7</div>
-              </div>
-              <div class="border border-orange-500/30 bg-orange-500/5 p-6 relative group hover:bg-orange-500/10 transition-all">
-                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="text-xs text-orange-600 mb-2">ЛЕТ РАБОТЫ:</div>
-                <div class="text-3xl md:text-4xl font-black text-orange-500">3+</div>
+                <div class="text-xs text-orange-600 mb-2">META СБОРОК:</div>
+                <div class="text-3xl md:text-4xl font-black text-orange-500">100+</div>
               </div>
             </div>
           </div>
@@ -113,11 +128,11 @@
           <!-- Features Section -->
           <div class="mb-12">
             <div class="font-mono text-sm text-orange-600 mb-6">
-              <span class="text-orange-600">&gt;</span> FEATURES_LIST:
+              <span class="text-orange-600">&gt;</span> FEATURES_BREAKDOWN:
             </div>
             <div class="grid md:grid-cols-2 gap-6">
               <!-- Feature 1 -->
-              <div class="border border-orange-500/30 bg-black/50 p-6 relative">
+              <div class="border border-orange-500/30 bg-black/50 p-6 relative hover:bg-orange-500/5 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="flex items-start space-x-4">
                   <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
@@ -126,14 +141,47 @@
                     </svg>
                   </div>
                   <div>
-                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">БАЗА ЗНАНИЙ</h3>
-                    <p class="text-gray-400 text-sm">Обширная коллекция гайдов по всем зомби-картам, от World at War до Black Ops 7</p>
+                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">COD WIKI</h3>
+                    <p class="text-gray-400 text-sm">База знаний по всем играм серии: оружие, описания перков, карты, операторы и игровая механика</p>
                   </div>
                 </div>
               </div>
 
               <!-- Feature 2 -->
-              <div class="border border-orange-500/30 bg-black/50 p-6 relative">
+              <div class="border border-orange-500/30 bg-black/50 p-6 relative hover:bg-orange-500/5 transition-all">
+                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
+                <div class="flex items-start space-x-4">
+                  <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">WARZONE META</h3>
+                    <p class="text-gray-400 text-sm">Актуальные билды топового оружия для Warzone с детальным разбором каждого аксессуара и тактики применения</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feature 3 -->
+              <div class="border border-orange-500/30 bg-black/50 p-6 relative hover:bg-orange-500/5 transition-all">
+                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
+                <div class="flex items-start space-x-4">
+                  <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M17.657 18.657A8 8 0 016.343 7.343S7 9 9 10c0-2 .5-5 2.986-7C14 5 16.09 5.777 17.656 7.343A7.975 7.975 0 0120 13a7.975 7.975 0 01-2.343 5.657z" stroke-linecap="round" stroke-linejoin="round"/>
+                      <path d="M9.879 16.121A3 3 0 1012.015 11L11 14H9c0 .768.293 1.536.879 2.121z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">ZOMBIES GUIDES</h3>
+                    <p class="text-gray-400 text-sm">Профессиональные гайды по всем зомби-картам Treyarch: Easter Eggs, стратегии выживания, секретные квесты от WaW до BO6</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feature 4 -->
+              <div class="border border-orange-500/30 bg-black/50 p-6 relative hover:bg-orange-500/5 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="flex items-start space-x-4">
                   <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
@@ -142,14 +190,30 @@
                     </svg>
                   </div>
                   <div>
-                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">КОМЬЮНИТИ</h3>
-                    <p class="text-gray-400 text-sm">Активное сообщество с системой друзей, личными сообщениями и достижениями</p>
+                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">ACTIVE COMMUNITY</h3>
+                    <p class="text-gray-400 text-sm">Найдите тиммейтов для любого режима, общайтесь в Discord и участвуйте в турнирах и ивентах</p>
                   </div>
                 </div>
               </div>
 
-              <!-- Feature 3 -->
-              <div class="border border-orange-500/30 bg-black/50 p-6 relative">
+              <!-- Feature 5 -->
+              <div class="border border-orange-500/30 bg-black/50 p-6 relative hover:bg-orange-500/5 transition-all">
+                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
+                <div class="flex items-start space-x-4">
+                  <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
+                    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                      <path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </div>
+                  <div>
+                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">META ANALYTICS</h3>
+                    <p class="text-gray-400 text-sm">Аналитика популярности оружия, статистика win-rate и тренды мета-игры на основе данных про-игроков</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Feature 6 -->
+              <div class="border border-orange-500/30 bg-black/50 p-6 relative hover:bg-orange-500/5 transition-all">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
                 <div class="flex items-start space-x-4">
                   <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
@@ -158,26 +222,37 @@
                     </svg>
                   </div>
                   <div>
-                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">УВЕДОМЛЕНИЯ</h3>
-                    <p class="text-gray-400 text-sm">Будьте в курсе новых гайдов, событий и обновлений в режиме реального времени</p>
+                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">INSTANT UPDATES</h3>
+                    <p class="text-gray-400 text-sm">Мгновенные уведомления о новых гайдах, обновлениях мета-сборок и важных игровых апдейтах</p>
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
 
-              <!-- Feature 4 -->
-              <div class="border border-orange-500/30 bg-black/50 p-6 relative">
+          <!-- What We Offer -->
+          <div class="mb-12">
+            <div class="font-mono text-sm text-orange-600 mb-6">
+              <span class="text-orange-600">&gt;</span> CONTENT_LIBRARY:
+            </div>
+            <div class="grid md:grid-cols-3 gap-4">
+              <div class="border border-orange-500/30 bg-gradient-to-br from-orange-900/10 to-black p-6 relative">
                 <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
-                <div class="flex items-start space-x-4">
-                  <div class="w-12 h-12 border border-orange-500/40 flex items-center justify-center flex-shrink-0">
-                    <svg class="w-6 h-6 text-orange-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                      <path d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                  </div>
-                  <div>
-                    <h3 class="text-xl font-black text-orange-500 mb-2 font-mono">ДОСТИЖЕНИЯ</h3>
-                    <p class="text-gray-400 text-sm">Зарабатывайте награды за прохождение гайдов и участие в жизни сообщества</p>
-                  </div>
-                </div>
+                <div class="text-4xl font-black text-orange-500 mb-2">📚</div>
+                <h4 class="font-mono text-orange-400 font-bold mb-2">COD WIKI</h4>
+                <p class="text-gray-400 text-sm">Мини энциклопедия по всем играм Call of Duty </p>
+              </div>
+              <div class="border border-orange-500/30 bg-gradient-to-br from-red-900/10 to-black p-6 relative">
+                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
+                <div class="text-4xl font-black text-orange-500 mb-2">⚡</div>
+                <h4 class="font-mono text-orange-400 font-bold mb-2">WARZONE META</h4>
+                <p class="text-gray-400 text-sm">Топовые сборки оружия с разбором каждого аксессуара</p>
+              </div>
+              <div class="border border-orange-500/30 bg-gradient-to-br from-green-900/10 to-black p-6 relative">
+                <div class="absolute top-0 left-0 w-full h-px bg-orange-500"></div>
+                <div class="text-4xl font-black text-orange-500 mb-2">🧟</div>
+                <h4 class="font-mono text-orange-400 font-bold mb-2">ZOMBIES</h4>
+                <p class="text-gray-400 text-sm">Гайды по всем зомби-картам Treyarch с Easter Eggs</p>
               </div>
             </div>
           </div>
@@ -193,12 +268,14 @@
                 <span class="text-orange-500">&gt;</span> НАША КОМАНДА
               </h3>
               <p class="text-gray-300 text-lg leading-relaxed mb-4">
-                Проект создан и поддерживается командой энтузиастов Call of Duty, которые посвятили годы изучению механик игры
-                и созданию качественного контента для русскоязычного комьюнити.
+                Проект создан командой фанатичных игроков Call of Duty с многолетним опытом.
+                Мы прошли все зомби-карты на высших раундах, достигли топ-рангов в Warzone
+                и знаем механику каждой игры серии от и до.
               </p>
               <p class="text-gray-400 leading-relaxed">
-                Мы постоянно работаем над улучшением платформы, добавлением новых функций и созданием
-                актуального контента для всех режимов Call of Duty.
+                Наша миссия — создать самый полный и актуальный русскоязычный ресурс по Call of Duty,
+                где каждый игрок найдёт нужную информацию: от новичка, изучающего базовую механику,
+                до хардкорного ветерана, ищущего секреты на зомби-картах.
               </p>
             </div>
           </div>

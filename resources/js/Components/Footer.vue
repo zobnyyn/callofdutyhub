@@ -36,14 +36,11 @@
             <li><a href="/zombies" class="text-gray-500 hover:text-orange-500 transition-colors">
               <span class="text-orange-800">&gt;</span> Zombies Режим
             </a></li>
-            <li><a href="/black-ops" class="text-gray-500 hover:text-orange-500 transition-colors">
-              <span class="text-orange-800">&gt;</span> Black Ops серия
+            <li><a href="/cod-wiki" class="text-gray-500 hover:text-orange-500 transition-colors">
+              <span class="text-orange-800">&gt;</span> COD Info
             </a></li>
-            <li><a href="/modern-warfare" class="text-gray-500 hover:text-orange-500 transition-colors">
-              <span class="text-orange-800">&gt;</span> Modern Warfare
-            </a></li>
-            <li><a href="#" class="text-gray-500 hover:text-orange-500 transition-colors">
-              <span class="text-orange-800">&gt;</span> Warzone
+            <li><a href="/warzone/meta" class="text-gray-500 hover:text-orange-500 transition-colors">
+              <span class="text-orange-800">&gt;</span> Warzone Meta
             </a></li>
           </ul>
         </div>

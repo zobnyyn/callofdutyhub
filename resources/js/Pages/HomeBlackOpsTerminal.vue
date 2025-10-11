@@ -1,4 +1,22 @@
 <template>
+  <Head>
+    <title>Call of Duty Terminal - Гайды, Сборки Оружия, Мета Warzone | COD Wiki</title>
+    <meta name="description" content="Лучший русскоязычный портал по Call of Duty: актуальные гайды по Warzone, Black Ops 6, MW3. Мета-сборки оружия, карты, тактики и комьюнити из 1000+ игроков.">
+    <meta name="keywords" content="Call of Duty, Warzone, Black Ops 6, MW3, Modern Warfare, гайды по cod, сборки оружия warzone, мета warzone, cod wiki, калл оф дюти">
+
+    <!-- Open Graph -->
+    <meta property="og:title" content="Call of Duty Terminal - Гайды, Сборки Оружия, Мета Warzone">
+    <meta property="og:description" content="Лучший русскоязычный портал по Call of Duty: актуальные гайды по Warzone, Black Ops 6, MW3. Мета-сборки оружия, карты, тактики.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/images/og-home.jpg">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Call of Duty Terminal - Гайды, Сборки Оружия, Мета Warzone">
+    <meta name="twitter:description" content="Лучший русскоязычный портал по Call of Duty: актуальные гайды по Warzone, Black Ops 6, MW3.">
+    <meta name="twitter:image" content="/images/og-home.jpg">
+  </Head>
+
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
     <!-- Background Video -->
     <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-50">
@@ -410,6 +428,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onUnmounted } from 'vue';
+import { Head } from '@inertiajs/vue3';
 import Header from '@/Components/Header.vue';
 import Footer from '@/Components/Footer.vue';
 
