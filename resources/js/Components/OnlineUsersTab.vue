@@ -1,5 +1,13 @@
 <template>
   <div class="space-y-6">
+    <!-- SEO Meta Tags -->
+    <Seo
+      :title="seoTitle"
+      :description="seoDescription"
+      :keywords="seoKeywords"
+      :image="seoImage"
+    />
+
     <!-- Terminal Header -->
     <div class="border border-orange-500/30 bg-orange-500/5 p-6">
       <div class="text-orange-600 font-mono text-sm mb-4 flex items-center justify-between">
@@ -138,8 +146,15 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
+import { ref, onMounted, onUnmounted, computed } from 'vue';
 import axios from 'axios';
+import Seo from './SEO.vue';
+
+// SEO поля
+const seoTitle = computed(() => 'Онлайн — COD Terminal');
+const seoDescription = computed(() => 'Список онлайн-пользователей и операторов на COD Terminal. Смотрите, кто сейчас активен.');
+const seoKeywords = computed(() => 'Call of Duty, COD, онлайн, операторы, сообщество');
+const seoImage = computed(() => null);
 
 const onlineData = ref({
   users: [],
@@ -213,4 +228,3 @@ onUnmounted(() => {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
 </style>
-

@@ -1,0 +1,182 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <defs>
+    <!-- Aggressive orange gradient -->
+    <linearGradient id="aggressiveGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ff4500;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#ff6b00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#ff8c00;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Metal shine -->
+    <linearGradient id="metalShine" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#ffcc00;stop-opacity:1" />
+      <stop offset="30%" style="stop-color:#ff8c00;stop-opacity:1" />
+      <stop offset="70%" style="stop-color:#ff6b00;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#cc5500;stop-opacity:1" />
+    </linearGradient>
+
+    <!-- Intense glow -->
+    <filter id="intenseGlow">
+      <feGaussianBlur stdDeviation="20" result="blur"/>
+      <feFlood flood-color="#ff6b00" flood-opacity="1"/>
+      <feComposite in2="blur" operator="in"/>
+      <feMerge>
+        <feMergeNode/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Sharp shadow -->
+    <filter id="sharpShadow">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.8"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" fill="#000000"/>
+
+  <!-- Diagonal stripes background -->
+  <g opacity="0.08">
+    <path d="M 0,100 L 100,0" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 0,200 L 200,0" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 0,300 L 300,0" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 0,400 L 400,0" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 0,512 L 512,0" stroke="#f59e42" stroke-width="3"/>
+    <path d="M 112,512 L 512,112" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 212,512 L 512,212" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 312,512 L 512,312" stroke="#f59e42" stroke-width="2"/>
+    <path d="M 412,512 L 512,412" stroke="#f59e42" stroke-width="2"/>
+  </g>
+
+  <!-- Aggressive frame borders -->
+  <g stroke="#ff6b00" stroke-width="6" fill="none" opacity="0.6">
+    <rect x="20" y="20" width="472" height="472"/>
+    <rect x="35" y="35" width="442" height="442"/>
+  </g>
+
+  <!-- Corner military brackets -->
+  <g fill="#f59e42" opacity="0.9">
+    <polygon points="20,20 80,20 80,26 26,26 26,80 20,80"/>
+    <polygon points="492,20 432,20 432,26 486,26 486,80 492,80"/>
+    <polygon points="20,492 80,492 80,486 26,486 26,432 20,432"/>
+    <polygon points="492,492 432,492 432,486 486,486 486,432 492,432"/>
+  </g>
+
+  <!-- Tactical crosshair center -->
+  <g stroke="#f59e42" stroke-width="4" fill="none" opacity="0.4">
+    <circle cx="256" cy="256" r="100"/>
+    <circle cx="256" cy="256" r="80"/>
+    <line x1="156" y1="256" x2="176" y2="256"/>
+    <line x1="336" y1="256" x2="356" y2="256"/>
+    <line x1="256" y1="156" x2="256" y2="176"/>
+    <line x1="256" y1="336" x2="256" y2="356"/>
+  </g>
+
+  <!-- Shield/Badge background -->
+  <g filter="url(#sharpShadow)">
+    <path d="M 256,100 L 360,140 L 360,300 L 256,380 L 152,300 L 152,140 Z"
+          fill="#1a1a1a" stroke="url(#metalShine)" stroke-width="4" opacity="0.9"/>
+  </g>
+
+  <!-- Inner shield detail -->
+  <path d="M 256,120 L 340,155 L 340,285 L 256,355 L 172,285 L 172,155 Z"
+        fill="none" stroke="#f59e42" stroke-width="2" opacity="0.5"/>
+
+  <!-- Skull icon (military style) -->
+  <g fill="#ff6b00" opacity="0.15">
+    <ellipse cx="256" cy="200" rx="45" ry="50"/>
+    <rect x="236" y="230" width="40" height="30" rx="5"/>
+    <rect x="241" y="255" width="8" height="25"/>
+    <rect x="263" y="255" width="8" height="25"/>
+  </g>
+
+  <!-- Main "COD" text - large and bold -->
+  <g filter="url(#intenseGlow)">
+    <text x="256" y="270" font-family="'Impact', 'Arial Black', sans-serif"
+          font-size="95" font-weight="900" fill="url(#aggressiveGrad)"
+          text-anchor="middle" letter-spacing="-4">COD</text>
+  </g>
+
+  <!-- Text stroke outline -->
+  <text x="256" y="270" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="95" font-weight="900" fill="none" stroke="#ff4500"
+        stroke-width="3" text-anchor="middle" letter-spacing="-4" opacity="0.9">COD</text>
+
+  <!-- Inner highlight on text -->
+  <text x="256" y="268" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="95" font-weight="900" fill="#ffcc00"
+        text-anchor="middle" letter-spacing="-4" opacity="0.3">COD</text>
+
+  <!-- Heavy glitch effect -->
+  <text x="258" y="268" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="95" font-weight="900" fill="#ff0000"
+        text-anchor="middle" opacity="0.2" letter-spacing="-4">COD</text>
+  <text x="254" y="272" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="95" font-weight="900" fill="#00ffff"
+        text-anchor="middle" opacity="0.2" letter-spacing="-4">COD</text>
+
+  <!-- "TERMINAL" subtitle text -->
+  <g filter="url(#intenseGlow)">
+    <text x="256" y="320" font-family="'Impact', 'Arial Black', sans-serif"
+          font-size="40" font-weight="900" fill="url(#aggressiveGrad)"
+          text-anchor="middle" letter-spacing="-1">TERMINAL</text>
+  </g>
+
+  <!-- Subtitle outline -->
+  <text x="256" y="320" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="40" font-weight="900" fill="none" stroke="#ff4500"
+        stroke-width="2" text-anchor="middle" letter-spacing="-1" opacity="0.9">TERMINAL</text>
+
+  <!-- Subtitle glitch -->
+  <text x="257" y="319" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="40" font-weight="900" fill="#ff0000"
+        text-anchor="middle" opacity="0.15" letter-spacing="-1">TERMINAL</text>
+  <text x="255" y="321" font-family="'Impact', 'Arial Black', sans-serif"
+        font-size="40" font-weight="900" fill="#00ffff"
+        text-anchor="middle" opacity="0.15" letter-spacing="-1">TERMINAL</text>
+
+  <!-- Danger stripes bottom -->
+  <g fill="#ff6b00" opacity="0.3">
+    <rect x="100" y="390" width="30" height="8"/>
+    <rect x="140" y="390" width="30" height="8"/>
+    <rect x="180" y="390" width="30" height="8"/>
+    <rect x="220" y="390" width="30" height="8"/>
+    <rect x="260" y="390" width="30" height="8"/>
+    <rect x="300" y="390" width="30" height="8"/>
+    <rect x="340" y="390" width="30" height="8"/>
+    <rect x="380" y="390" width="30" height="8"/>
+  </g>
+
+  <!-- Warning markers -->
+  <g fill="#ff6b00" opacity="0.6">
+    <polygon points="50,256 60,246 60,266"/>
+    <polygon points="462,256 452,246 452,266"/>
+    <polygon points="256,50 246,60 266,60"/>
+    <polygon points="256,462 246,452 266,452"/>
+  </g>
+
+  <!-- Tactical grid overlay -->
+  <g stroke="#f59e42" stroke-width="1" opacity="0.05">
+    <line x1="64" y1="0" x2="64" y2="512"/>
+    <line x1="128" y1="0" x2="128" y2="512"/>
+    <line x1="192" y1="0" x2="192" y2="512"/>
+    <line x1="256" y1="0" x2="256" y2="512"/>
+    <line x1="320" y1="0" x2="320" y2="512"/>
+    <line x1="384" y1="0" x2="384" y2="512"/>
+    <line x1="448" y1="0" x2="448" y2="512"/>
+    <line x1="0" y1="64" x2="512" y2="64"/>
+    <line x1="0" y1="128" x2="512" y2="128"/>
+    <line x1="0" y1="192" x2="512" y2="192"/>
+    <line x1="0" y1="256" x2="512" y2="256"/>
+    <line x1="0" y1="320" x2="512" y2="320"/>
+    <line x1="0" y1="384" x2="512" y2="384"/>
+    <line x1="0" y1="448" x2="512" y2="448"/>
+  </g>
+
+  <!-- Digital noise -->
+  <g opacity="0.03">
+    <rect x="0" y="0" width="512" height="2" fill="#ffffff"/>
+    <rect x="0" y="5" width="512" height="2" fill="#ffffff"/>
+    <rect x="0" y="10" width="512" height="2" fill="#ffffff"/>
+  </g>
+</svg>

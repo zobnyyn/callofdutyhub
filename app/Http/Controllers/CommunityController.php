@@ -42,7 +42,7 @@ class CommunityController extends Controller
             ->limit(50)
             ->get();
 
-        return Inertia::render('Community', [
+        return Inertia::render('General/Community', [
             'maps' => $maps,
             'articles' => $articles,
         ]);

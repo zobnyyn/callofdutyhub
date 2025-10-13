@@ -1,21 +1,10 @@
 <template>
-  <Head>
-    <title>Warzone Meta Оружие - Лучшие Сборки и Билды | Call of Duty Wiki</title>
-    <meta name="description" content="Актуальная мета Warzone: лучшие сборки оружия для MW2, MW3 и Black Ops 6. Проверенные билды от профи с описанием всех аксессуаров и тактик.">
-    <meta name="keywords" content="warzone meta, мета варзон, лучшее оружие warzone, сборки оружия warzone, билды warzone, warzone builds, mw3 meta, bo6 meta">
-
-    <!-- Open Graph -->
-    <meta property="og:title" content="Warzone Meta Оружие - Лучшие Сборки и Билды">
-    <meta property="og:description" content="Актуальная мета Warzone: лучшие сборки оружия для MW2, MW3 и Black Ops 6. Проверенные билды от профи.">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="/images/og-warzone-meta.jpg">
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Warzone Meta Оружие - Лучшие Сборки и Билды">
-    <meta name="twitter:description" content="Актуальная мета Warzone: лучшие сборки оружия для MW2, MW3 и Black Ops 6.">
-    <meta name="twitter:image" content="/images/og-warzone-meta.jpg">
-  </Head>
+  <SEO
+    :title="seoTitle"
+    :description="seoDescription"
+    :keywords="seoKeywords"
+    :image="seoImage"
+  />
 
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
     <!-- Background Image -->
@@ -281,6 +270,13 @@ import { ref, reactive, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Header from '@/Components/Header.vue';
 import WeaponListItem from '@/Components/Warzone/WeaponListItem.vue';
+import SEO from '@/Components/SEO.vue';
+
+// SEO
+const seoTitle = 'Warzone Meta Оружие — лучшие сборки и билды | COD Terminal';
+const seoDescription = 'Актуальная мета Warzone: лучшие сборки оружия для MW2, MW3 и Black Ops 6. Проверенные билды от профи с описанием всех аксессуаров и тактик.';
+const seoKeywords = 'warzone meta, мета warzone, сборки, билды, mw2, mw3, bo6, warzone builds';
+const seoImage = '/images/og-warzone-meta.jpg';
 
 // Background image
 const backgroundImage = '/images/warzonebackground.jpg';

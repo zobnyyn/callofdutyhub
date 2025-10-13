@@ -1,5 +1,13 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
+
+    <!-- SEO Meta Tags -->
+    <Seo
+      title="Статьи сообщества"
+      description="Статьи, обзоры и гайды сообщества COD Terminal: свежие новости, мета-сборки, тактики и разборы карт по Call of Duty."
+      keywords="статьи COD, гайды, мета-сборки, новости Call of Duty, обзоры"
+    />
+
     <!-- Terminal Background -->
     <div class="fixed inset-0 opacity-[0.02]" style="background-image: repeating-linear-gradient(0deg, #f97316 0px, transparent 1px, transparent 2px);"></div>
 
@@ -160,6 +168,7 @@
 import { Link } from '@inertiajs/vue3';
 import Header from '@/Components/Header.vue';
 import Footer from '@/Components/Footer.vue';
+import Seo from '../../Components/SEO.vue';
 
 const props = defineProps({
   articles: Object,
@@ -217,4 +226,3 @@ function formatDate(date) {
   overflow: hidden;
 }
 </style>
-

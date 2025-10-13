@@ -156,6 +156,27 @@
                       <span class="text-orange-600">&gt;</span> VIEW_PROFILE
                     </a>
                   </div>
+
+                  <!-- Link to group chat for group messages -->
+                  <div v-else-if="notification.type === 'group_message'" class="mt-2">
+                    <a
+                      href="/community?tab=groups"
+                      class="inline-block px-3 py-1 bg-green-600/20 border border-green-500/30 text-green-500 hover:bg-green-500/30 font-mono text-xs transition-all"
+                      @click="handleGroupMessageClick(notification)"
+                    >
+                      <span class="text-green-600">&gt;</span> OPEN_CHAT
+                    </a>
+                  </div>
+
+                  <!-- Link to chat for private messages -->
+                  <div v-else-if="notification.type === 'message'" class="mt-2">
+                    <a
+                      :href="`/chat/${notification.from_user?.id}`"
+                      class="inline-block px-3 py-1 bg-blue-600/20 border border-blue-500/30 text-blue-500 hover:bg-blue-500/30 font-mono text-xs transition-all"
+                    >
+                      <span class="text-blue-600">&gt;</span> OPEN_CHAT
+                    </a>
+                  </div>
                 </div>
 
                 <!-- Action Buttons -->
@@ -189,6 +210,9 @@
         </div>
       </div>
     </transition>
+
+    <!-- Notification Sound -->
+    <audio ref="notificationSound" src="/sounds/notification.mp3" preload="auto"></audio>
   </div>
 </template>
 
@@ -201,10 +225,22 @@ const notifications = ref([]);
 const isLoading = ref(false);
 const notificationContainer = ref(null);
 const friendshipStatuses = ref({}); // Хранит статусы дружбы для каждого пользователя
+const previousNotificationCount = ref(0); // Для отслеживания новых уведомлений
+const notificationSound = ref(null); // Звук уведомления
 
 const unreadCount = computed(() => {
   return notifications.value.filter(n => !n.read).length;
 });
+
+// Воспроизвести звук уведомления
+const playNotificationSound = () => {
+  if (notificationSound.value) {
+    notificationSound.value.currentTime = 0;
+    notificationSound.value.play().catch(error => {
+      console.log('Could not play notification sound:', error);
+    });
+  }
+};
 
 // Проверяем, был ли запрос уже обработан
 const isRequestProcessed = (notification) => {
@@ -238,7 +274,16 @@ const loadNotifications = async () => {
   isLoading.value = true;
   try {
     const response = await axios.get('/api/notifications/');
-    notifications.value = response.data.notifications || [];
+    const newNotifications = response.data.notifications || [];
+
+    // Проверяем, появились ли новые непрочитанные уведомления
+    const newUnreadCount = newNotifications.filter(n => !n.read).length;
+    if (previousNotificationCount.value > 0 && newUnreadCount > previousNotificationCount.value) {
+      playNotificationSound();
+    }
+    previousNotificationCount.value = newUnreadCount;
+
+    notifications.value = newNotifications;
 
     // Загружаем статусы дружбы после загрузки уведомлений
     await loadFriendshipStatuses();
@@ -361,7 +406,7 @@ const acceptFriendRequest = async (notification) => {
     if (error.response?.status === 404 || error.response?.data?.message?.includes('не найден')) {
       await markAsRead(notification.id);
 
-      // Обновляем статус - запрос уже обработан
+      // Обновляем статус - запрос уже был обработан
       friendshipStatuses.value[notification.from_user.id] = 'none';
 
       alert('Запрос уже был обработан ранее');
@@ -403,7 +448,7 @@ const declineFriendRequest = async (notification) => {
     if (error.response?.status === 404 || error.response?.data?.message?.includes('не найден')) {
       await markAsRead(notification.id);
 
-      // Обновляем статус - запрос уже обработан
+      // Обновляем статус - запрос уже был обработан
       friendshipStatuses.value[notification.from_user.id] = 'none';
 
       alert('Запрос уже был обработан ранее');
@@ -412,6 +457,26 @@ const declineFriendRequest = async (notification) => {
       alert(error.response?.data?.message || 'Ошибка при отклонении запроса');
     }
   }
+};
+
+// Handle group message notification click
+const handleGroupMessageClick = (notification) => {
+  // Mark notification as read
+  if (!notification.read) {
+    markAsRead(notification.id);
+  }
+
+  // Сохраняем ID группы в localStorage для автоматического открытия чата
+  const notificationData = typeof notification.data === 'string'
+    ? JSON.parse(notification.data)
+    : notification.data;
+
+  if (notificationData?.group_id) {
+    localStorage.setItem('openGroupChatId', notificationData.group_id);
+  }
+
+  // Navigate to community groups tab
+  window.location.href = '/community';
 };
 
 // Close dropdown when clicking outside

@@ -9,6 +9,10 @@ use App\Http\Controllers\ZombieGuideController;
 use App\Http\Controllers\CommunityController;
 use App\Http\Controllers\Api\ItemController;
 use Inertia\Inertia;
+use App\Http\Controllers\SitemapController;
+
+// Sitemap route
+Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 
 // API маршруты для получения предметов
 Route::get('/api/items/{category}', [ItemController::class, 'index']);
@@ -16,15 +20,15 @@ Route::get('/api/game-items', [ItemController::class, 'getGameItems']);
 
 Route::get('/', [HomeController::class, 'index']);
 Route::get('/about', function () {
-    return Inertia::render('About');
+    return Inertia::render('General/About');
 })->name('about');
 
 Route::get('/rules', function () {
-    return Inertia::render('Rules');
+    return Inertia::render('General/Rules');
 })->name('rules');
 
 Route::get('/partnership', function () {
-    return Inertia::render('Partnership');
+    return Inertia::render('General/Partnership');
 })->name('partnership');
 
 // Страница сообщества
@@ -33,63 +37,66 @@ Route::get('/community', [CommunityController::class, 'index'])->middleware('aut
 // Страница чата
 Route::get('/chat/{userId}', [\App\Http\Controllers\MessageController::class, 'showChat'])->middleware('auth')->name('chat.show');
 
+// Страница группового чата
+Route::get('/group-chat/{groupId}', [\App\Http\Controllers\MessageController::class, 'showGroupChat'])->middleware('auth')->name('group-chat.show');
+
 Route::get('/black-ops', function () {
     return Inertia::render('BlackOps');
 })->name('blackops');
 Route::get('/modern-warfare', function () {
-    return Inertia::render('ModernWarfare');
+    return Inertia::render('General/ModernWarfare');
 })->name('modernwarfare');
 Route::get('/cod-wiki', function () {
-    return Inertia::render('CodWiki');
+    return Inertia::render('Wiki/CodWiki');
 })->name('codwiki');
 
 // Прямые маршруты для новых Modern Warfare Wiki-страниц (должны быть ПЕРЕД динамическим маршрутом)
 Route::get('/wiki/cod4-modern-warfare', function () {
-    return Inertia::render('ModernWarfare2007Wiki');
+    return Inertia::render('Wiki/ModernWarfare2007Wiki');
 })->name('wiki.cod4');
 
 Route::get('/wiki/modern-warfare-2', function () {
-    return Inertia::render('ModernWarfare2009Wiki');
+    return Inertia::render('Wiki/ModernWarfare2009Wiki');
 })->name('wiki.mw2');
 
 Route::get('/wiki/modern-warfare-3', function () {
-    return Inertia::render('ModernWarfare2011Wiki');
+    return Inertia::render('Wiki/ModernWarfare2011Wiki');
 })->name('wiki.mw3');
 
 Route::get('/wiki/modern-warfare-2019', function () {
-    return Inertia::render('ModernWarfare2019Wiki');
+    return Inertia::render('Wiki/ModernWarfare2019Wiki');
 })->name('wiki.mw2019');
 
 Route::get('/wiki/modern-warfare-2022', function () {
-    return Inertia::render('ModernWarfare2022Wiki');
+    return Inertia::render('Wiki/ModernWarfare2022Wiki');
 })->name('wiki.mw2022');
 
 Route::get('/wiki/modern-warfare-2023', function () {
-    return Inertia::render('ModernWarfare2023Wiki');
+    return Inertia::render('Wiki/ModernWarfare2023Wiki');
 })->name('wiki.mw2023');
 
 Route::get('/wiki/black-ops', function () {
-    return Inertia::render('BlackOpsWiki');
+    return Inertia::render('Wiki/BlackOpsWiki');
 })->name('wiki.blackops');
 
 Route::get('/wiki/black-ops-2', function () {
-    return Inertia::render('BlackOps2Wiki');
+    return Inertia::render('Wiki/BlackOps2Wiki');
 })->name('wiki.blackops2');
 
 Route::get('/wiki/black-ops-3', function () {
-    return Inertia::render('BlackOps3Wiki');
+    return Inertia::render('Wiki/BlackOps3Wiki');
 })->name('wiki.blackops3');
 
 Route::get('/wiki/black-ops-4', function () {
-    return Inertia::render('BlackOps4Wiki');
+    return Inertia::render('Wiki/BlackOps4Wiki');
 })->name('wiki.blackops4');
 
 Route::get('/wiki/black-ops-cold-war', function () {
-    return Inertia::render('BlackOpsColdWarWiki');
+    return Inertia::render('Wiki/BlackOpsColdWarWiki');
 })->name('wiki.blackopscoldwar');
 
 Route::get('/wiki/black-ops-6', function () {
-    return Inertia::render('BlackOps6Wiki');
+    return Inertia::render('Wiki/BlackOps6Wiki');
 })->name('wiki.blackops6');
 
 // Wiki страницы для отдельных игр (динамический маршрут должен быть ПОСЛЕ конкретных)
@@ -100,28 +107,28 @@ Route::get('/wiki/zombie-maps/{slug}', [\App\Http\Controllers\ZombieMapControlle
 
 Route::get('/zombies', [ZombiesController::class, 'index'])->name('zombies');
 Route::get('/zombies/world-at-war', function () {
-    return Inertia::render('WorldAtWarZombies');
+    return Inertia::render('Zombies/WorldAtWarZombies');
 })->name('zombies.worldatwar');
 Route::get('/zombies/black-ops', function () {
-    return Inertia::render('BlackOpsZombies');
+    return Inertia::render('Zombies/BlackOpsZombies');
 })->name('zombies.blackops');
 Route::get('/zombies/black-ops-2', function () {
-    return Inertia::render('BlackOps2Zombies');
+    return Inertia::render('Zombies/BlackOps2Zombies');
 })->name('zombies.blackops2');
 Route::get('/zombies/black-ops-3', function () {
-    return Inertia::render('BlackOps3Zombies');
+    return Inertia::render('Zombies/BlackOps3Zombies');
 })->name('zombies.blackops3');
 Route::get('/zombies/black-ops-4', function () {
-    return Inertia::render('BlackOps4Zombies');
+    return Inertia::render('Zombies/BlackOps4Zombies');
 })->name('zombies.blackops4');
 Route::get('/zombies/cold-war', function () {
-    return Inertia::render('ColdWarZombies');
+    return Inertia::render('Zombies/ColdWarZombies');
 })->name('zombies.coldwar');
 Route::get('/zombies/black-ops-6', function () {
-    return Inertia::render('BlackOps6Zombies');
+    return Inertia::render('Zombies/BlackOps6Zombies');
 })->name('zombies.blackops6');
 Route::get('/zombies/black-ops-7', function () {
-    return Inertia::render('BlackOps7Zombies');
+    return Inertia::render('Zombies/BlackOps7Zombies');
 })->name('zombies.blackops7');
 
 // Маршруты для гайдов зомби-карт (требуют авторизации)
@@ -177,26 +184,38 @@ Route::middleware('auth')->prefix('api/community')->group(function () {
     Route::get('/users/search', [CommunityController::class, 'searchUsers'])->name('community.users.search');
     Route::get('/guides/search', [CommunityController::class, 'searchGuides'])->name('community.guides.search');
     Route::get('/articles/search', [CommunityController::class, 'searchArticles'])->name('community.articles.search');
+
+    // Группы для поиска тиммейтов
+    Route::get('/groups', [\App\Http\Controllers\GameGroupController::class, 'index'])->name('community.groups.index');
+    Route::post('/groups', [\App\Http\Controllers\GameGroupController::class, 'store'])->name('community.groups.store');
+    Route::post('/groups/{group}/join', [\App\Http\Controllers\GameGroupController::class, 'join'])->name('community.groups.join');
+    Route::post('/groups/{group}/leave', [\App\Http\Controllers\GameGroupController::class, 'leave'])->name('community.groups.leave');
+    Route::delete('/groups/{group}', [\App\Http\Controllers\GameGroupController::class, 'destroy'])->name('community.groups.destroy');
+    Route::get('/groups/{group}/members', [\App\Http\Controllers\GameGroupController::class, 'members'])->name('community.groups.members');
+
+    // Групповые чаты
+    Route::get('/groups/{group}/messages', [\App\Http\Controllers\GroupMessageController::class, 'getMessages'])->name('community.groups.messages.get');
+    Route::post('/groups/{group}/messages', [\App\Http\Controllers\GroupMessageController::class, 'sendMessage'])->name('community.groups.messages.send');
 });
 
 // Страницы аутентификации
 Route::get('/register', function () {
-    return Inertia::render('Register');
+    return Inertia::render('Auth/Register');
 })->middleware('guest')->name('register.page');
 
 Route::get('/login', function () {
-    return Inertia::render('Login');
+    return Inertia::render('Auth/Login');
 })->middleware('guest')->name('login.page');
 
 // Страница редактирования профиля
 Route::get('/profile/edit', function () {
-    return Inertia::render('ProfileEdit');
+    return Inertia::render('Profile/ProfileEdit');
 })->middleware('auth')->name('profile.edit');
 
 // Страница просмотра профиля пользователя
 Route::get('/profile/{user}', function ($userId) {
     $user = \App\Models\User::findOrFail($userId);
-    return Inertia::render('ProfileView', [
+    return Inertia::render('Profile/ProfileView', [
         'profileUser' => $user
     ]);
 })->name('profile.view');
@@ -269,13 +288,13 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 });
 
 // Публичные роуты для статей
-Route::get('/articles', [\AppHttp\Controllers\ArticleController::class, 'publicIndex'])->name('articles.public.index');
+Route::get('/articles', [\App\Http\Controllers\ArticleController::class, 'publicIndex'])->name('articles.public.index');
 Route::get('/articles/{article:slug}', [\App\Http\Controllers\ArticleController::class, 'show'])->name('articles.show');
 
 
 // API для Wiki-контента
 Route::prefix('api/wiki')->name('api.wiki.')->group(function () {
-    Route::get('/{game}/weapons', [\AppHttp\Controllers\WikiController::class, 'getWeapons'])->name('weapons');
+    Route::get('/{game}/weapons', [\App\Http\Controllers\WikiController::class, 'getWeapons'])->name('weapons');
     Route::get('/{game}/maps', [\App\Http\Controllers\WikiController::class, 'getMaps'])->name('maps');
     Route::get('/{game}/zombie-maps', [\App\Http\Controllers\WikiController::class, 'getZombieMaps'])->name('zombie-maps');
     Route::get('/{game}/zombie-maps/{slug}', [\App\Http\Controllers\WikiController::class, 'getZombieMap'])->name('zombie-map');
@@ -285,24 +304,24 @@ Route::prefix('api/wiki')->name('api.wiki.')->group(function () {
 Route::middleware(['auth','admin'])->prefix('admin/warzone')->name('admin.warzone.')->group(function() {
     Route::get('weapons', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'index'])->name('weapons.index');
     Route::get('weapons/create', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'create'])->name('weapons.create');
-    Route::post('weapons', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'store'])->name('weapons.store');
-    Route::get('weapons/{weapon}/edit', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'edit'])->name('weapons.edit');
-    Route::put('weapons/{weapon}', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'update'])->name('weapons.update');
-    Route::post('weapons/{weapon}', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'update']); // Для загрузки файлов
-    Route::delete('weapons/{weapon}', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'destroy'])->name('weapons.destroy');
+    Route::post('weapons', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'store'])->name('weapons.store');
+    Route::get('weapons/{weapon}/edit', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'edit'])->name('weapons.edit');
+    Route::put('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'update'])->name('weapons.update');
+    Route::post('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'update']); // Для загрузки файлов
+    Route::delete('weapons/{weapon}', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'destroy'])->name('weapons.destroy');
 
     // Builds Management Page
-    Route::get('weapons/{weapon}/builds', [\AppHttp\Controllers\Admin\WarzoneWeaponController::class,'manageBuilds'])->name('weapons.builds');
+    Route::get('weapons/{weapon}/builds', [\App\Http\Controllers\Admin\WarzoneWeaponController::class,'manageBuilds'])->name('weapons.builds');
 
     // Builds
-    Route::post('weapons/{weapon}/builds', [\AppHttp\Controllers\Admin\WarzoneWeaponBuildController::class,'store'])->name('builds.store');
-    Route::put('builds/{build}', [\AppHttp\Controllers\Admin\WarzoneWeaponBuildController::class,'update'])->name('builds.update');
-    Route::delete('builds/{build}', [\AppHttp\Controllers\Admin\WarzoneWeaponBuildController::class,'destroy'])->name('builds.destroy');
+    Route::post('weapons/{weapon}/builds', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'store'])->name('builds.store');
+    Route::put('builds/{build}', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'update'])->name('builds.update');
+    Route::delete('builds/{build}', [\App\Http\Controllers\Admin\WarzoneWeaponBuildController::class,'destroy'])->name('builds.destroy');
 
     // Attachments
-    Route::post('builds/{build}/attachments', [\AppHttp\Controllers\Admin\WarzoneWeaponAttachmentController::class,'store'])->name('attachments.store');
-    Route::put('attachments/{attachment}', [\AppHttp\Controllers\Admin\WarzoneWeaponAttachmentController::class,'update'])->name('attachments.update');
-    Route::delete('attachments/{attachment}', [\AppHttp\Controllers\Admin\WarzoneWeaponAttachmentController::class,'destroy'])->name('attachments.destroy');
+    Route::post('builds/{build}/attachments', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'store'])->name('attachments.store');
+    Route::put('attachments/{attachment}', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'update'])->name('attachments.update');
+    Route::delete('attachments/{attachment}', [\App\Http\Controllers\Admin\WarzoneWeaponAttachmentController::class,'destroy'])->name('attachments.destroy');
 });
 
 // Warzone Meta Hub - Public Routes

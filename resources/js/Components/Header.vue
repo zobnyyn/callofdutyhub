@@ -26,19 +26,12 @@
       <div class="flex items-center justify-between">
         <!-- Logo with Terminal Style -->
         <div class="flex items-center space-x-2 md:space-x-4">
-          <div class="relative group">
-            <!-- Terminal-style rotating diamond -->
+          <a href="/" class="relative group">
+            <!-- Terminal-style icon -->
             <div class="w-10 h-10 md:w-14 md:h-14 relative">
-              <div class="absolute inset-0 bg-gradient-to-br from-orange-600 to-red-700 transform rotate-45 overflow-hidden">
-                <div class="absolute inset-0 bg-black/30"></div>
-                <div class="absolute inset-0 terminal-grid"></div>
-              </div>
-              <div class="absolute inset-2 bg-black transform rotate-45"></div>
-              <div class="absolute inset-0 border-2 border-orange-500/40 transform rotate-45 group-hover:border-orange-400 transition-colors"></div>
-              <!-- Static cursor in center -->
-              <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-1.5 h-2 md:w-2 md:h-3 bg-orange-500"></div>
+              <img :src="faviconAlt3" alt="COD Terminal" class="w-full h-full object-contain transition-transform group-hover:scale-110" />
             </div>
-          </div>
+          </a>
           <div>
             <div class="text-sm md:text-2xl font-black tracking-tighter font-mono">
                 <span class="text-orange-500">&gt; <span class="hidden sm:inline">CALL OF DUTY</span><span class="sm:hidden">COD</span> <span class="text-white"></span></span>
@@ -476,6 +469,9 @@ import mw2011 from '../../images/icons/mw2011.jpg';
 import mw2019 from '../../images/icons/mw2019.jpg';
 import mw2022 from '../../images/icons/mw2022.jpg';
 import mw2023 from '../../images/icons/mw2023.jpg';
+
+// Импорт favicon - используем путь из public через /
+const faviconAlt3 = '/favicon-alt-3.svg?url';
 
 const page = usePage();
 const user = ref(page.props.auth?.user || null);

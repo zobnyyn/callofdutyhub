@@ -13,9 +13,8 @@ class ZombieMapController extends Controller
             ->where('is_published', true)
             ->firstOrFail();
 
-        return Inertia::render('ZombieMapDetail', [
+        return Inertia::render('Zombies/ZombieMapDetail', [
             'zombieMap' => $zombieMap
         ]);
     }
 }
-

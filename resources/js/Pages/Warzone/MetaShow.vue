@@ -1,5 +1,14 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
+
+    <!-- SEO Meta Tags -->
+    <SEO
+      :title="seoTitle"
+      :description="seoDescription"
+      :keywords="seoKeywords"
+      :image="seoImage"
+    />
+
     <!-- Terminal Background -->
     <div class="fixed inset-0 opacity-[0.02]" style="background-image: repeating-linear-gradient(0deg, #f97316 0px, transparent 1px, transparent 2px);"></div>
 
@@ -110,12 +119,35 @@
 import { Link } from '@inertiajs/vue3';
 import Header from '@/Components/Header.vue';
 import BuildBlock from '@/Components/Warzone/BuildBlock.vue';
+import { computed } from 'vue';
+import SEO from '@/Components/SEO.vue';
 
-defineProps({
+const props = defineProps({
   weapon: {
     type: Object,
     required: true
   }
+});
+
+const seoTitle = computed(() => {
+  return `${props.weapon.name} — мета сборки, билды и гайды | COD Terminal`;
+});
+
+const seoDescription = computed(() => {
+  if (props.weapon.description) return props.weapon.description;
+  return `${props.weapon.name} — мета‑сборки и подробная информация по статистике и билдам.`;
+});
+
+const seoKeywords = computed(() => {
+  const parts = [];
+  if (props.weapon.category) parts.push(props.weapon.category);
+  if (props.weapon.origin_game) parts.push(props.weapon.origin_game);
+  parts.push('Warzone', 'сборки', 'билды');
+  return parts.join(', ');
+});
+
+const seoImage = computed(() => {
+  return props.weapon.image ? `/storage/${props.weapon.image}` : '/images/og-warzone-meta.jpg';
 });
 
 const formatOrigin = (origin) => {
@@ -141,7 +173,7 @@ const formatCategory = (category) => {
     'tactical': 'Tactical',
     'battlerifle': 'Battle Rifle'
   };
-  return map[category] || category.toUpperCase();
+  return map[category] || (category ? category.toUpperCase() : '');
 };
 
 const formatDate = (dateString) => {

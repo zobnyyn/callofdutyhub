@@ -31,7 +31,8 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon2.ico') }}">
+    <link rel="alternate icon" type="image/x-icon" href="{{ asset('favicon2.ico') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
     @inertiaHead

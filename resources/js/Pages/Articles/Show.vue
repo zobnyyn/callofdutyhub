@@ -1,5 +1,13 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
+    <!-- SEO Meta Tags -->
+    <SEO
+      :title="`${article.title} | COD Terminal`"
+      :description="article.excerpt || (article.content ? (article.content.replace(/<[^>]+>/g, '').slice(0,160)) : 'Статья по Call of Duty')"
+      :keywords="`${article.game || ''}, ${article.category || ''}, Call of Duty, гайды, новости`"
+      :image="article.image ? `/storage/${article.image}` : '/images/og-article.jpg'"
+    />
+
     <!-- Terminal Background -->
     <div class="fixed inset-0 opacity-[0.02]" style="background-image: repeating-linear-gradient(0deg, #f97316 0px, transparent 1px, transparent 2px);"></div>
 
@@ -173,6 +181,7 @@
 import { Link } from '@inertiajs/vue3';
 import Header from '@/Components/Header.vue';
 import Footer from '@/Components/Footer.vue';
+import SEO from '@/Components/SEO.vue';
 
 const props = defineProps({
   article: Object,

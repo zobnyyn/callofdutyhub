@@ -16,14 +16,15 @@ class IsAdmin
     public function handle(Request $request, Closure $next): Response
     {
         if (!auth()->check()) {
-            return redirect('/login')->with('error', 'Необходимо авторизоваться');
+            // Для неавторизованных пользователей возвращаем 404
+            abort(404);
         }
 
         if (!auth()->user()->isAdmin()) {
-            abort(403, 'У вас нет прав доступа к админ-панели');
+            // Для авторизованных, но не админов, также возвращаем 404
+            abort(404);
         }
 
         return $next($request);
     }
 }
-

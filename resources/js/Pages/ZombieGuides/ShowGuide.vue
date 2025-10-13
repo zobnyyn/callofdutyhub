@@ -1,5 +1,14 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative">
+
+    <!-- SEO Meta Tags -->
+    <Seo
+      :title="guide.title"
+      :description="seoDescription"
+      :keywords="`${guide.game}, гайд, ${guide.map_name}`"
+      :image="seoImage"
+    />
+
     <!-- Terminal Background -->
     <div class="fixed inset-0 z-0 opacity-[0.02]" style="background-image: repeating-linear-gradient(0deg, #f97316 0px, transparent 1px, transparent 2px);"></div>
 
@@ -601,8 +610,9 @@
 </template>
 
 <script setup>
-import { defineProps, ref, onMounted, onUnmounted, nextTick, watch } from 'vue';
+import { defineProps, ref, onMounted, onUnmounted, nextTick, watch, computed } from 'vue';
 import Header from '../../Components/Header.vue';
+import Seo from '../../Components/SEO.vue';
 import axios from 'axios';
 
 const props = defineProps({
@@ -640,6 +650,19 @@ const props = defineProps({
     type: Array,
     default: () => []
   }
+});
+
+// SEO helpers
+const seoDescription = computed(() => {
+  const g = props.guide || {};
+  if (g.description) return g.description;
+  if (g.content) return g.content.replace(/<[^>]+>/g, '').slice(0, 160);
+  return `${g.map_name || ''} гайд по ${g.game || 'Call of Duty'}`;
+});
+
+const seoImage = computed(() => {
+  const g = props.guide || {};
+  return g.image ? `/storage/${g.image}` : null;
 });
 
 const contentRef = ref(null);

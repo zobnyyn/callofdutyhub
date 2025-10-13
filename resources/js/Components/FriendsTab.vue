@@ -20,6 +20,8 @@
             @click="sendFriendRequest"
             :disabled="isLoading"
             class="px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white font-mono font-bold transition-all disabled:opacity-50"
+            type="button"
+            aria-label="Добавить в друзья"
           >
             <span class="text-white">&gt;</span> ADD_FRIEND
           </button>
@@ -30,6 +32,8 @@
             @click="cancelFriendRequest"
             :disabled="isLoading"
             class="px-6 py-3 bg-gray-600 hover:bg-gray-500 text-white font-mono transition-all disabled:opacity-50"
+            type="button"
+            aria-label="Отменить запрос в друзья"
           >
             <span class="text-white">&gt;</span> CANCEL_REQUEST
           </button>
@@ -40,6 +44,8 @@
               @click="acceptFriendRequest"
               :disabled="isLoading"
               class="px-6 py-3 bg-green-600 hover:bg-green-500 text-white font-mono font-bold transition-all disabled:opacity-50"
+              type="button"
+              aria-label="Принять запрос в друзья"
             >
               <span class="text-white">&gt;</span> ACCEPT
             </button>
@@ -47,6 +53,8 @@
               @click="declineFriendRequest"
               :disabled="isLoading"
               class="px-4 py-3 bg-red-600 hover:bg-red-500 text-white font-mono transition-all disabled:opacity-50"
+              type="button"
+              aria-label="Отклонить запрос в друзья"
             >
               DECLINE
             </button>
@@ -58,6 +66,8 @@
             @click="removeFriend"
             :disabled="isLoading"
             class="px-6 py-3 bg-red-600/20 border border-red-500/30 text-red-500 hover:bg-red-500/30 font-mono transition-all disabled:opacity-50"
+            type="button"
+            aria-label="Удалить из друзей"
           >
             <span class="text-red-600">&gt;</span> REMOVE_FRIEND
           </button>
@@ -103,6 +113,8 @@
                 @click="acceptRequest(request.id)"
                 class="px-3 py-2 bg-green-600 hover:bg-green-500 text-white font-mono text-xs transition-all"
                 title="Accept"
+                type="button"
+                aria-label="Принять запрос от {{ request.name }}"
               >
                 ✓
               </button>
@@ -110,6 +122,8 @@
                 @click="declineRequest(request.id)"
                 class="px-3 py-2 bg-red-600 hover:bg-red-500 text-white font-mono text-xs transition-all"
                 title="Decline"
+                type="button"
+                aria-label="Отклонить запрос от {{ request.name }}"
               >
                 ✗
               </button>
@@ -128,8 +142,10 @@
         </span>
         <button
           @click="loadFriends"
-          class="px-3 py-1 bg-orange-500/20 border border-orange-500/30 text-orange-500 text-xs hover:bg-orange-500/30 transition-all"
+          class="px-3 py-1 bg-orange-500/20 border border-orange-500/30 text-orange-500 text-xs font-mono hover:bg-orange-500/30 transition-all"
           :disabled="isLoading"
+          type="button"
+          aria-label="Обновить список друзей"
         >
           <span v-if="!isLoading">↻ REFRESH</span>
           <span v-else>LOADING...</span>
@@ -173,7 +189,7 @@
                 class="w-14 h-14 rounded-full border-2 border-orange-500/50 object-cover group-hover:border-orange-500 transition-colors"
               />
               <!-- Online indicator -->
-              <div v-if="isOnline(friend.id)" class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black"></div>
+              <div v-if="isOnline(friend.id)" class="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-black" aria-hidden="true"></div>
             </div>
 
             <!-- User Info -->
@@ -195,8 +211,10 @@
             v-if="isOwnProfile"
             @click="openChat(friend)"
             class="w-full px-3 py-2 bg-orange-600/20 border border-orange-500/30 text-orange-500 text-xs font-mono hover:bg-orange-500/30 transition-all flex items-center justify-center gap-2"
+            type="button"
+            aria-label="Открыть чат с пользователем"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
             </svg>
             <span class="text-orange-600">&gt;</span> НАПИСАТЬ

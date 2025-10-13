@@ -9,7 +9,6 @@ class ZombiesController extends Controller
 {
     public function index()
     {
-        return Inertia::render('Zombies');
+        return Inertia::render('Zombies/Index');
     }
 }
-

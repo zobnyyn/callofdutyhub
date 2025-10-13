@@ -5,7 +5,25 @@ import '../css/app.css';
 createInertiaApp({
   resolve: name => {
     const pages = import.meta.glob('./Pages/**/*.vue', { eager: true });
-    return pages[`./Pages/${name}.vue`];
+
+    // Пытаемся найти страницу в новой структуре с подпапками
+    let page = pages[`./Pages/${name}.vue`];
+
+    // Если не нашли, пробуем поискать в подпапках
+    if (!page) {
+      // Список возможных подпапок
+      const folders = ['Wiki', 'Zombies', 'Auth', 'Profile', 'Chat', 'General', 'Admin', 'Articles', 'Warzone', 'ZombieGuides'];
+
+      for (const folder of folders) {
+        const possiblePath = `./Pages/${folder}/${name}.vue`;
+        if (pages[possiblePath]) {
+          page = pages[possiblePath];
+          break;
+        }
+      }
+    }
+
+    return page;
   },
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })

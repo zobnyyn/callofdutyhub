@@ -3,6 +3,8 @@ namespace App\Http\Controllers;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\Notification;
+use App\Models\GameGroup;
+use App\Models\GroupMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -51,7 +53,7 @@ class MessageController extends Controller
             ->where('data', 'like', '%"sender_id":' . $userId . '%')
             ->update(['read' => true]);
 
-        return Inertia::render('Chat', [
+        return Inertia::render('Chat/Chat', [
             'companion' => $companion,
             'initialMessages' => $messages,
         ]);
@@ -76,13 +78,41 @@ class MessageController extends Controller
             })
             ->exists();
     }
+
     /**
-     * Получить список всех диалогов
+     * Показать страницу группового чата
+     */
+    public function showGroupChat($groupId)
+    {
+        $userId = Auth::id();
+        $group = GameGroup::with('creator')->findOrFail($groupId);
+
+        // Проверяем, является ли пользователь участником группы
+        if (!$group->isMember($userId)) {
+            return redirect()->route('community')->with('error', 'Вы не являетесь участником этой группы');
+        }
+
+        // Получаем сообщения группы
+        $messages = GroupMessage::where('game_group_id', $groupId)
+            ->with('user:id,name,avatar')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        return Inertia::render('Chat/GroupChat', [
+            'group' => $group,
+            'initialMessages' => $messages,
+        ]);
+    }
+
+    /**
+     * Получить список всех диалогов (личные + групповые)
      */
     public function getConversations()
     {
         $userId = Auth::id();
-        $conversations = DB::table('messages')
+
+        // Получаем личные диалоги
+        $personalConversations = DB::table('messages')
             ->select(
                 DB::raw("CASE
                     WHEN sender_id = {$userId} THEN receiver_id
@@ -96,19 +126,69 @@ class MessageController extends Controller
                       ->orWhere('receiver_id', $userId);
             })
             ->groupBy('user_id')
-            ->orderBy('last_message_at', 'desc')
             ->get();
-        $userIds = $conversations->pluck('user_id')->toArray();
+
+        $userIds = $personalConversations->pluck('user_id')->toArray();
         $users = User::whereIn('id', $userIds)->get()->keyBy('id');
-        return response()->json($conversations->map(function ($conversation) use ($users) {
+
+        $personalChats = $personalConversations->map(function ($conversation) use ($users) {
             $user = $users[$conversation->user_id] ?? null;
             if (!$user) return null;
+
+            // Получаем последнее сообщение для превью
+            $lastMessage = Message::where(function($query) use ($conversation, $users) {
+                $query->where('sender_id', auth()->id())
+                      ->where('receiver_id', $conversation->user_id);
+            })
+            ->orWhere(function($query) use ($conversation) {
+                $query->where('sender_id', $conversation->user_id)
+                      ->where('receiver_id', auth()->id());
+            })
+            ->orderBy('created_at', 'desc')
+            ->first();
+
             return [
+                'type' => 'personal',
                 'user' => $user,
                 'last_message_at' => $conversation->last_message_at,
+                'last_message' => $lastMessage ? $lastMessage->message : null,
                 'unread_count' => $conversation->unread_count,
             ];
-        })->filter());
+        })->filter()->values();
+
+        // Получаем групповые чаты, где пользователь является участником
+        $groupChats = GameGroup::where(function($query) use ($userId) {
+            // Группы, где пользователь создатель
+            $query->where('creator_id', $userId)
+                // Или где пользователь является участником
+                ->orWhereHas('members', function($q) use ($userId) {
+                    $q->where('user_id', $userId)
+                      ->where('status', 'accepted');
+                });
+        })
+        ->with(['creator'])
+        ->get()
+        ->map(function ($group) use ($userId) {
+            // Получаем последнее сообщение в группе
+            $lastMessage = GroupMessage::where('game_group_id', $group->id)
+                ->orderBy('created_at', 'desc')
+                ->first();
+
+            return [
+                'type' => 'group',
+                'group' => $group,
+                'last_message_at' => $lastMessage ? $lastMessage->created_at : $group->created_at,
+                'last_message' => $lastMessage ? $lastMessage->message : null,
+                'unread_count' => 0, // Упрощенная версия без отслеживания прочитанных
+            ];
+        });
+
+        // Объединяем и сортируем по дате последнего сообщения
+        $allConversations = $personalChats->concat($groupChats)
+            ->sortByDesc('last_message_at')
+            ->values();
+
+        return response()->json($allConversations);
     }
     /**
      * Получить сообщения с конкретным пользователем

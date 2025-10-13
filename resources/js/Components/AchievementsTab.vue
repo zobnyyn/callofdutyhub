@@ -1,8 +1,16 @@
 <template>
   <div>
+    <!-- SEO Meta Tags -->
+    <Seo
+      :title="seoTitle"
+      :description="seoDescription"
+      :keywords="seoKeywords"
+      :image="seoImage"
+    />
+
     <!-- Loading State -->
     <div v-if="loading" class="text-center py-12">
-      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500"></div>
+      <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-orange-500" role="status" aria-label="loading"></div>
       <p class="text-orange-500 font-mono text-sm mt-4">
         <span class="text-orange-600">&gt;</span> LOADING_ACHIEVEMENTS...
       </p>
@@ -10,7 +18,7 @@
 
     <!-- No Achievements -->
     <div v-else-if="achievements.length === 0" class="text-center py-12 border border-orange-500/30 bg-orange-500/5 p-8">
-      <svg class="w-16 h-16 mx-auto text-orange-500/30 mb-4" fill="currentColor" viewBox="0 0 20 20">
+      <svg class="w-16 h-16 mx-auto text-orange-500/30 mb-4" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
       </svg>
       <p class="text-gray-400 font-mono text-sm">
@@ -34,18 +42,21 @@
             v-for="achievement in displayedAchievements"
             :key="achievement.id"
             class="border-2 border-orange-500 bg-gradient-to-br from-orange-500/20 to-red-500/20 p-4 relative overflow-hidden group"
+            role="article"
+            aria-label="featured achievement"
           >
             <!-- Background Image -->
             <div
               v-if="achievement.guide?.image"
               class="absolute inset-0 bg-cover bg-center opacity-60 group-hover:opacity-70 transition-opacity duration-300"
               :style="{ backgroundImage: `url(${getImagePath(achievement.guide.image)})` }"
+              aria-hidden="true"
             ></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-black/30" aria-hidden="true"></div>
 
             <!-- Content -->
             <div class="flex items-start gap-3 relative z-10">
-              <svg class="w-8 h-8 text-orange-500 flex-shrink-0 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
+              <svg class="w-8 h-8 text-orange-500 flex-shrink-0 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                 <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
               </svg>
               <div class="flex-1 min-w-0">
@@ -76,6 +87,7 @@
             <button
               @click="cancelEdit"
               class="px-4 py-2 border border-gray-500 text-gray-400 font-mono text-xs hover:bg-gray-500/10 transition-colors"
+              aria-label="Cancel editing achievements"
             >
               CANCEL
             </button>
@@ -83,6 +95,7 @@
               @click="saveDisplayed"
               :disabled="selectedAchievements.length === 0"
               class="px-4 py-2 border border-orange-500 text-orange-500 font-mono text-xs hover:bg-orange-500/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Save featured achievements"
             >
               SAVE ({{ selectedAchievements.length }}/3)
             </button>
@@ -91,6 +104,7 @@
             v-else-if="isOwnProfile"
             @click="startEdit"
             class="px-4 py-2 border border-orange-500 text-orange-500 font-mono text-xs hover:bg-orange-500/10 transition-colors"
+            aria-label="Edit featured achievements"
           >
             <span class="text-orange-600">&gt;</span> EDIT_FEATURED
           </button>
@@ -108,26 +122,32 @@
                 ? 'border-orange-500 bg-orange-500/20'
                 : 'border-orange-500/30 bg-orange-500/5'
             ]"
+            :role="editMode ? 'button' : 'article'"
+            :tabindex="editMode ? 0 : -1"
+            :aria-pressed="editMode ? selectedAchievements.includes(achievement.id) : undefined"
+            :aria-label="`achievement ${achievement.guide?.title || achievement.id}`"
           >
             <!-- Background Image -->
             <div
               v-if="achievement.guide?.image"
               class="absolute inset-0 bg-cover bg-center opacity-45 group-hover:opacity-55 transition-opacity duration-300"
               :style="{ backgroundImage: `url(${getImagePath(achievement.guide.image)})` }"
+              aria-hidden="true"
             ></div>
-            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/55 to-black/35"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/55 to-black/35" aria-hidden="true"></div>
 
             <!-- Content -->
             <div class="flex items-start gap-3 relative z-10">
               <div class="relative">
-                <svg class="w-10 h-10 text-orange-500 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20">
+                <svg class="w-10 h-10 text-orange-500 drop-shadow-lg" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                   <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
                 </svg>
                 <div
                   v-if="editMode && selectedAchievements.includes(achievement.id)"
                   class="absolute -top-1 -right-1 w-5 h-5 bg-orange-500 rounded-full flex items-center justify-center"
+                  aria-hidden="true"
                 >
-                  <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                  <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true" focusable="false">
                     <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
                   </svg>
                 </div>
@@ -153,6 +173,7 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue';
 import axios from 'axios';
+import Seo from './SEO.vue';
 
 const props = defineProps({
   userId: {
@@ -171,6 +192,22 @@ const loading = ref(true);
 const achievements = ref([]);
 const editMode = ref(false);
 const selectedAchievements = ref([]);
+
+// SEO
+const seoTitle = computed(() => {
+  return props.isOwnProfile
+    ? 'Мои достижения | COD Terminal'
+    : `Достижения — Профиль #${props.userId}`;
+});
+
+const seoDescription = computed(() => {
+  return props.isOwnProfile
+    ? 'Ваши достижения на COD Terminal. Отслеживайте прогресс в прохождении зомби-гайдов и демонстрируйте свои успехи.'
+    : `Достижения пользователя #${props.userId} на COD Terminal.`;
+});
+
+const seoKeywords = computed(() => 'Call of Duty, достижения, гайды, зомби, прогресс, COD Terminal');
+const seoImage = computed(() => null);
 
 const displayedAchievements = computed(() => {
   return achievements.value

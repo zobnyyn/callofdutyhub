@@ -1,7 +1,7 @@
 <template>
   <Teleport to="body">
     <div v-if="show" class="fixed inset-0 bg-black/80 flex items-center justify-center z-50 p-4" @click.self="$emit('close')">
-      <div class="bg-gray-900 border border-orange-600/30 rounded-lg w-full max-w-4xl h-[600px] flex flex-col">
+      <div class="bg-gray-900 border border-orange-600/30 rounded-lg w-full max-w-4xl h-[600px] flex flex-col" role="dialog" aria-modal="true" :aria-label="`Chat with ${user.name}`">
         <!-- Header -->
         <div class="p-4 border-b border-orange-600/30 flex items-center justify-between">
           <div class="flex items-center space-x-3">
@@ -11,7 +11,7 @@
               class="w-10 h-10 rounded-full border-2 border-orange-500 object-cover"
             />
             <div>
-              <h2 class="text-xl font-black font-mono text-orange-500">
+              <h2 class="text-xl font-black font-mono text-orange-500" id="chat-title">
                 <span class="text-orange-600">&gt;</span> {{ user.name }}
               </h2>
               <div class="text-xs text-gray-400 font-mono">SECURE_CHAT</div>
@@ -20,8 +20,9 @@
           <button
             @click="$emit('close')"
             class="text-gray-400 hover:text-orange-500 transition-colors"
+            aria-label="Close chat"
           >
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
@@ -65,16 +66,19 @@
         <div class="p-4 border-t border-orange-600/30 bg-gray-900">
           <form @submit.prevent="sendMessage" class="flex space-x-3">
             <input
+              ref="inputEl"
               v-model="newMessage"
               type="text"
               placeholder="Введите сообщение..."
               maxlength="1000"
               class="flex-1 px-4 py-2 bg-black border border-orange-600/30 rounded text-white font-mono focus:border-orange-500 focus:outline-none"
+              :aria-label="`Message to ${user.name}`"
             />
             <button
               type="submit"
               :disabled="!newMessage.trim() || sending"
               class="px-6 py-2 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-black text-sm font-black font-mono transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+              aria-label="Send message"
             >
               {{ sending ? 'ОТПРАВКА...' : 'ОТПРАВИТЬ' }}
             </button>
@@ -108,25 +112,26 @@ const newMessage = ref('');
 const loading = ref(false);
 const sending = ref(false);
 const messagesContainer = ref(null);
+const inputEl = ref(null);
 let pollingInterval = null;
 
 // Загружаем сообщения при монтировании, если чат уже открыт
 onMounted(() => {
   if (props.show) {
-    console.log('ChatModal mounted with show=true, loading messages...');
     loadMessages();
     startPolling();
   }
 });
 
 watch(() => props.show, (newVal) => {
-  console.log('Show changed to:', newVal);
   if (newVal) {
-    console.log('Chat opened, loading messages...');
     loadMessages();
     startPolling();
+    // Фокусируем поле ввода, когда модал открыт
+    setTimeout(() => {
+      inputEl.value?.focus();
+    }, 50);
   } else {
-    console.log('Chat closed, stopping polling...');
     stopPolling();
   }
 });
@@ -144,15 +149,12 @@ function getAvatarUrl(avatar) {
 async function loadMessages() {
   loading.value = true;
   try {
-    console.log('Loading messages for user:', props.user.id);
     const response = await axios.get(`/api/messages/${props.user.id}`);
-    console.log('Messages loaded:', response.data);
     messages.value = response.data;
     await nextTick();
     scrollToBottom();
   } catch (error) {
     console.error('Error loading messages:', error);
-    console.error('Error response:', error.response?.data);
     if (error.response?.status === 403) {
       alert('Ошибка: ' + (error.response.data?.error || 'Вы можете писать только друзьям'));
     }
@@ -166,20 +168,17 @@ async function sendMessage() {
 
   sending.value = true;
   try {
-    console.log('Sending message to user:', props.user.id, 'message:', newMessage.value);
     const response = await axios.post('/api/messages/send', {
       receiver_id: props.user.id,
       message: newMessage.value
     });
 
-    console.log('Message sent successfully:', response.data);
     messages.value.push(response.data);
     newMessage.value = '';
     await nextTick();
     scrollToBottom();
   } catch (error) {
     console.error('Error sending message:', error);
-    console.error('Error response:', error.response?.data);
     alert(error.response?.data?.error || error.response?.data?.message || 'Ошибка при отправке сообщения');
   } finally {
     sending.value = false;
@@ -216,7 +215,6 @@ function formatTime(dateString) {
 }
 
 function startPolling() {
-  // Обновляем сообщения каждые 3 секунды
   pollingInterval = setInterval(async () => {
     if (props.show) {
       try {
@@ -224,7 +222,6 @@ function startPolling() {
         const oldLength = messages.value.length;
         messages.value = response.data;
 
-        // Прокручиваем вниз если появились новые сообщения
         if (response.data.length > oldLength) {
           await nextTick();
           scrollToBottom();

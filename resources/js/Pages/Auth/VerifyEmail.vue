@@ -1,5 +1,12 @@
 <template>
   <div class="min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-900 flex items-center justify-center px-4">
+    <!-- SEO Meta Tags -->
+    <Seo
+      title="Подтверждение Email | COD Terminal"
+      description="Подтвердите ваш email адрес для завершения регистрации на COD Terminal."
+      keywords="подтверждение email, регистрация, COD Terminal"
+    />
+
     <div class="max-w-md w-full">
       <div class="bg-gray-800 rounded-lg shadow-2xl p-8 border border-orange-500/20">
         <!-- Header -->
@@ -72,7 +79,8 @@
 
 <script setup>
 import { ref } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { router } from '@inertiajs/vue3';
+import Seo from '@/Components/SEO.vue';
 
 const loading = ref(false);
 const status = ref(null);
@@ -96,4 +104,3 @@ const resendVerification = () => {
   });
 };
 </script>
-

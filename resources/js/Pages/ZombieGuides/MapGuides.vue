@@ -1,5 +1,14 @@
 <template>
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
+
+    <!-- SEO -->
+    <Seo
+      :title="mapInfo?.name ? `${mapInfo.name} — Гайды` : 'Гайды по карте | COD Terminal'"
+      :description="seoDescription"
+      :keywords="`${game}, ${mapInfo?.name || ''}, гайды, zombies`"
+      :image="seoImage"
+    />
+
     <!-- Terminal Background -->
     <div class="fixed inset-0 z-0 opacity-[0.02]" style="background-image: repeating-linear-gradient(0deg, #f97316 0px, transparent 1px, transparent 2px);"></div>
 
@@ -151,15 +160,29 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue';
+import { defineProps, computed } from 'vue';
 import { router } from '@inertiajs/vue3';
 import Header from '../../Components/Header.vue';
+import Seo from '../../Components/SEO.vue';
 
 const props = defineProps({
   guides: Array,
   game: String,
   mapSlug: String,
   mapInfo: Object
+});
+
+const seoDescription = computed(() => {
+  const m = props.mapInfo || {};
+  if (m.description) return m.description;
+  return `${m.name || 'Карта'} — список гайдов, советы и прохождения для ${props.game || 'Call of Duty'}.`;
+});
+
+const seoImage = computed(() => {
+  const m = props.mapInfo || {};
+  if (m.image) return `/storage/${m.image}`;
+  if (m.images && m.images.length) return `/storage/${m.images[0]}`;
+  return null;
 });
 
 const openGuide = (guide) => {
@@ -203,6 +226,7 @@ const backToMaps = () => {
 .line-clamp-2 {
   display: -webkit-box;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
