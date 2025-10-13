@@ -1,10 +1,10 @@
-import { createApp, h } from 'vue';
+import { createApp, h, DefineComponent } from 'vue';
 import { createInertiaApp } from '@inertiajs/vue3';
 import '../css/app.css';
 
 createInertiaApp({
-  resolve: name => {
-    const pages = import.meta.glob('./Pages/**/*.vue', { eager: true });
+  resolve: (name): DefineComponent | Promise<DefineComponent> => {
+    const pages = import.meta.glob<{ default: DefineComponent }>('./Pages/**/*.vue', { eager: true });
 
     // Пытаемся найти страницу в новой структуре с подпапками
     let page = pages[`./Pages/${name}.vue`];
@@ -23,7 +23,11 @@ createInertiaApp({
       }
     }
 
-    return page;
+    if (!page) {
+      throw new Error(`Page not found: ${name}`);
+    }
+
+    return page.default;
   },
   setup({ el, App, props, plugin }) {
     createApp({ render: () => h(App, props) })
