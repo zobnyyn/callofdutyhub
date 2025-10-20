@@ -103,19 +103,29 @@
               <!-- Meta Information -->
               <div class="flex flex-wrap items-center gap-4 md:gap-6 text-xs md:text-sm font-mono">
                 <!-- Author -->
-                <div class="flex items-center gap-2">
-                  <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold text-sm md:text-base overflow-hidden">
+                <div class="flex items-center gap-2 md:gap-3">
+                  <div class="w-10 h-10 md:w-12 md:h-12 rounded-full bg-orange-500/20 flex items-center justify-center text-orange-500 font-bold text-base md:text-lg overflow-hidden border-2 border-orange-500/50 flex-shrink-0">
                     <img
                       v-if="guide.user?.avatar"
-                      :src="`/storage/${guide.user.avatar}`"
+                      :key="`avatar-${guide.user.id}-${guide.user.avatar}`"
+                      :src="getAvatarUrl(guide.user.avatar, guide.user.name)"
                       :alt="guide.user.name"
                       class="w-full h-full object-cover"
+                      @error="handleImageError"
                     />
-                    <span v-else>{{ guide.user?.name?.charAt(0)?.toUpperCase() || '?' }}</span>
+                    <span v-else class="text-lg md:text-xl">{{ guide.user?.name?.charAt(0)?.toUpperCase() || '?' }}</span>
                   </div>
                   <div>
                     <div class="text-orange-500/70 text-[10px] md:text-xs">AUTHOR</div>
-                    <div class="text-white text-sm md:text-base">{{ guide.user?.name || 'Unknown' }}</div>
+                    <div class="flex items-center gap-1 flex-wrap">
+                      <span v-if="guide.user?.admin_prefix" class="text-orange-500 text-xs md:text-sm font-bold font-mono">{{ guide.user.admin_prefix }}</span>
+                      <div class="text-white text-sm md:text-base">{{ guide.user?.name || 'Unknown' }}</div>
+                      <span v-if="guide.user?.is_vip" class="text-yellow-400 text-xs md:text-sm" title="VIP пользователь">⭐</span>
+                    </div>
+                    <div class="flex gap-1 mt-0.5">
+                      <span v-if="guide.user?.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[8px] md:text-[10px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                      <span v-if="guide.user?.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] md:text-[10px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                    </div>
                   </div>
                 </div>
 
@@ -700,6 +710,26 @@ const formatMapName = (mapSlug) => {
     .split('-')
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ');
+};
+
+// Получить URL аватарки пользователя
+const getAvatarUrl = (avatar, name) => {
+  if (!avatar || avatar === 'null' || avatar === '0' || avatar === 0) {
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name || 'User')}&background=ea580c&color=fff`;
+  }
+  if (avatar.startsWith('http')) {
+    return avatar;
+  }
+  // Добавляем timestamp для предотвращения кэширования
+  const timestamp = new Date().getTime();
+  return `/storage/${avatar}?t=${timestamp}`;
+};
+
+// Обработчик ошибок загрузки изображения
+const handleImageError = (event) => {
+  const img = event.target;
+  const name = img.alt || 'User';
+  img.src = `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=ea580c&color=fff`;
 };
 
 // Генерация оглавления из заголовков
@@ -1378,6 +1408,44 @@ const hideGameItemTooltip = (container) => {
   font-style: italic;
   background-color: rgba(249, 115, 22, 0.05);
   padding: 1rem;
+}
+
+/* Стили для аудио элементов */
+:deep(.guide-content .audio-wrapper) {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 2px solid rgba(249, 115, 22, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease;
+}
+
+:deep(.guide-content .audio-wrapper:hover) {
+  border-color: rgba(249, 115, 22, 0.6);
+}
+
+:deep(.guide-content .audio-wrapper .text-orange-400) {
+  color: #fb923c;
+  font-family: monospace;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+:deep(.guide-content .audio-wrapper audio) {
+  width: 100%;
+  filter: hue-rotate(20deg) saturate(1.2);
+  outline: none;
+}
+
+:deep(.guide-content audio) {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  outline: none;
+  filter: hue-rotate(20deg) saturate(1.2);
 }
 
 /* Стили для встроенных предметов в гайде */

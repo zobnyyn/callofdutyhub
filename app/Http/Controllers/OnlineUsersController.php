@@ -34,6 +34,9 @@ class OnlineUsersController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'avatar' => $user->avatar,
+                    'admin_prefix' => $user->admin_prefix,
+                    'is_admin' => $user->is_admin,
+                    'is_vip' => $user->is_vip,
                 ];
             }
         }
@@ -58,4 +61,3 @@ class OnlineUsersController extends Controller
         return $count;
     }
 }
-

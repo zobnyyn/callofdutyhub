@@ -141,7 +141,11 @@
                     />
                     <span v-else>{{ guide.user?.name?.charAt(0)?.toUpperCase() || '?' }}</span>
                   </div>
-                  <span class="text-sm text-gray-400 font-mono">{{ guide.user?.name || 'Unknown' }}</span>
+                  <div class="flex items-center gap-1 flex-wrap">
+                    <span v-if="guide.user?.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ guide.user.admin_prefix }}</span>
+                    <span class="text-sm text-gray-400 font-mono">{{ guide.user?.name || 'Unknown' }}</span>
+                    <span v-if="guide.user?.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+                  </div>
                 </div>
 
                 <div class="flex items-center space-x-2 text-orange-500 font-mono text-xs group-hover:text-orange-400 transition-colors">
@@ -186,23 +190,13 @@ const seoImage = computed(() => {
 });
 
 const openGuide = (guide) => {
+  // Используем game из props, который уже в URL-формате (black-ops, а не Black Ops)
   router.visit(`/zombies/${props.game}/${props.mapSlug}/guides/${guide.id}`);
 };
 
 const backToMaps = () => {
-  // Динамическое определение страницы возврата на основе названия игры
-  const gameRoutes = {
-    'World at War': '/zombies/world-at-war',
-    'Black Ops': '/zombies/black-ops',
-    'Black Ops 2': '/zombies/black-ops-2',
-    'Black Ops 3': '/zombies/black-ops-3',
-    'Black Ops 4': '/zombies/black-ops-4',
-    'Cold War': '/zombies/cold-war',
-    'Black Ops 6': '/zombies/black-ops-6',
-  };
-
-  const route = gameRoutes[props.game] || '/zombies';
-  router.visit(route);
+  // game уже приходит в правильном формате из URL
+  router.visit(`/zombies/${props.game}`);
 };
 </script>
 

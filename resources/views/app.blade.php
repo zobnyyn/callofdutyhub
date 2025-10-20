@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <!-- БЕЗ кэширования -->
+    <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate, max-age=0">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
 
     <!-- SEO Meta Tags -->
     <title inertia>{{ config('app.name') }}</title>
@@ -31,8 +37,12 @@
     <link rel="canonical" href="{{ url()->current() }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="{{ asset('favicon2.ico') }}">
-    <link rel="alternate icon" type="image/x-icon" href="{{ asset('favicon2.ico') }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+    <link rel="alternate icon" type="image/x-icon" href="{{ asset('favicon.ico') }}">
+
+    <!-- Preconnect для оптимизации загрузки -->
+    <link rel="preconnect" href="{{ config('app.url') }}">
+    <link rel="dns-prefetch" href="{{ config('app.url') }}">
 
     @vite(['resources/css/app.css', 'resources/js/app.ts'])
     @inertiaHead

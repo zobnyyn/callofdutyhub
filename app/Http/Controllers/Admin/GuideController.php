@@ -53,7 +53,7 @@ class GuideController extends Controller
             'map_slug' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'content' => 'required|string|max:5000000',
+            'content' => 'required|string|max:5000000000',
             'image' => 'nullable|image|max:10240',
             'is_published' => 'boolean',
             'gives_achievement' => 'boolean',
@@ -133,7 +133,7 @@ class GuideController extends Controller
             'map_slug' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'nullable|string',
-            'content' => 'required|string|max:5000000',
+            'content' => 'required|string|max:50000000',
             'image' => 'nullable|image|max:10240',
             'is_published' => 'boolean',
             'gives_achievement' => 'boolean',
@@ -174,6 +174,10 @@ class GuideController extends Controller
         // Отвязываем старые предметы и прикрепляем новые
         $guide->items()->detach();
         $this->attachItems($guide, $request);
+
+        // КРИТИЧЕСКИ ВАЖНО: Очищаем кэш после обновления предметов
+        // так как изменение pivot-таблицы не вызывает событие 'saved' модели
+        $guide->forceClearCache();
 
         return redirect()->route('admin.guides.index')
             ->with('success', 'Гайд успешно обновлен!');

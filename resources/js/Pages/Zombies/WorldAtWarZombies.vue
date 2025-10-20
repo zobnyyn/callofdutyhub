@@ -277,7 +277,7 @@ const navigateToGuides = (mapSlug) => {
     router.visit('/register');
     return;
   }
-  router.visit(`/zombies/World at War/${mapSlug}/guides`);
+  router.visit(`/zombies/world-at-war/${mapSlug}/guides`);
 };
 </script>
 

@@ -37,7 +37,7 @@
 
           <!-- Back Button -->
           <Link
-            href="/articles"
+            href="/community"
             class="text-orange-500 hover:text-orange-400 font-mono text-sm mb-6 inline-flex items-center gap-2"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

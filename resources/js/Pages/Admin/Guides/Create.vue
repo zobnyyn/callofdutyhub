@@ -63,14 +63,14 @@
                 class="w-full px-4 py-3 bg-black border-2 border-orange-500/30 text-white font-mono focus:outline-none focus:border-orange-500 transition-colors"
               >
                 <option value="">Выберите игру</option>
-                <option value="World at War">Call of Duty: World at War</option>
-                <option value="Black Ops">Call of Duty: Black Ops</option>
-                <option value="Black Ops 2">Call of Duty: Black Ops 2</option>
-                <option value="Black Ops 3">Call of Duty: Black Ops 3</option>
-                <option value="Black Ops 4">Call of Duty: Black Ops 4</option>
-                <option value="Cold War">Call of Duty: Black Ops Cold War</option>
-                <option value="Black Ops 6">Call of Duty: Black Ops 6</option>
-                <option value="Black Ops 7">Call of Duty: Black Ops 7</option>
+                <option value="world-at-war">Call of Duty: World at War</option>
+                <option value="black-ops">Call of Duty: Black Ops</option>
+                <option value="black-ops-2">Call of Duty: Black Ops 2</option>
+                <option value="black-ops-3">Call of Duty: Black Ops 3</option>
+                <option value="black-ops-4">Call of Duty: Black Ops 4</option>
+                <option value="cold-war">Call of Duty: Black Ops Cold War</option>
+                <option value="black-ops-6">Call of Duty: Black Ops 6</option>
+                <option value="black-ops-7">Call of Duty: Black Ops 7</option>
               </select>
             </div>
 
@@ -292,13 +292,13 @@ const form = useForm({
 
 // Карты для каждой игры
 const gameMaps = {
-  'World at War': [
+  'world-at-war': [
     { slug: 'nacht-der-untoten', name: 'Nacht der Untoten' },
     { slug: 'verruckt', name: 'Verrückt' },
     { slug: 'shi-no-numa', name: 'Shi No Numa' },
     { slug: 'der-riese', name: 'Der Riese' }
   ],
-  'Black Ops': [
+  'black-ops': [
     { slug: 'kino-der-toten', name: 'Kino der Toten' },
     { slug: 'five', name: '"Five"' },
     { slug: 'ascension', name: 'Ascension' },
@@ -306,7 +306,7 @@ const gameMaps = {
     { slug: 'shangri-la', name: 'Shangри-La' },
     { slug: 'moon', name: 'Moon' }
   ],
-  'Black Ops 2': [
+  'black-ops-2': [
     { slug: 'tranzit', name: 'TranZit' },
     { slug: 'nuketown-zombies', name: 'Nuketown Zombies' },
     { slug: 'die-rise', name: 'Die Rise' },
@@ -314,7 +314,7 @@ const gameMaps = {
     { slug: 'buried', name: 'Buried' },
     { slug: 'origins', name: 'Origins' }
   ],
-  'Black Ops 3': [
+  'black-ops-3': [
     // Original Maps
     { slug: 'shadows-of-evil', name: 'Shadows of Evil' },
     { slug: 'the-giant', name: 'The Giant' },
@@ -332,7 +332,7 @@ const gameMaps = {
     { slug: 'bo3-moon', name: 'Moon (ZC)' },
     { slug: 'bo3-origins', name: 'Origins (ZC)' }
   ],
-  'Black Ops 4': [
+  'black-ops-4': [
     { slug: 'ix', name: 'IX' },
     { slug: 'blood-of-the-dead', name: 'Blood of the Dead' },
     { slug: 'voyage-of-despair', name: 'Voyage of Despair' },
@@ -342,14 +342,14 @@ const gameMaps = {
     { slug: 'alpha-omega', name: 'Alpha Omega' },
     { slug: 'tag-der-toten', name: 'Tag der Toten' }
   ],
-  'Cold War': [
+  'cold-war': [
     { slug: 'die-maschine', name: 'Die Maschine' },
     { slug: 'firebase-z', name: 'Firebase Z' },
     { slug: 'outbreak', name: 'Outbreak' },
     { slug: 'mauer-der-toten', name: 'Mauer der Toten' },
     { slug: 'forsaken', name: 'Forsaken' }
   ],
-  'Black Ops 6': [
+  'black-ops-6': [
     { slug: 'liberty-falls', name: 'Liberty Falls' },
     { slug: 'terminus', name: 'Terminus' },
     { slug: 'citadelle-des-morts', name: 'Citadelle des Morts' },
@@ -357,7 +357,7 @@ const gameMaps = {
     { slug: 'shattered-veil', name: 'Shattered Veil' },
     { slug: 'reckoning', name: 'Reckoning' }
   ],
-  'Black Ops 7': [
+  'black-ops-7': [
     { slug: 'ashes-of-the-damned', name: 'Ashes of the Damned' }
   ]
 };
@@ -453,5 +453,38 @@ function submit() {
 @keyframes blink {
   0%, 50% { opacity: 1; }
   51%, 100% { opacity: 0; }
+}
+/* Стили для аудио в TiptapEditor */
+:deep(.audio-wrapper) {
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border: 2px solid rgba(249, 115, 22, 0.3);
+  background-color: rgba(0, 0, 0, 0.3);
+  border-radius: 0.5rem;
+  transition: border-color 0.3s ease;
+}
+:deep(.audio-wrapper:hover) {
+  border-color: rgba(249, 115, 22, 0.6);
+}
+:deep(.audio-wrapper .text-orange-400) {
+  color: #fb923c;
+  font-family: monospace;
+  font-size: 0.875rem;
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+:deep(.audio-wrapper audio) {
+  width: 100%;
+  filter: hue-rotate(20deg) saturate(1.2);
+  outline: none;
+}
+:deep(audio) {
+  width: 100%;
+  margin: 1.5rem 0;
+  border-radius: 0.5rem;
+  outline: none;
+  filter: hue-rotate(20deg) saturate(1.2);
 }
 </style>

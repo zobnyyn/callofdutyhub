@@ -7,7 +7,11 @@
         :alt="user.name"
         class="w-8 h-8 rounded-full border-2 border-orange-500 object-cover"
       />
-      <span class="text-sm font-mono text-orange-400">{{ user.name }}</span>
+      <div class="flex items-center gap-1">
+        <span v-if="user.admin_prefix" class="text-xs font-bold font-mono text-orange-500">{{ user.admin_prefix }}</span>
+        <span class="text-sm font-mono text-orange-400">{{ user.name }}</span>
+        <span v-if="user.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+      </div>
       <svg class="w-4 h-4 text-orange-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
       </svg>
@@ -22,9 +26,24 @@
             :alt="user.name"
             class="w-12 h-12 rounded-full border-2 border-orange-500 object-cover"
           />
-          <div>
-            <div class="text-white font-mono font-bold">{{ user.name }}</div>
-            <div class="text-xs text-gray-400 font-mono">{{ user.email }}</div>
+          <div class="flex-1">
+            <div class="flex items-center gap-1 flex-wrap">
+              <span v-if="user.admin_prefix" class="text-orange-500 font-mono font-bold text-sm">{{ user.admin_prefix }}</span>
+              <span class="text-white font-mono font-bold">{{ user.name }}</span>
+              <span v-if="user.is_vip" class="text-yellow-400" title="VIP пользователь">⭐</span>
+            </div>
+            <div class="text-xs text-gray-400 font-mono mt-1">{{ user.email }}</div>
+            <div v-if="user.is_admin" class="mt-1">
+              <span class="px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/30 font-mono">
+                ADMIN
+              </span>
+            </div>
+            <div v-if="user.is_vip && user.vip_expires_at" class="mt-1 text-xs text-yellow-400 font-mono">
+              VIP до: {{ new Date(user.vip_expires_at).toLocaleDateString('ru-RU') }}
+            </div>
+            <div v-else-if="user.is_vip && !user.vip_expires_at" class="mt-1 text-xs text-yellow-400 font-mono">
+              VIP: ∞ Навсегда
+            </div>
           </div>
         </div>
       </div>

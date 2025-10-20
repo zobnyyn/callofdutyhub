@@ -1,7 +1,6 @@
 <?php
 
 return [
-
     /*
     |--------------------------------------------------------------------------
     | Third Party Services
@@ -35,4 +34,9 @@ return [
         ],
     ],
 
+    'donation_alerts' => [
+        'secret' => env('DONATION_ALERTS_SECRET'),
+        'client_id' => env('DONATION_ALERTS_CLIENT_ID'),
+        'client_secret' => env('DONATION_ALERTS_CLIENT_SECRET'),
+    ],
 ];

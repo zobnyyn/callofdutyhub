@@ -8,23 +8,40 @@ use App\Services\GuideContentProcessor;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Cache;
 
 class ZombieGuideController extends Controller
 {
+    /**
+     * Конвертировать URL-формат названия игры в формат БД
+     * В БД теперь игры хранятся в формате с дефисами (black-ops)
+     */
+    private function normalizeGameName($game)
+    {
+        // Просто возвращаем название как есть, так как в БД хранится в том же формате
+        return $game;
+    }
+
     /**
      * Показать все гайды для конкретной карты
      */
     public function showByMap($game, $mapSlug)
     {
-        $guides = ZombieGuide::where('game', $game)
-            ->where('map_slug', $mapSlug)
-            ->where('is_published', true)
-            ->with('user')
-            ->orderBy('created_at', 'desc')
-            ->get();
+        $normalizedGame = $this->normalizeGameName($game);
+
+        // Кэшируем список гайдов на 6 часов
+        $cacheKey = "guides_map_{$normalizedGame}_{$mapSlug}";
+        $guides = Cache::remember($cacheKey, now()->addHours(6), function () use ($normalizedGame, $mapSlug) {
+            return ZombieGuide::where('game', $normalizedGame)
+                ->where('map_slug', $mapSlug)
+                ->where('is_published', true)
+                ->with('user')
+                ->orderBy('created_at', 'desc')
+                ->get();
+        });
 
         // Получаем информацию о карте
-        $mapInfo = $this->getMapInfo($game, $mapSlug);
+        $mapInfo = $this->getMapInfo($normalizedGame, $mapSlug);
 
         return Inertia::render('ZombieGuides/MapGuides', [
             'guides' => $guides,
@@ -39,17 +56,25 @@ class ZombieGuideController extends Controller
      */
     public function show($game, $mapSlug, $id)
     {
-        $guide = ZombieGuide::where('game', $game)
-            ->where('map_slug', $mapSlug)
-            ->where('is_published', true)
-            ->with(['user', 'items'])
-            ->findOrFail($id);
+        $normalizedGame = $this->normalizeGameName($game);
 
-        // Увеличиваем счетчик просмотров
-        $guide->increment('views');
+        // Кэшируем конкретный гайд на 6 часов
+        $cacheKey = "guide_{$normalizedGame}_{$mapSlug}_{$id}";
+        $guide = Cache::remember($cacheKey, now()->addHours(6), function () use ($normalizedGame, $mapSlug, $id) {
+            $guide = ZombieGuide::where('game', $normalizedGame)
+                ->where('map_slug', $mapSlug)
+                ->where('is_published', true)
+                ->with(['user', 'items'])
+                ->findOrFail($id);
 
-        // Обрабатываем контент гайда, добавляя data-атрибуты к игровым предметам
-        $guide->content = GuideContentProcessor::processContent($guide->content);
+            // Обрабатываем контент гайда, добавляя data-атрибуты к игровым предметам
+            $guide->content = GuideContentProcessor::processContent($guide->content);
+
+            return $guide;
+        });
+
+        // Увеличиваем счетчик просмотров (не кэшируем это действие)
+        ZombieGuide::where('id', $id)->increment('views');
 
         // Проверяем, есть ли у пользователя уже это достижение
         $hasAchievement = false;
@@ -92,7 +117,8 @@ class ZombieGuideController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
 
-        $guide = ZombieGuide::where('game', $game)
+        $normalizedGame = $this->normalizeGameName($game);
+        $guide = ZombieGuide::where('game', $normalizedGame)
             ->where('map_slug', $mapSlug)
             ->where('is_published', true)
             ->findOrFail($id);
@@ -129,8 +155,9 @@ class ZombieGuideController extends Controller
      */
     private function getMapInfo($game, $mapSlug)
     {
+        // Обновляем структуру массива с названиями игр в формате с дефисами
         $maps = [
-            'World at War' => [
+            'world-at-war' => [
                 'nacht-der-untoten' => [
                     'name' => 'Nacht der Untoten',
                     'description' => 'Night of the Undead',
@@ -152,7 +179,7 @@ class ZombieGuideController extends Controller
                     'image' => '/images/worldatwarzombies/derrise.jpg'
                 ]
             ],
-            'Black Ops' => [
+            'black-ops' => [
                 'kino-der-toten' => [
                     'name' => 'Kino der Toten',
                     'description' => 'Theater of the Damned'
@@ -178,7 +205,7 @@ class ZombieGuideController extends Controller
                     'description' => 'Lunar Base'
                 ]
             ],
-            'Black Ops 2' => [
+            'black-ops-2' => [
                 'tranzit' => [
                     'name' => 'TranZit',
                     'description' => 'Green Run'
@@ -212,7 +239,7 @@ class ZombieGuideController extends Controller
                     'description' => 'Diner'
                 ]
             ],
-            'Black Ops 3' => [
+            'black-ops-3' => [
                 // Original Maps
                 'shadows-of-evil' => [
                     'name' => 'Shadows of Evil',
@@ -272,7 +299,7 @@ class ZombieGuideController extends Controller
                     'description' => 'Zombie Chronicles'
                 ]
             ],
-            'Black Ops 4' => [
+            'black-ops-4' => [
                 'ix' => [
                     'name' => 'IX',
                     'description' => 'Gladiator Arena',
@@ -314,7 +341,7 @@ class ZombieGuideController extends Controller
                     'image' => '/images/blackops4zombies/tagdertoten.jpg'
                 ]
             ],
-            'Cold War' => [
+            'cold-war' => [
                 'die-maschine' => [
                     'name' => 'Die Maschine',
                     'description' => 'Nacht der Untoten Facility',
@@ -341,7 +368,7 @@ class ZombieGuideController extends Controller
                     'image' => '/images/blackopscoldwarzombies/forsaken.jpg'
                 ]
             ],
-            'Black Ops 6' => [
+            'black-ops-6' => [
                 'liberty-falls' => [
                     'name' => 'Liberty Falls',
                     'description' => 'West Virginia Town',
@@ -373,7 +400,7 @@ class ZombieGuideController extends Controller
                     'image' => '/images/blackops6zombies/reckoning.jpg'
                 ]
             ],
-            'Black Ops 7' => [
+            'black-ops-7' => [
                 'ashes-of-the-damned' => [
                     'name' => 'Ashes of the Damned',
                     'description' => 'Infernal Wasteland',

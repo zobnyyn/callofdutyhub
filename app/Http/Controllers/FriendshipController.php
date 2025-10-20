@@ -18,11 +18,11 @@ class FriendshipController extends Controller
         $user = Auth::user();
 
         $friends = $user->friendsOfMine()
-            ->select('users.id', 'users.name', 'users.avatar')
+            ->select('users.id', 'users.name', 'users.avatar', 'users.admin_prefix', 'users.is_admin', 'users.is_vip')
             ->get()
             ->merge(
                 $user->friendOf()
-                    ->select('users.id', 'users.name', 'users.avatar')
+                    ->select('users.id', 'users.name', 'users.avatar', 'users.admin_prefix', 'users.is_admin', 'users.is_vip')
                     ->get()
             );
 
@@ -40,7 +40,7 @@ class FriendshipController extends Controller
         $user = Auth::user();
 
         $requests = $user->friendRequestsReceived()
-            ->select('users.id', 'users.name', 'users.avatar', 'friendships.created_at')
+            ->select('users.id', 'users.name', 'users.avatar', 'users.admin_prefix', 'users.is_admin', 'users.is_vip', 'friendships.created_at')
             ->get();
 
         return response()->json([
@@ -57,7 +57,7 @@ class FriendshipController extends Controller
         $user = Auth::user();
 
         $requests = $user->friendRequestsSent()
-            ->select('users.id', 'users.name', 'users.avatar', 'friendships.created_at')
+            ->select('users.id', 'users.name', 'users.avatar', 'users.admin_prefix', 'users.is_admin', 'users.is_vip', 'friendships.created_at')
             ->get();
 
         return response()->json([

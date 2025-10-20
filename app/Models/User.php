@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use App\Notifications\ResetPasswordNotification;
 
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -29,6 +30,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'steam',
         'psn',
         'is_admin',
+        'is_vip',
+        'vip_expires_at',
+        'donation_alerts_username',
+        'admin_prefix',
     ];
 
     /**
@@ -52,6 +57,8 @@ class User extends Authenticatable implements MustVerifyEmail
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'is_admin' => 'boolean',
+            'is_vip' => 'boolean',
+            'vip_expires_at' => 'datetime',
         ];
     }
 
@@ -61,6 +68,56 @@ class User extends Authenticatable implements MustVerifyEmail
     public function isAdmin(): bool
     {
         return $this->is_admin;
+    }
+
+    /**
+     * Проверить, является ли пользователь VIP
+     */
+    public function isVip(): bool
+    {
+        if (!$this->is_vip) {
+            return false;
+        }
+
+        // Если VIP бессрочный (vip_expires_at = null)
+        if ($this->vip_expires_at === null) {
+            return true;
+        }
+
+        // Проверяем не истек ли VIP
+        if ($this->vip_expires_at->isFuture()) {
+            return true;
+        }
+
+        // VIP истек, убираем статус
+        $this->update(['is_vip' => false, 'vip_expires_at' => null]);
+        return false;
+    }
+
+    /**
+     * Установить VIP статус пользователю
+     */
+    public function grantVip(int $days = null): void
+    {
+        $this->update([
+            'is_vip' => true,
+            'vip_expires_at' => $days ? now()->addDays($days) : null,
+        ]);
+    }
+
+    /**
+     * Продлить VIP статус
+     */
+    public function extendVip(int $days): void
+    {
+        $expiresAt = $this->vip_expires_at && $this->vip_expires_at->isFuture()
+            ? $this->vip_expires_at->addDays($days)
+            : now()->addDays($days);
+
+        $this->update([
+            'is_vip' => true,
+            'vip_expires_at' => $expiresAt,
+        ]);
     }
 
     /**
@@ -177,5 +234,36 @@ class User extends Authenticatable implements MustVerifyEmail
         }
 
         return $friendship->status;
+    }
+
+    /**
+     * Получить отображаемое имя с префиксом
+     */
+    public function getDisplayName(): string
+    {
+        $name = $this->name;
+
+        // Префикс админа
+        if ($this->is_admin && $this->admin_prefix) {
+            $name = $this->admin_prefix . ' ' . $name;
+        }
+
+        // VIP бейдж
+        if ($this->isVip()) {
+            $name .= ' ⭐';
+        }
+
+        return $name;
+    }
+
+    /**
+     * Отправить уведомление о восстановлении пароля
+     *
+     * @param  string  $token
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPasswordNotification($token));
     }
 }

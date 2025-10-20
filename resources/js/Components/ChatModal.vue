@@ -11,10 +11,18 @@
               class="w-10 h-10 rounded-full border-2 border-orange-500 object-cover"
             />
             <div>
-              <h2 class="text-xl font-black font-mono text-orange-500" id="chat-title">
-                <span class="text-orange-600">&gt;</span> {{ user.name }}
-              </h2>
-              <div class="text-xs text-gray-400 font-mono">SECURE_CHAT</div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span v-if="user.admin_prefix" class="text-orange-500 text-sm font-bold font-mono">{{ user.admin_prefix }}</span>
+                <h2 class="text-xl font-black font-mono text-orange-500" id="chat-title">
+                  <span class="text-orange-600">&gt;</span> {{ user.name }}
+                </h2>
+                <span v-if="user.is_vip" class="text-yellow-400 text-sm" title="VIP пользователь">⭐</span>
+              </div>
+              <div class="flex items-center gap-2 mt-1">
+                <span v-if="user.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                <span v-if="user.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[10px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                <div class="text-xs text-gray-400 font-mono">SECURE_CHAT</div>
+              </div>
             </div>
           </div>
           <button
@@ -40,7 +48,28 @@
             <!-- My Message -->
             <div v-if="message.sender_id === currentUserId" class="flex justify-end">
               <div class="max-w-[70%]">
-                <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-3 rounded-lg font-mono text-sm">
+                <div class="flex items-start space-x-2 mb-1 justify-end">
+                  <div class="text-right">
+                    <div class="flex items-center gap-1.5 flex-wrap justify-end mb-0.5">
+                      <span v-if="message.sender?.admin_prefix" class="text-orange-500 text-[10px] font-bold font-mono">{{ message.sender.admin_prefix }}</span>
+                      <p class="text-orange-500 text-xs font-mono font-bold">
+                        {{ message.sender?.name || 'Вы' }}
+                      </p>
+                      <span v-if="message.sender?.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 justify-end">
+                      <span v-if="message.sender?.is_admin" class="px-1 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                      <span v-if="message.sender?.is_vip" class="px-1 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                    </div>
+                  </div>
+                  <div class="w-8 h-8 bg-orange-900/30 border border-orange-500/50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <img v-if="message.sender?.avatar" :src="getAvatarUrl(message.sender.avatar)" :alt="message.sender?.name" class="w-full h-full object-cover">
+                    <span v-else class="text-orange-500 text-xs font-bold font-mono">
+                      {{ message.sender?.name?.charAt(0).toUpperCase() || '?' }}
+                    </span>
+                  </div>
+                </div>
+                <div class="bg-gradient-to-r from-orange-600 to-red-600 text-white p-3 rounded-lg font-mono text-sm break-words">
                   {{ message.message }}
                 </div>
                 <div class="text-xs text-gray-500 font-mono mt-1 text-right">
@@ -51,7 +80,28 @@
             <!-- Their Message -->
             <div v-else class="flex justify-start">
               <div class="max-w-[70%]">
-                <div class="bg-gray-800 text-white p-3 rounded-lg font-mono text-sm border border-orange-500/30">
+                <div class="flex items-start space-x-2 mb-1">
+                  <div class="w-8 h-8 bg-orange-900/30 border border-orange-500/50 flex items-center justify-center overflow-hidden flex-shrink-0">
+                    <img v-if="message.sender?.avatar" :src="getAvatarUrl(message.sender.avatar)" :alt="message.sender?.name" class="w-full h-full object-cover">
+                    <span v-else class="text-orange-500 text-xs font-bold font-mono">
+                      {{ message.sender?.name?.charAt(0).toUpperCase() || '?' }}
+                    </span>
+                  </div>
+                  <div>
+                    <div class="flex items-center gap-1.5 flex-wrap mb-0.5">
+                      <span v-if="message.sender?.admin_prefix" class="text-orange-500 text-[10px] font-bold font-mono">{{ message.sender.admin_prefix }}</span>
+                      <p class="text-orange-500 text-xs font-mono font-bold">
+                        {{ message.sender?.name || 'Пользователь' }}
+                      </p>
+                      <span v-if="message.sender?.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+                    </div>
+                    <div class="flex items-center gap-1.5">
+                      <span v-if="message.sender?.is_admin" class="px-1 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                      <span v-if="message.sender?.is_vip" class="px-1 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                    </div>
+                  </div>
+                </div>
+                <div class="bg-gray-800 text-white p-3 rounded-lg font-mono text-sm border border-orange-500/30 break-words">
                   {{ message.message }}
                 </div>
                 <div class="text-xs text-gray-500 font-mono mt-1">
@@ -117,6 +167,11 @@ let pollingInterval = null;
 
 // Загружаем сообщения при монтировании, если чат уже открыт
 onMounted(() => {
+  console.log('ChatModal opened with user data:', props.user);
+  console.log('User admin_prefix:', props.user.admin_prefix);
+  console.log('User is_admin:', props.user.is_admin);
+  console.log('User is_vip:', props.user.is_vip);
+
   if (props.show) {
     loadMessages();
     startPolling();
@@ -125,6 +180,7 @@ onMounted(() => {
 
 watch(() => props.show, (newVal) => {
   if (newVal) {
+    console.log('ChatModal show changed, user data:', props.user);
     loadMessages();
     startPolling();
     // Фокусируем поле ввода, когда модал открыт
@@ -151,6 +207,16 @@ async function loadMessages() {
   try {
     const response = await axios.get(`/api/messages/${props.user.id}`);
     messages.value = response.data;
+
+    // Детальное логирование для отладки
+    console.log('Loaded messages:', response.data);
+    if (response.data.length > 0) {
+      console.log('First message sender:', response.data[0].sender);
+      console.log('First message sender admin_prefix:', response.data[0].sender?.admin_prefix);
+      console.log('First message sender is_admin:', response.data[0].sender?.is_admin);
+      console.log('First message sender is_vip:', response.data[0].sender?.is_vip);
+    }
+
     await nextTick();
     scrollToBottom();
   } catch (error) {

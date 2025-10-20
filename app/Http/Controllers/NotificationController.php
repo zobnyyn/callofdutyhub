@@ -15,6 +15,15 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
 
+        // Проверяем что пользователь авторизован
+        if (!$user) {
+            return response()->json([
+                'error' => 'Unauthorized',
+                'notifications' => [],
+                'unread_count' => 0
+            ], 401);
+        }
+
         $notifications = Notification::where('user_id', $user->id)
             ->with('fromUser:id,name,avatar')
             ->orderBy('created_at', 'desc')
@@ -38,6 +47,15 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
 
+        // Проверяем что пользователь авторизован
+        if (!$user) {
+            return response()->json([
+                'error' => 'Unauthorized',
+                'notifications' => [],
+                'count' => 0
+            ], 401);
+        }
+
         $notifications = Notification::where('user_id', $user->id)
             ->unread()
             ->with('fromUser:id,name,avatar')
@@ -56,6 +74,10 @@ class NotificationController extends Controller
     public function markAsRead($id)
     {
         $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         $notification = Notification::where('user_id', $user->id)
             ->where('id', $id)
@@ -76,6 +98,10 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         Notification::where('user_id', $user->id)
             ->unread()
             ->update(['read' => true]);
@@ -92,6 +118,10 @@ class NotificationController extends Controller
     public function destroy($id)
     {
         $user = Auth::user();
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
 
         $notification = Notification::where('user_id', $user->id)
             ->where('id', $id)
@@ -112,6 +142,10 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
         Notification::where('user_id', $user->id)
             ->where('read', true)
             ->delete();
@@ -129,6 +163,10 @@ class NotificationController extends Controller
     {
         $user = Auth::user();
 
+        if (!$user) {
+            return response()->json(['count' => 0], 401);
+        }
+
         $count = Notification::where('user_id', $user->id)
             ->unread()
             ->count();
@@ -138,4 +176,3 @@ class NotificationController extends Controller
         ]);
     }
 }
-

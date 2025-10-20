@@ -19,7 +19,7 @@
       </span>
     </button>
 
-    <!-- Notifications Dropdown -->
+    <!-- Notifications Dropdown - адаптивное позиционирование -->
     <transition
       enter-active-class="transition ease-out duration-200"
       enter-from-class="transform opacity-0 scale-95"
@@ -30,19 +30,24 @@
     >
       <div
         v-if="showNotifications"
-        class="absolute right-0 mt-2 w-96 max-h-[600px] overflow-hidden bg-black border-2 border-orange-500/50 shadow-2xl z-50"
+        class="fixed md:absolute right-0 md:right-0 mt-2 w-full md:w-96 max-h-[600px] overflow-hidden bg-black border-2 border-orange-500/50 shadow-2xl z-50"
+        :class="[
+          'md:max-w-96',
+          // На мобильных - фиксированная позиция от правого края экрана
+          'max-md:left-0 max-md:right-0 max-md:mx-2'
+        ]"
       >
         <!-- Header -->
-        <div class="p-4 border-b border-orange-500/30 bg-orange-500/5">
+        <div class="p-3 md:p-4 border-b border-orange-500/30 bg-orange-500/5">
           <div class="flex items-center justify-between mb-2">
-            <div class="text-orange-600 font-mono text-sm font-bold">
+            <div class="text-orange-600 font-mono text-xs md:text-sm font-bold">
               <span class="text-orange-600">&gt;</span> NOTIFICATIONS
             </div>
-            <div class="flex gap-2">
+            <div class="flex gap-1 md:gap-2">
               <button
                 v-if="notifications.length > 0"
                 @click="markAllAsRead"
-                class="px-2 py-1 text-xs font-mono text-orange-500 hover:bg-orange-500/10 border border-orange-500/30 transition-all"
+                class="px-1.5 md:px-2 py-1 text-[10px] md:text-xs font-mono text-orange-500 hover:bg-orange-500/10 border border-orange-500/30 transition-all"
                 title="Mark all as read"
               >
                 ✓ ALL
@@ -50,20 +55,28 @@
               <button
                 v-if="notifications.some(n => n.read)"
                 @click="clearReadNotifications"
-                class="px-2 py-1 text-xs font-mono text-gray-500 hover:bg-gray-500/10 border border-gray-500/30 transition-all"
+                class="px-1.5 md:px-2 py-1 text-[10px] md:text-xs font-mono text-gray-500 hover:bg-gray-500/10 border border-gray-500/30 transition-all"
                 title="Clear read"
               >
                 CLEAR
               </button>
+              <!-- Кнопка закрытия для мобильных -->
+              <button
+                @click="toggleNotifications"
+                class="md:hidden px-1.5 py-1 text-[10px] font-mono text-red-500 hover:bg-red-500/10 border border-red-500/30 transition-all"
+                title="Close"
+              >
+                ✕
+              </button>
             </div>
           </div>
-          <div class="text-gray-500 font-mono text-xs">
+          <div class="text-gray-500 font-mono text-[10px] md:text-xs">
             {{ unreadCount }} непрочитанных
           </div>
         </div>
 
         <!-- Notifications List -->
-        <div class="overflow-y-auto max-h-[500px]">
+        <div class="overflow-y-auto max-h-[70vh] md:max-h-[500px]">
           <!-- Loading State -->
           <div v-if="isLoading" class="p-8 text-center">
             <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-orange-500 border-t-transparent"></div>
@@ -217,8 +230,10 @@
 </template>
 
 <script setup>
+// Используем глобальный axios с правильной конфигурацией HTTPS
+const axios = window.axios;
+
 import { ref, onMounted, onUnmounted, computed } from 'vue';
-import axios from 'axios';
 
 const showNotifications = ref(false);
 const notifications = ref([]);

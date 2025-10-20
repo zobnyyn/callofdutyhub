@@ -1,11 +1,11 @@
 <template>
   <header class="fixed top-0 left-0 right-0 z-40 bg-black/95 backdrop-blur-sm border-b border-orange-500/30">
-    <!-- Terminal status bar -->
-    <div class="border-b border-orange-900/30 bg-orange-950/20 px-3 md:px-6 py-1 overflow-hidden">
-      <div class="flex items-center justify-between text-[8px] md:text-[10px] font-mono text-orange-400">
-        <div class="flex items-center space-x-2 md:space-x-4 truncate">
+    <!-- Terminal status bar - более компактный для мобильных -->
+    <div class="border-b border-orange-900/30 bg-orange-950/20 px-2 md:px-6 py-0.5 md:py-1 overflow-hidden">
+      <div class="flex items-center justify-between text-[7px] md:text-[10px] font-mono text-orange-400">
+        <div class="flex items-center space-x-1 md:space-x-4 truncate">
           <div class="flex items-center space-x-1 md:space-x-2">
-            <div class="w-1.5 h-1.5 md:w-2 md:h-2 bg-orange-500 rounded-full"></div>
+            <div class="w-1 h-1 md:w-2 md:h-2 bg-orange-500 rounded-full"></div>
             <span class="hidden sm:inline">SYSTEM_ACTIVE</span>
             <span class="sm:hidden">SYS</span>
           </div>
@@ -14,29 +14,36 @@
           <span class="hidden lg:inline">|</span>
           <span class="hidden lg:inline">CLEARANCE: TOP_SECRET</span>
         </div>
-        <div class="flex items-center space-x-2 md:space-x-4">
-          <span id="terminal-time" class="text-[8px] md:text-[10px]">{{ currentTime }}</span>
+        <div class="flex items-center space-x-1 md:space-x-4">
+          <span id="terminal-time" class="text-[7px] md:text-[10px]">{{ currentTime }}</span>
           <span class="hidden md:inline">|</span>
           <span class="hidden md:inline">CONNECTION: SECURE</span>
         </div>
       </div>
     </div>
 
-    <nav class="container mx-auto px-3 md:px-6 py-3 md:py-4 relative">
+    <nav class="container mx-auto px-2 md:px-6 py-2 md:py-4 relative">
       <div class="flex items-center justify-between">
-        <!-- Logo with Terminal Style -->
-        <div class="flex items-center space-x-2 md:space-x-4">
+        <!-- Logo с компактным дизайном для мобильных -->
+        <div class="flex items-center space-x-1.5 md:space-x-4">
           <a href="/" class="relative group">
-            <!-- Terminal-style icon -->
-            <div class="w-10 h-10 md:w-14 md:h-14 relative">
+            <!-- Уменьшенная иконка для мобильных -->
+            <div class="w-8 h-8 md:w-14 md:h-14 relative">
               <img :src="faviconAlt3" alt="COD Terminal" class="w-full h-full object-contain transition-transform group-hover:scale-110" />
             </div>
           </a>
           <div>
-            <div class="text-sm md:text-2xl font-black tracking-tighter font-mono">
-                <span class="text-orange-500">&gt; <span class="hidden sm:inline">CALL OF DUTY</span><span class="sm:hidden">COD</span> <span class="text-white"></span></span>
+            <!-- Более компактный текст для мобильных -->
+            <div class="text-xs md:text-2xl font-black tracking-tighter font-mono leading-none">
+                <span class="text-orange-500">
+                  <span class="hidden sm:inline">&gt; CALL OF DUTY</span>
+                  <span class="sm:hidden">&gt; COD</span>
+                </span>
             </div>
-            <div class="text-[7px] md:text-[9px] text-white tracking-[0.2em] md:tracking-[0.3em] font-mono">TERMINAL_v3.0</div>
+            <div class="text-[6px] md:text-[9px] text-white tracking-[0.15em] md:tracking-[0.3em] font-mono mt-0.5">
+              <span class="hidden sm:inline">TERMINAL_v3.0</span>
+              <span class="sm:hidden">v3.0</span>
+            </div>
           </div>
         </div>
 
@@ -187,6 +194,14 @@
                 @mouseenter="openAdminDropdown" @mouseleave="closeAdminDropdown">
                 <ul class="py-2">
                   <li>
+                    <a href="/admin/users" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
+                      <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                      </svg>
+                      <span>Управление пользователями</span>
+                    </a>
+                  </li>
+                  <li>
                     <a href="/admin/guides" class="flex items-center gap-3 px-4 py-2 text-sm text-gray-300 hover:bg-orange-500/10 hover:text-orange-400 transition-all">
                       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -233,61 +248,71 @@
         </div>
 
         <!-- Auth Buttons & Mobile Menu Button -->
-        <div class="flex items-center space-x-2 md:space-x-3">
+        <div class="flex items-center space-x-1.5 md:space-x-3">
           <!-- Notification Bell (для авторизованных пользователей) -->
           <NotificationBell v-if="user" />
 
           <!-- Показываем профиль, если пользователь авторизован -->
           <UserProfile v-if="user" :user="user" />
 
-          <!-- Показываем кнопки входа и регистрации для гостей - Desktop -->
+          <!-- Показываем кнопки входа и регистрации для гостей -->
           <template v-else>
+            <!-- Кнопка входа - скрыта на маленьких экранах, видна только на планшетах+ -->
             <a href="/login" class="hidden md:block px-3 lg:px-5 py-2 text-xs lg:text-sm font-bold font-mono text-orange-500 border border-orange-500/30 hover:bg-orange-500/10 transition-all relative group">
               <span class="text-orange-600 mr-1">&gt;</span>
               <span>ВОЙТИ</span>
             </a>
-            <a href="/register" class="hidden md:block px-3 lg:px-6 py-2 lg:py-2.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-black text-xs lg:text-sm font-black font-mono tracking-wider transition-all relative overflow-hidden group">
+            <!-- Кнопка регистрации - компактная на мобильных -->
+            <a href="/register" class="px-2 md:px-3 lg:px-6 py-1.5 md:py-2 lg:py-2.5 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white md:text-black text-[10px] md:text-xs lg:text-sm font-black font-mono tracking-wider transition-all relative overflow-hidden group">
               <span class="absolute inset-0 terminal-grid opacity-20" aria-hidden="true"></span>
-              <span class="relative z-10">&gt; <span class="hidden lg:inline">ЗАРЕГИСТРИРОВАТЬСЯ_</span><span class="lg:hidden">РЕГИСТР._</span></span>
-              <span class="inline-block w-2 h-3 bg-black/50 ml-1 cursor-blink"></span>
+              <span class="relative z-10">
+                <span class="hidden md:inline">&gt; </span>
+                <span class="md:hidden">РЕГИСТР.</span>
+                <span class="hidden md:inline lg:hidden">РЕГИСТР.</span>
+                <span class="hidden lg:inline">ЗАРЕГИСТРИРОВАТЬСЯ_</span>
+              </span>
+              <span class="hidden md:inline-block w-2 h-3 bg-black/50 ml-1 cursor-blink"></span>
             </a>
           </template>
 
-          <!-- Mobile Menu Button -->
+          <!-- Mobile Menu Button - более компактная кнопка -->
           <button
             @click="toggleMobileMenu"
-            class="lg:hidden p-2 text-orange-500 border border-orange-500/30 hover:bg-orange-500/10 transition-all"
+            class="lg:hidden p-1.5 md:p-2 text-orange-500 border border-orange-500/30 hover:bg-orange-500/10 transition-all"
             aria-label="Toggle menu"
           >
-            <svg v-if="!showMobileMenu" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg v-if="!showMobileMenu" class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
-            <svg v-else class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg v-else class="w-5 h-5 md:w-6 md:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
             </svg>
           </button>
         </div>
       </div>
 
-      <!-- Mobile Menu -->
+      <!-- Mobile Menu - оптимизированный для маленьких экранов с непрозрачным фоном -->
       <div
         v-show="showMobileMenu"
-        class="lg:hidden fixed left-0 right-0 bg-black/95 border-b-2 border-orange-500/50 backdrop-blur-md shadow-2xl overflow-y-auto z-50"
+        class="lg:hidden fixed left-0 right-0 bg-black border-b-2 border-orange-500/50 shadow-2xl overflow-y-auto z-50"
         :style="{ top: headerHeight + 'px', maxHeight: `calc(100vh - ${headerHeight}px)` }"
       >
-        <nav class="px-3 py-4 space-y-2 pb-20">
-          <a href="/" class="block px-4 py-3 text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
+        <nav class="px-2 md:px-3 py-3 md:py-4 space-y-1.5 md:space-y-2 pb-20 bg-gradient-to-b from-black via-zinc-950 to-black">
+          <a href="/" class="block px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
             <span class="text-orange-600 mr-2">&gt;</span>ГЛАВНАЯ
           </a>
-          <a href="/zombies" class="block px-4 py-3 text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
+          <a href="/zombies" class="block px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
             <span class="text-orange-600 mr-2">&gt;</span>ZOMBIES
+          </a>
+          <a href="/warzone/meta" class="block px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
+            <span class="text-orange-600 mr-2">&gt;</span>WARZONE META
           </a>
 
           <!-- Mobile COD WIKI Combined Menu -->
           <div class="border border-orange-500/40 bg-orange-500/10">
             <button
               @click="toggleCodWikiMenu"
-              class="w-full px-4 py-3 text-sm font-mono text-orange-500 hover:bg-orange-500/20 transition-all flex items-center justify-between"
+              class="w-full px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm font-mono text-orange-500 hover:bg-orange-500/20 transition-all flex items-center justify-between"
             >
               <span><span class="text-orange-600 mr-2">&gt;</span>COD INFO</span>
               <svg
@@ -302,74 +327,74 @@
             </button>
             <div v-show="showCodWikiMobile" class="bg-orange-950/30">
               <!-- Black Ops Section -->
-              <div class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20">
+              <div class="px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20">
                 Black Ops Series
               </div>
-              <a href="/wiki/world-at-war" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="worldatwar" alt="World at War" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/world-at-war" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="worldatwar" alt="World at War" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>World at War (2008)</span>
               </a>
-              <a href="/wiki/black-ops" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="blackops1" alt="Black Ops" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/black-ops" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops1" alt="Black Ops" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Black Ops (2010)</span>
               </a>
-              <a href="/wiki/black-ops-2" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="blackops2" alt="Black Ops II" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/black-ops-2" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops2" alt="Black Ops II" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Black Ops II (2012)</span>
               </a>
-              <a href="/wiki/black-ops-3" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="blackops3" alt="Black Ops III" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/black-ops-3" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops3" alt="Black Ops III" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Black Ops III (2015)</span>
               </a>
-              <a href="/wiki/black-ops-4" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="blackops4" alt="Black Ops 4" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/black-ops-4" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops4" alt="Black Ops 4" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Black Ops 4 (2018)</span>
               </a>
-              <a href="/wiki/black-ops-cold-war" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="coldwar" alt="Cold War" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/black-ops-cold-war" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="coldwar" alt="Cold War" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Cold War (2020)</span>
               </a>
-              <a href="/wiki/black-ops-6" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="blackops6" alt="Black Ops 6" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/black-ops-6" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops6" alt="Black Ops 6" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Black Ops 6 (2024)</span>
               </a>
-              <a href="/cod-wiki" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="blackops7" alt="Black Ops 7" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/cod-wiki" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="blackops7" alt="Black Ops 7" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>Black Ops 7 (2025)</span>
               </a>
 
               <!-- Modern Warfare Section -->
-              <div class="px-4 py-2 text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20 mt-2">
+              <div class="px-3 md:px-4 py-1.5 md:py-2 text-[10px] md:text-xs font-bold font-mono text-orange-500 uppercase border-t border-orange-500/20 mt-2">
                 Modern Warfare Series
               </div>
-              <a href="/wiki/cod4-modern-warfare" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="mw2007" alt="COD 4: MW" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/cod4-modern-warfare" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2007" alt="COD 4: MW" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>COD 4: MW (2007)</span>
               </a>
-              <a href="/wiki/modern-warfare-2" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="mw2009" alt="MW 2" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/modern-warfare-2" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2009" alt="MW 2" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>MW 2 (2009)</span>
               </a>
-              <a href="/wiki/modern-warfare-3" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="mw2011" alt="MW 3" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/modern-warfare-3" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2011" alt="MW 3" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>MW 3 (2011)</span>
               </a>
-              <a href="/wiki/modern-warfare-2019" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="mw2019" alt="MW" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/modern-warfare-2019" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2019" alt="MW" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>MW (2019)</span>
               </a>
-              <a href="/wiki/modern-warfare-2022" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="mw2022" alt="MW II" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/modern-warfare-2022" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2022" alt="MW II" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>MW II (2022)</span>
               </a>
-              <a href="/wiki/modern-warfare-2023" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
-                <img :src="mw2023" alt="MW III" class="w-6 h-6 rounded object-cover border border-orange-500/30" />
+              <a href="/wiki/modern-warfare-2023" class="flex items-center gap-2 md:gap-3 px-4 md:px-6 py-2 text-[11px] md:text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                <img :src="mw2023" alt="MW III" class="w-5 h-5 md:w-6 md:h-6 rounded object-cover border border-orange-500/30 flex-shrink-0" />
                 <span>MW III (2023)</span>
               </a>
             </div>
           </div>
 
-          <a href="/community" class="block px-4 py-3 text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
+          <a href="/community" class="block px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm font-mono text-orange-500 bg-orange-500/10 border border-orange-500/40 hover:bg-orange-500/20 hover:border-orange-500 transition-all">
             <span class="text-orange-600 mr-2">&gt;</span>СООБЩЕСТВО
           </a>
 
@@ -391,6 +416,12 @@
                 </svg>
               </button>
               <div v-show="showAdminMobile" class="bg-orange-950/30">
+                <a href="/admin/users" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                  </svg>
+                  <span>Управление пользователями</span>
+                </a>
                 <a href="/admin/guides" class="flex items-center gap-3 px-6 py-2 text-xs text-gray-300 hover:bg-orange-500/20 hover:text-orange-400 border-t border-orange-500/20">
                   <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
@@ -425,13 +456,13 @@
             </div>
           </template>
 
-          <!-- Mobile Auth Buttons -->
+          <!-- Mobile Auth Buttons - улучшенные для маленьких экранов -->
           <template v-if="!user">
-            <div class="pt-4 space-y-2">
-              <a href="/login" class="block px-4 py-3 text-sm font-bold font-mono text-orange-500 bg-orange-500/10 border-2 border-orange-500/60 hover:bg-orange-500/20 hover:border-orange-500 transition-all text-center">
+            <div class="pt-3 md:pt-4 space-y-2">
+              <a href="/login" class="block px-3 md:px-4 py-2.5 md:py-3 text-xs md:text-sm font-bold font-mono text-orange-500 bg-orange-500/10 border-2 border-orange-500/60 hover:bg-orange-500/20 hover:border-orange-500 transition-all text-center">
                 <span class="text-orange-600 mr-2">&gt;</span>ВОЙТИ
               </a>
-              <a href="/register" class="block px-4 py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-black text-sm font-black font-mono text-center transition-all">
+              <a href="/register" class="block px-3 md:px-4 py-2.5 md:py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-white font-black text-xs md:text-sm font-mono text-center transition-all">
                 <span>&gt;</span> ЗАРЕГИСТРИРОВАТЬСЯ_
               </a>
             </div>

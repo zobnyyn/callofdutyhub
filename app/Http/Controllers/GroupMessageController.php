@@ -26,7 +26,7 @@ class GroupMessageController extends Controller
 
         // Получаем сообщения с информацией об авторах
         $messages = GroupMessage::where('game_group_id', $groupId)
-            ->with('user:id,name,avatar')
+            ->with('user:id,name,avatar,admin_prefix,is_admin,is_vip')
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -57,7 +57,7 @@ class GroupMessageController extends Controller
         ]);
 
         // Загружаем информацию о пользователе
-        $message->load('user:id,name,avatar');
+        $message->load('user:id,name,avatar,admin_prefix,is_admin,is_vip');
 
         // Создаём уведомления для всех участников группы (кроме отправителя)
         $this->notifyGroupMembers($group, $message, $userId);
@@ -134,4 +134,3 @@ class GroupMessageController extends Controller
         return response()->json($unreadCounts);
     }
 }
-

@@ -100,9 +100,17 @@
             </a>
 
             <div class="flex-1 min-w-0">
-              <a :href="`/profile/${request.id}`" class="text-white font-mono font-bold text-sm truncate hover:text-orange-400 transition-colors block">
-                {{ request.name }}
-              </a>
+              <div class="flex items-center gap-2 flex-wrap mb-1">
+                <span v-if="request.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ request.admin_prefix }}</span>
+                <a :href="`/profile/${request.id}`" class="text-white font-mono font-bold text-sm truncate hover:text-orange-400 transition-colors">
+                  {{ request.name }}
+                </a>
+                <span v-if="request.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+              </div>
+              <div class="flex gap-1 mb-1">
+                <span v-if="request.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                <span v-if="request.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+              </div>
               <div class="text-gray-500 font-mono text-xs mt-1">
                 {{ formatDate(request.pivot?.created_at) }}
               </div>
@@ -197,9 +205,17 @@
               <div class="text-orange-600 font-mono text-xs mb-1">
                 <span class="text-orange-600">&gt;</span> FRIEND
               </div>
-              <h3 class="text-white font-mono font-bold text-sm truncate group-hover:text-orange-400 transition-colors">
-                {{ friend.name }}
-              </h3>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span v-if="friend.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ friend.admin_prefix }}</span>
+                <h3 class="text-white font-mono font-bold text-sm truncate group-hover:text-orange-400 transition-colors">
+                  {{ friend.name }}
+                </h3>
+                <span v-if="friend.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+              </div>
+              <div class="flex gap-1 mt-1">
+                <span v-if="friend.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                <span v-if="friend.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+              </div>
               <div class="text-gray-500 font-mono text-xs mt-1">
                 ID: #{{ friend.id }}
               </div>
@@ -236,7 +252,8 @@
 
 <script setup>
 import { ref, onMounted, computed } from 'vue';
-import axios from 'axios';
+// Используем глобальный axios с правильной конфигурацией HTTPS
+const axios = window.axios;
 import ChatModal from './ChatModal.vue';
 
 const props = defineProps({

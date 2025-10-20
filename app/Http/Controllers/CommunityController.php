@@ -56,7 +56,7 @@ class CommunityController extends Controller
         $query = $request->input('query', '');
         $currentUserId = $request->user()?->id;
 
-        $users = User::select('id', 'name', 'avatar', 'telegram', 'discord', 'steam', 'psn', 'xbox', 'created_at')
+        $users = User::select('id', 'name', 'avatar', 'telegram', 'discord', 'steam', 'psn', 'xbox', 'created_at', 'admin_prefix', 'is_admin', 'is_vip')
             ->where('id', '!=', $currentUserId)
             ->where(function($q) use ($query) {
                 $q->where('name', 'like', '%' . $query . '%')

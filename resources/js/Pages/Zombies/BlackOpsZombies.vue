@@ -353,7 +353,7 @@ const navigateToGuides = (mapSlug) => {
     router.visit('/register');
     return;
   }
-  router.visit(`/zombies/Black Ops/${mapSlug}/guides`);
+  router.visit(`/zombies/black-ops/${mapSlug}/guides`);
 };
 </script>
 

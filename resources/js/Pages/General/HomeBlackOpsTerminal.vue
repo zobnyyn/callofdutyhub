@@ -1,15 +1,15 @@
 <template>
   <SEO
     title="Call of Duty Terminal - Гайды, Сборки Оружия, Мета Warzone | COD Wiki"
-    description="Лучший русскоязычный портал по Call of Duty: актуальные гайды по Warzone, Black Ops 6, MW3. Мета-сборки оружия, карты, тактики и комьюнити из 1000+ игроков."
-    keywords="Call of Duty, Warzone, Black Ops 6, MW3, Modern Warfare, гайды по cod, сборки оружия warzone, мета warzone, cod wiki, калл оф дюти, зомби гайды, карты cod"
+    description="Лучший русскоязычный портал по Call of Duty: актуальные гайды к zombie картам, мета сборки Warzone, поиск игроков и лобби для игры."
+    keywords="Call of Duty, Warzone, Black Ops 6, MW3, Modern Warfare, гайды по cod, сборки оружия warzone, мета warzone, cod wiki, калл оф дюти, зомби гайды, карты cod, зомби карты на русском, лучшие сборки оружия, тактики cod, новости cod, комьюнити cod, call of duty zombies"
     image="/images/og-home.jpg"
   />
 
   <div class="min-h-screen bg-black text-gray-100 font-[system-ui] relative overflow-hidden">
     <!-- Background Video -->
     <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-50">
-      <source :src="backgroundVideo" type="video/mp4">
+      <source :src="backgroundVideo" type="video/webm">
     </video>
 
     <!-- CRT Screen Effect -->
@@ -428,7 +428,7 @@
                 <span class="text-[#F7931E]">&gt;</span> ДОНАТ
               </h3>
               <p class="text-gray-400 text-sm mb-6 leading-relaxed">
-                Поддержите проект и помогите в развитии комьюнити и улучшении контента
+                Поддержите проект и получите VIP статус на сайте в течений суток. Спасибо за вашу помощь!
               </p>
 
               <div class="flex justify-end mt-auto">
@@ -462,9 +462,9 @@ let mwDropdownTimeout: number | null = null;
 
 // Массив фоновых видео
 const backgroundVideos = [
-  '/backgroundvideo/homepage/cod_main_page_1.mp4',
-  '/backgroundvideo/homepage/cod_main_page_2.mp4',
-  '/backgroundvideo/homepage/cod_main_page_3.mp4',
+  '/backgroundvideo/homepage/cod_main_page_1.webm',
+  '/backgroundvideo/homepage/cod_main_page_2.webm',
+  '/backgroundvideo/homepage/cod_main_page_3.webm',
 ];
 
 // Выбираем случайное видео

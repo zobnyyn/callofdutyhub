@@ -38,12 +38,20 @@
                   </span>
                 </div>
                 <div>
-                  <h2 class="text-white font-mono font-bold text-lg">
-                    {{ companion?.name || 'Загрузка...' }}
-                  </h2>
-                  <p class="text-gray-500 text-xs font-mono">
-                    {{ companion?.is_online ? 'В сети' : 'Не в сети' }}
-                  </p>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span v-if="companion?.admin_prefix" class="text-orange-500 text-sm font-bold font-mono">{{ companion.admin_prefix }}</span>
+                    <h2 class="text-white font-mono font-bold text-lg">
+                      {{ companion?.name || 'Загрузка...' }}
+                    </h2>
+                    <span v-if="companion?.is_vip" class="text-yellow-400 text-sm" title="VIP пользователь">⭐</span>
+                  </div>
+                  <div class="flex items-center gap-2 mt-1">
+                    <span v-if="companion?.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                    <span v-if="companion?.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[10px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                    <p class="text-gray-500 text-xs font-mono">
+                      {{ companion?.is_online ? 'В сети' : 'Не в сети' }}
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -89,16 +97,24 @@
                     </span>
                   </div>
                   <div>
-                    <p class="text-orange-500 text-xs font-mono font-bold">
-                      {{ message.sender?.name || 'Пользователь' }}
-                    </p>
-                    <p class="text-gray-500 text-xs font-mono">
-                      {{ formatMessageDate(message.created_at) }}
-                    </p>
+                    <div class="flex items-center gap-1.5 flex-wrap">
+                      <span v-if="message.sender?.admin_prefix" class="text-orange-500 text-[10px] font-bold font-mono">{{ message.sender.admin_prefix }}</span>
+                      <p class="text-orange-500 text-xs font-mono font-bold">
+                        {{ message.sender?.name || 'Пользователь' }}
+                      </p>
+                      <span v-if="message.sender?.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+                    </div>
+                    <div class="flex items-center gap-1.5 mt-0.5">
+                      <span v-if="message.sender?.is_admin" class="px-1 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                      <span v-if="message.sender?.is_vip" class="px-1 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                      <p class="text-gray-500 text-xs font-mono">
+                        {{ formatMessageDate(message.created_at) }}
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <p class="text-white font-mono text-sm break-words whitespace-pre-wrap">
-                  {{ message.message }}
+                  <LinkifiedText :text="message.message" />
                 </p>
               </div>
             </div>
@@ -163,6 +179,7 @@
 import { ref, onMounted, nextTick } from 'vue';
 import Header from '@/Components/Header.vue';
 import SEO from '@/Components/SEO.vue';
+import LinkifiedText from '@/Components/LinkifiedText.vue';
 import axios from 'axios';
 import { usePage } from '@inertiajs/vue3';
 
@@ -355,4 +372,3 @@ onMounted(() => {
   background-color: rgba(255, 165, 0, 0.9);
 }
 </style>
-

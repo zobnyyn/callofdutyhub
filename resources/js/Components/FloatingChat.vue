@@ -158,7 +158,7 @@
               <div :class="message.sender_id === currentUserId
                 ? 'bg-gradient-to-r from-orange-600 to-red-600 text-white p-2 rounded-lg font-mono text-xs'
                 : 'bg-gray-800 text-white p-2 rounded-lg font-mono text-xs border border-orange-500/30'">
-                {{ message.message }}
+                <LinkifiedText :text="message.message" />
               </div>
               <div class="text-xs text-gray-500 font-mono mt-1" :class="message.sender_id === currentUserId ? 'text-right' : ''">
                 {{ formatTime(message.created_at) }}
@@ -187,7 +187,7 @@
                 <span class="text-gray-600 text-[9px] font-mono">{{ formatTime(message.created_at) }}</span>
               </div>
               <div class="bg-gray-800 text-white p-2 rounded-lg font-mono text-xs border border-orange-500/30">
-                {{ message.message }}
+                <LinkifiedText :text="message.message" />
               </div>
             </div>
           </div>
@@ -232,6 +232,7 @@
 <script setup>
 import { ref, onMounted, nextTick, onUnmounted } from 'vue';
 import axios from 'axios';
+import LinkifiedText from '@/Components/LinkifiedText.vue';
 
 const props = defineProps({
   currentUserId: {

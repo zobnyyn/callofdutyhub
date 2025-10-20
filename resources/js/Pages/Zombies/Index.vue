@@ -11,7 +11,7 @@
 
     <!-- Background Video -->
     <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-30">
-      <source :src="backgroundVideo" type="video/mp4">
+      <source :src="backgroundVideo" type="video/webm">
     </video>
 
     <!-- Terminal Background -->
@@ -374,23 +374,21 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import { Head } from '@inertiajs/vue3';
+import { ref, onMounted } from 'vue';
 import Header from '@/Components/Header.vue';
 import Footer from '@/Components/Footer.vue';
 import Seo from '../../Components/SEO.vue';
 
 // Список всех доступных видео
 const backgroundVideos = [
-  '/backgroundvideo/3.mp4',
-  '/backgroundvideo/4.mp4',
-  '/backgroundvideo/5.mp4',
-  '/backgroundvideo/6.mp4',
-  '/backgroundvideo/7.mp4',
-  '/backgroundvideo/8.mp4',
-  '/backgroundvideo/9.mp4',
-  '/backgroundvideo/10.mp4',
-  '/backgroundvideo/test2.mp4'
+  '/backgroundvideo/3.webm',
+  '/backgroundvideo/4.webm',
+  '/backgroundvideo/5.webm',
+  '/backgroundvideo/6.webm',
+  '/backgroundvideo/7.webm',
+  '/backgroundvideo/8.webm',
+  '/backgroundvideo/9.webm',
+  '/backgroundvideo/10.webm'
 ];
 
 // Выбираем случайное видео

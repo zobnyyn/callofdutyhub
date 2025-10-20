@@ -18,7 +18,14 @@ Route::get('/sitemap.xml', [SitemapController::class, 'index']);
 Route::get('/api/items/{category}', [ItemController::class, 'index']);
 Route::get('/api/game-items', [ItemController::class, 'getGameItems']);
 
+// Загрузка аудиофайлов (требует авторизацию)
+Route::post('/api/upload/audio', [\App\Http\Controllers\AudioUploadController::class, 'upload'])
+    ->middleware(['auth', 'verified'])
+    ->name('audio.upload');
+
+// Главная страница
 Route::get('/', [HomeController::class, 'index']);
+
 Route::get('/about', function () {
     return Inertia::render('General/About');
 })->name('about');
@@ -31,21 +38,23 @@ Route::get('/partnership', function () {
     return Inertia::render('General/Partnership');
 })->name('partnership');
 
-// Страница сообщества
-Route::get('/community', [CommunityController::class, 'index'])->middleware('auth')->name('community');
+// Страница сообщества - БЕЗ КЭШИРОВАНИЯ
+Route::get('/community', [CommunityController::class, 'index'])->middleware(['auth', 'verified'])->name('community');
 
 // Страница чата
-Route::get('/chat/{userId}', [\App\Http\Controllers\MessageController::class, 'showChat'])->middleware('auth')->name('chat.show');
+Route::get('/chat/{userId}', [\App\Http\Controllers\MessageController::class, 'showChat'])->middleware(['auth', 'verified'])->name('chat.show');
 
 // Страница группового чата
-Route::get('/group-chat/{groupId}', [\App\Http\Controllers\MessageController::class, 'showGroupChat'])->middleware('auth')->name('group-chat.show');
+Route::get('/group-chat/{groupId}', [\App\Http\Controllers\MessageController::class, 'showGroupChat'])->middleware(['auth', 'verified'])->name('group-chat.show');
 
 Route::get('/black-ops', function () {
     return Inertia::render('BlackOps');
 })->name('blackops');
+
 Route::get('/modern-warfare', function () {
     return Inertia::render('General/ModernWarfare');
 })->name('modernwarfare');
+
 Route::get('/cod-wiki', function () {
     return Inertia::render('Wiki/CodWiki');
 })->name('codwiki');
@@ -105,34 +114,43 @@ Route::get('/wiki/{game}', [\App\Http\Controllers\WikiPageController::class, 'sh
 // Детальные страницы зомби-карт
 Route::get('/wiki/zombie-maps/{slug}', [\App\Http\Controllers\ZombieMapController::class, 'show'])->name('wiki.zombie-map.show');
 
+// ZOMBIES - БЕЗ КЭШИРОВАНИЯ
 Route::get('/zombies', [ZombiesController::class, 'index'])->name('zombies');
+
 Route::get('/zombies/world-at-war', function () {
     return Inertia::render('Zombies/WorldAtWarZombies');
 })->name('zombies.worldatwar');
+
 Route::get('/zombies/black-ops', function () {
     return Inertia::render('Zombies/BlackOpsZombies');
 })->name('zombies.blackops');
+
 Route::get('/zombies/black-ops-2', function () {
     return Inertia::render('Zombies/BlackOps2Zombies');
 })->name('zombies.blackops2');
+
 Route::get('/zombies/black-ops-3', function () {
     return Inertia::render('Zombies/BlackOps3Zombies');
 })->name('zombies.blackops3');
+
 Route::get('/zombies/black-ops-4', function () {
     return Inertia::render('Zombies/BlackOps4Zombies');
 })->name('zombies.blackops4');
+
 Route::get('/zombies/cold-war', function () {
     return Inertia::render('Zombies/ColdWarZombies');
 })->name('zombies.coldwar');
+
 Route::get('/zombies/black-ops-6', function () {
     return Inertia::render('Zombies/BlackOps6Zombies');
 })->name('zombies.blackops6');
+
 Route::get('/zombies/black-ops-7', function () {
     return Inertia::render('Zombies/BlackOps7Zombies');
 })->name('zombies.blackops7');
 
-// Маршруты для гайдов зомби-карт (требуют авторизации)
-Route::middleware('auth')->group(function () {
+// Маршруты для гайдов зомби-карт (требуют авторизации и верификации)
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/zombies/{game}/{mapSlug}/guides', [ZombieGuideController::class, 'showByMap'])->name('zombies.guides.map');
     Route::get('/zombies/{game}/{mapSlug}/guides/{id}', [ZombieGuideController::class, 'show'])->name('zombies.guides.show');
     Route::post('/zombies/{game}/{mapSlug}/guides/{id}/complete', [ZombieGuideController::class, 'completeGuide'])->name('zombies.guides.complete');
@@ -141,13 +159,26 @@ Route::middleware('auth')->group(function () {
 // Маршруты для достижений
 Route::get('/api/achievements/user/{userId}', [\App\Http\Controllers\AchievementController::class, 'getUserAchievements'])->name('achievements.user');
 Route::get('/api/achievements/displayed/{userId}', [\App\Http\Controllers\AchievementController::class, 'getDisplayedAchievements'])->name('achievements.displayed');
-Route::post('/api/achievements/update-displayed', [\App\Http\Controllers\AchievementController::class, 'updateDisplayedAchievements'])->middleware('auth')->name('achievements.update');
+Route::post('/api/achievements/update-displayed', [\App\Http\Controllers\AchievementController::class, 'updateDisplayedAchievements'])->middleware(['auth', 'verified'])->name('achievements.update');
 
 // API для онлайн пользователей
 Route::get('/api/online-users', [\App\Http\Controllers\OnlineUsersController::class, 'index'])->name('online.users');
 
+// ТЕСТОВЫЕ API endpoints для проверки Mixed Content
+Route::get('/api/test-simple', function() {
+    return response()->json(['message' => 'Simple test endpoint works!', 'timestamp' => now()]);
+});
+
+Route::get('/api/test-friends', function() {
+    return response()->json(['message' => 'Test friends endpoint works!', 'friends' => []]);
+});
+
+Route::get('/api/test-notifications', function() {
+    return response()->json(['message' => 'Test notifications endpoint works!', 'notifications' => []]);
+});
+
 // API для системы друзей
-Route::middleware('auth')->prefix('api/friends')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('api/friends')->group(function () {
     Route::get('/', [\App\Http\Controllers\FriendshipController::class, 'index'])->name('friends.index');
     Route::get('/requests', [\App\Http\Controllers\FriendshipController::class, 'pendingRequests'])->name('friends.requests');
     Route::get('/sent', [\App\Http\Controllers\FriendshipController::class, 'sentRequests'])->name('friends.sent');
@@ -159,7 +190,7 @@ Route::middleware('auth')->prefix('api/friends')->group(function () {
 });
 
 // API для системы уведомлений
-Route::middleware('auth')->prefix('api/notifications')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('api/notifications')->group(function () {
     Route::get('/', [\App\Http\Controllers\NotificationController::class, 'index'])->name('notifications.index');
     Route::get('/unread', [\App\Http\Controllers\NotificationController::class, 'unread'])->name('notifications.unread');
     Route::get('/count', [\App\Http\Controllers\NotificationController::class, 'getUnreadCount'])->name('notifications.count');
@@ -170,7 +201,7 @@ Route::middleware('auth')->prefix('api/notifications')->group(function () {
 });
 
 // API для системы сообщений
-Route::middleware('auth')->prefix('api/messages')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('api/messages')->group(function () {
     Route::get('/conversations', [\App\Http\Controllers\MessageController::class, 'getConversations'])->name('messages.conversations');
     Route::get('/unread-count', [\App\Http\Controllers\MessageController::class, 'getUnreadCount'])->name('messages.unread.count');
     Route::get('/unread-by-user', [\App\Http\Controllers\MessageController::class, 'getUnreadCountByUser'])->name('messages.unread.by.user');
@@ -180,7 +211,7 @@ Route::middleware('auth')->prefix('api/messages')->group(function () {
 });
 
 // API для страницы сообщества
-Route::middleware('auth')->prefix('api/community')->group(function () {
+Route::middleware(['auth', 'verified'])->prefix('api/community')->group(function () {
     Route::get('/users/search', [CommunityController::class, 'searchUsers'])->name('community.users.search');
     Route::get('/guides/search', [CommunityController::class, 'searchGuides'])->name('community.guides.search');
     Route::get('/articles/search', [CommunityController::class, 'searchArticles'])->name('community.articles.search');
@@ -198,6 +229,22 @@ Route::middleware('auth')->prefix('api/community')->group(function () {
     Route::post('/groups/{group}/messages', [\App\Http\Controllers\GroupMessageController::class, 'sendMessage'])->name('community.groups.messages.send');
 });
 
+// VIP и донаты
+Route::post('/api/webhook/donation-alerts', [\App\Http\Controllers\VipController::class, 'donationWebhook'])
+    ->name('webhook.donation');
+
+Route::middleware(['auth', 'verified'])->prefix('api/vip')->group(function () {
+    Route::post('/link-donation-alerts', [\App\Http\Controllers\VipController::class, 'linkDonationAlerts'])
+        ->name('vip.link.donation');
+});
+
+Route::middleware(['auth', 'admin'])->prefix('api/admin/vip')->group(function () {
+    Route::post('/grant', [\App\Http\Controllers\VipController::class, 'grantVipManual'])
+        ->name('admin.vip.grant');
+    Route::post('/set-prefix', [\App\Http\Controllers\VipController::class, 'setAdminPrefix'])
+        ->name('admin.vip.prefix');
+});
+
 // Страницы аутентификации
 Route::get('/register', function () {
     return Inertia::render('Auth/Register');
@@ -207,10 +254,22 @@ Route::get('/login', function () {
     return Inertia::render('Auth/Login');
 })->middleware('guest')->name('login.page');
 
+// Страницы восстановления пароля
+Route::get('/forgot-password', function () {
+    return Inertia::render('Auth/ForgotPassword');
+})->middleware('guest')->name('password.request');
+
+Route::get('/reset-password', function () {
+    return Inertia::render('Auth/ResetPassword');
+})->middleware('guest')->name('password.reset');
+
 // Страница редактирования профиля
 Route::get('/profile/edit', function () {
     return Inertia::render('Profile/ProfileEdit');
 })->middleware('auth')->name('profile.edit');
+
+// Обновление профиля
+Route::post('/profile', [AuthController::class, 'updateProfile'])->middleware('auth')->name('profile.update');
 
 // Страница просмотра профиля пользователя
 Route::get('/profile/{user}', function ($userId) {
@@ -238,13 +297,16 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request, $id, $hash) 
     }
 
     if ($user->hasVerifiedEmail()) {
-        return redirect('/')->with('message', 'Email уже подтвержден');
+        return redirect('/login')->with('success', 'Email уже подтвержден. Войдите в систему.');
     }
 
     $user->markEmailAsVerified();
 
-    return redirect('/')->with('message', 'Email успешно подтвержден!');
-})->middleware(['auth', 'signed'])->name('verification.verify');
+    // Автоматически логиним пользователя после верификации
+    \Illuminate\Support\Facades\Auth::login($user);
+
+    return redirect('/')->with('success', 'Email успешно подтвержден! Добро пожаловать.');
+})->middleware(['signed'])->name('verification.verify');
 
 Route::post('/email/verification-notification', function (Request $request) {
     $request->user()->sendEmailVerificationNotification();
@@ -254,6 +316,14 @@ Route::post('/email/verification-notification', function (Request $request) {
 
 // Admin Routes - Управление гайдами
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Управление пользователями
+    Route::get('/users', [\App\Http\Controllers\Admin\UserManagementController::class, 'index'])->name('users.index');
+    Route::post('/users/{user}/toggle-admin', [\App\Http\Controllers\Admin\UserManagementController::class, 'toggleAdmin'])->name('users.toggle-admin');
+    Route::post('/users/{user}/set-prefix', [\App\Http\Controllers\Admin\UserManagementController::class, 'setPrefix'])->name('users.set-prefix');
+    Route::post('/users/{user}/grant-vip', [\App\Http\Controllers\Admin\UserManagementController::class, 'grantVip'])->name('users.grant-vip');
+    Route::post('/users/{user}/remove-vip', [\App\Http\Controllers\Admin\UserManagementController::class, 'removeVip'])->name('users.remove-vip');
+    Route::delete('/users/{user}', [\App\Http\Controllers\Admin\UserManagementController::class, 'destroy'])->name('users.destroy');
+
     Route::get('/guides', [\App\Http\Controllers\Admin\GuideController::class, 'index'])->name('guides.index');
     Route::get('/guides/create', [\App\Http\Controllers\Admin\GuideController::class, 'create'])->name('guides.create');
     Route::post('/guides', [\App\Http\Controllers\Admin\GuideController::class, 'store'])->name('guides.store');

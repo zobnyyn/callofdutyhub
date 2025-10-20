@@ -93,6 +93,14 @@
         >
           ▶️
         </button>
+        <button
+          type="button"
+          @click="addAudio"
+          class="p-2 border border-orange-500/30 hover:bg-orange-500/30 text-white font-mono text-sm transition-all rounded"
+          title="Insert Audio URL"
+        >
+          🎵
+        </button>
 
         <!-- NEW: Insert Game Item Button -->
         <button
@@ -181,6 +189,20 @@
               type="file"
               accept="image/*,image/gif"
               @change="handleImageUpload"
+              class="hidden"
+            />
+          </label>
+        </div>
+
+        <!-- Audio Upload -->
+        <div class="p-2 bg-orange-600 hover:bg-orange-500 text-black font-mono text-sm transition-all rounded cursor-pointer text-center">
+          <label class="w-full h-full cursor-pointer flex items-center justify-center" title="Загрузить аудио">
+            🎧
+            <input
+              ref="audioFileInput"
+              type="file"
+              accept="audio/*"
+              @change="handleAudioUpload"
               class="hidden"
             />
           </label>
@@ -291,6 +313,30 @@
               title="Link to Chapter"
             >
               📑
+            </button>
+            <button
+              type="button"
+              @click.prevent="openItemPickerFromBubble"
+              class="px-3 py-1.5 hover:bg-orange-500 text-white font-mono text-sm transition-all rounded bg-orange-600/30"
+              title="Вставить предмет из игры"
+            >
+              🎮
+            </button>
+            <button
+              type="button"
+              @click.prevent="triggerBubbleImageUpload"
+              class="px-3 py-1.5 hover:bg-orange-500 text-white font-mono text-sm transition-all rounded"
+              title="Загрузить изображение"
+            >
+              🖼️
+            </button>
+            <button
+              type="button"
+              @click.prevent="triggerBubbleAudioUpload"
+              class="px-3 py-1.5 hover:bg-orange-500 text-white font-mono text-sm transition-all rounded"
+              title="Загрузить аудио"
+            >
+              🎧
             </button>
           </div>
 
@@ -410,6 +456,24 @@
       </div>
     </div>
 
+    <!-- Hidden file input for bubble menu image upload -->
+    <input
+      ref="bubbleImageInput"
+      type="file"
+      accept="image/*,image/gif"
+      @change="handleBubbleImageUpload"
+      class="hidden"
+    />
+
+    <!-- Hidden file input for bubble menu audio upload -->
+    <input
+      ref="bubbleAudioInput"
+      type="file"
+      accept="audio/*"
+      @change="handleBubbleAudioUpload"
+      class="hidden"
+    />
+
     <!-- Item Picker Modal -->
     <ItemPickerModal
       :isOpen="showItemPicker"
@@ -433,6 +497,7 @@ import { Extension } from '@tiptap/core';
 import { Plugin, PluginKey } from '@tiptap/pm/state';
 import ItemPickerModal from './ItemPickerModal.vue';
 import { Mark } from '@tiptap/core';
+import { Audio } from '../tiptap-audio.js';
 
 // Custom Game Item Mark Extension
 const GameItemMark = Mark.create({
@@ -513,6 +578,9 @@ const showChapterMenu = ref(false);
 const chapters = ref([]);
 const showItemPicker = ref(false);
 const currentGame = ref(props.game);
+const bubbleImageInput = ref(null);
+const bubbleAudioInput = ref(null);
+const audioFileInput = ref(null);
 
 // Watch for game prop changes
 watch(() => props.game, (newGame) => {
@@ -521,6 +589,15 @@ watch(() => props.game, (newGame) => {
 
 // Open item picker modal
 const openItemPicker = () => {
+  if (!currentGame.value) {
+    alert('Пожалуйста, сначала выберите игру');
+    return;
+  }
+  showItemPicker.value = true;
+};
+
+// Open item picker from bubble menu (same functionality)
+const openItemPickerFromBubble = () => {
   if (!currentGame.value) {
     alert('Пожалуйста, сначала выберите игру');
     return;
@@ -728,6 +805,7 @@ const editor = useEditor({
         class: 'my-4 mx-auto'
       }
     }),
+    Audio, // Добавляем расширение для аудиофайлов
     Link.configure({
       openOnClick: false,
       HTMLAttributes: {
@@ -739,7 +817,7 @@ const editor = useEditor({
       types: ['heading', 'paragraph']
     }),
     Placeholder.configure({
-      placeholder: 'Начните писать свой гайд здесь...\n\nВы можете вставлять изображения, видео, форматировать текст и многое другое!'
+      placeholder: 'Начните писать свой гайд здесь...\n\nВы можете вставлять изображения, видео, аудио, форматировать текст и многое другое!'
     }),
     HeadingWithId, // Добавляем расширение для заголовков с ID
     GameItemMark, // Добавляем расширение для игровых предметов
@@ -949,6 +1027,17 @@ function addYouTube() {
   }
 }
 
+// Add Audio
+function addAudio() {
+  if (!editor.value) return;
+
+  const url = window.prompt('Введите URL аудио:');
+  if (url) {
+    const title = window.prompt('Введите название аудиофайла (необязательно):');
+    editor.value.chain().focus().setAudio({ src: url, title: title || 'Аудиофайл' }).run();
+  }
+}
+
 // Add Link
 function addLink() {
   if (!editor.value) return;
@@ -982,6 +1071,81 @@ function handleImageUpload(event) {
     editor.value.chain().focus().setImage({ src: base64 }).run();
   };
   reader.readAsDataURL(file);
+}
+
+// Handle audio file upload
+function handleAudioUpload(event) {
+  if (!editor.value) return;
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('audio/')) {
+    alert('Пожалуйста, выберите аудиофайл');
+    return;
+  }
+
+  if (file.size > 20 * 1024 * 1024) {
+    alert('Размер файла не должен превышать 20MB');
+    return;
+  }
+
+  // Показываем индикатор загрузки как оверлей (не в контенте редактора)
+  const loadingNode = document.createElement('div');
+  loadingNode.className = 'audio-upload-loading';
+  loadingNode.innerHTML = '<div class="loading-spinner"></div><span>Загрузка аудио...</span>';
+  loadingNode.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: flex; align-items: center; gap: 10px; padding: 20px; background: rgba(0, 0, 0, 0.9); border: 2px solid rgba(249, 115, 22, 0.5); border-radius: 8px; color: #fb923c; font-family: monospace; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);';
+
+  // Добавляем оверлей к body, а не к редактору
+  document.body.appendChild(loadingNode);
+
+  // Создаем FormData для загрузки
+  const formData = new FormData();
+  formData.append('audio', file);
+
+  // Загружаем файл на сервер
+  fetch('/api/upload/audio', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Удаляем индикатор загрузки
+        if (loadingNode.parentNode) {
+          loadingNode.remove();
+        }
+
+        // Вставляем аудио с URL вместо base64
+        const title = data.filename || file.name;
+
+        // Вставляем аудио и перемещаем курсор после него
+        editor.value
+          .chain()
+          .focus()
+          .setAudio({ src: data.url, title: title })
+          .enter() // Добавляем новую строку после аудио
+          .run();
+      } else {
+        throw new Error('Ошибка загрузки');
+      }
+    })
+    .catch(error => {
+      // Удаляем индикатор загрузки
+      if (loadingNode.parentNode) {
+        loadingNode.remove();
+      }
+
+      console.error('Ошибка загрузки аудио:', error);
+      alert('Ошибка при загрузке аудиофайла. Попробуйте еще раз.');
+    })
+    .finally(() => {
+      // Очищаем input
+      event.target.value = '';
+    });
 }
 
 // Apply format to the selected text
@@ -1038,6 +1202,130 @@ function addLinkFromSelection() {
   if (url) {
     editor.value.chain().focus().setLink({ href: url }).run();
   }
+}
+
+// Add image from bubble menu
+function addImageFromBubble() {
+  if (!editor.value) return;
+
+  const url = window.prompt('Введите URL изображения для вставки:');
+  if (url) {
+    editor.value.chain().focus().setImage({ src: url }).run();
+  }
+}
+
+// Trigger file input for bubble image upload
+function triggerBubbleImageUpload() {
+  if (bubbleImageInput.value) {
+    bubbleImageInput.value.click();
+  }
+}
+
+// Handle image upload from bubble menu
+function handleBubbleImageUpload(event) {
+  if (!editor.value) return;
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('image/')) {
+    alert('Пожалуйста, выберите изображение');
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert('Размер файла не должен превышать 5MB');
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const base64 = e.target.result;
+    editor.value.chain().focus().setImage({ src: base64 }).run();
+  };
+  reader.readAsDataURL(file);
+}
+
+// Trigger file input for bubble audio upload
+function triggerBubbleAudioUpload() {
+  if (bubbleAudioInput.value) {
+    bubbleAudioInput.value.click();
+  }
+}
+
+// Handle audio upload from bubble menu
+function handleBubbleAudioUpload(event) {
+  if (!editor.value) return;
+
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith('audio/')) {
+    alert('Пожалуйста, выберите аудиофайл');
+    return;
+  }
+
+  if (file.size > 20 * 1024 * 1024) {
+    alert('Размер файла не должен превышать 20MB');
+    return;
+  }
+
+  // Показываем индикатор загрузки как оверлей (не в контенте редактора)
+  const loadingNode = document.createElement('div');
+  loadingNode.className = 'audio-upload-loading';
+  loadingNode.innerHTML = '<div class="loading-spinner"></div><span>Загрузка аудио...</span>';
+  loadingNode.style.cssText = 'position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); z-index: 9999; display: flex; align-items: center; gap: 10px; padding: 20px; background: rgba(0, 0, 0, 0.9); border: 2px solid rgba(249, 115, 22, 0.5); border-radius: 8px; color: #fb923c; font-family: monospace; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);';
+
+  // Добавляем оверлей к body, а не к редактору
+  document.body.appendChild(loadingNode);
+
+  // Создаем FormData для загрузки
+  const formData = new FormData();
+  formData.append('audio', file);
+
+  // Загружаем файл на сервер
+  fetch('/api/upload/audio', {
+    method: 'POST',
+    body: formData,
+    headers: {
+      'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || ''
+    }
+  })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Удаляем индикатор загрузки
+        if (loadingNode.parentNode) {
+          loadingNode.remove();
+        }
+
+        // Вставляем аудио с URL вместо base64
+        const title = data.filename || file.name;
+
+        // Вставляем аудио и перемещаем курсор после него
+        editor.value
+          .chain()
+          .focus()
+          .setAudio({ src: data.url, title: title })
+          .enter() // Добавляем новую строку после аудио
+          .run();
+      } else {
+        throw new Error('Ошибка загрузки');
+      }
+    })
+    .catch(error => {
+      // Удаляем индикатор загрузки
+      if (loadingNode.parentNode) {
+        loadingNode.remove();
+      }
+
+      console.error('Ошибка загрузки аудио:', error);
+      alert('Ошибка при загрузке аудиофайла. Попробуйте еще раз.');
+    })
+    .finally(() => {
+      // Очищаем input
+      event.target.value = '';
+    });
 }
 
 watch(() => props.modelValue, (value) => {
@@ -1327,5 +1615,39 @@ watch(() => props.modelValue, (value) => {
   margin-top: 8px;
   color: white;
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Audio Upload Loading Indicator */
+.audio-upload-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  background: rgba(249, 115, 22, 0.1);
+  border: 2px solid rgba(249, 115, 22, 0.3);
+  border-radius: 8px;
+  margin: 10px 0;
+  color: #fb923c;
+  font-family: monospace;
+  font-size: 14px;
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 3px solid rgba(249, 115, 22, 0.3);
+  border-top-color: #f97316;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
 }
 </style>

@@ -233,7 +233,12 @@
                     {{ article.user.name.charAt(0).toUpperCase() }}
                   </span>
                 </div>
-                <span class="text-gray-400 text-xs font-mono">{{ article.user.name }}</span>
+                <div class="flex items-center gap-1 flex-wrap flex-1 min-w-0">
+                  <span v-if="article.user.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ article.user.admin_prefix }}</span>
+                  <span class="text-gray-400 text-xs font-mono truncate">{{ article.user.name }}</span>
+                  <span v-if="article.user.is_vip" class="text-yellow-400 text-[10px]" title="VIP">⭐</span>
+                  <span v-if="article.user.is_admin" class="px-1 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                </div>
               </div>
             </a>
           </div>
@@ -345,7 +350,12 @@
                     {{ guide.user.name.charAt(0).toUpperCase() }}
                   </span>
                 </div>
-                <span class="text-gray-400 text-xs font-mono">{{ guide.user.name }}</span>
+                <div class="flex items-center gap-1 flex-wrap flex-1 min-w-0">
+                  <span v-if="guide.user.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ guide.user.admin_prefix }}</span>
+                  <span class="text-gray-400 text-xs font-mono truncate">{{ guide.user.name }}</span>
+                  <span v-if="guide.user.is_vip" class="text-yellow-400 text-[10px]" title="VIP">⭐</span>
+                  <span v-if="guide.user.is_admin" class="px-1 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                </div>
               </div>
             </a>
           </div>
@@ -402,9 +412,24 @@
 
                 <!-- User Info -->
                 <div class="flex-1 min-w-0">
-                  <h3 class="text-white font-mono font-bold text-lg mb-1 truncate group-hover:text-orange-500 transition-colors">
-                    {{ user.name }}
-                  </h3>
+                  <div class="flex items-center gap-1 flex-wrap mb-1">
+                    <span v-if="user.admin_prefix" class="text-orange-500 font-mono font-bold text-sm">{{ user.admin_prefix }}</span>
+                    <h3 class="text-white font-mono font-bold text-lg truncate group-hover:text-orange-500 transition-colors">
+                      {{ user.name }}
+                    </h3>
+                    <span v-if="user.is_vip" class="text-yellow-400 text-sm" title="VIP пользователь">⭐</span>
+                  </div>
+
+                  <!-- Badges -->
+                  <div class="flex gap-2 mb-2">
+                    <span v-if="user.is_admin" class="px-2 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/30 font-mono">
+                      ADMIN
+                    </span>
+                    <span v-if="user.is_vip" class="px-2 py-0.5 bg-yellow-500/20 text-yellow-400 text-[10px] font-bold border border-yellow-500/30 font-mono">
+                      VIP
+                    </span>
+                  </div>
+
                   <p class="text-gray-500 text-xs font-mono mb-3">
                     На сайте с {{ formatDate(user.created_at) }}
                   </p>
@@ -852,9 +877,25 @@
                   <div class="flex-1 min-w-0">
                     <div class="flex items-center justify-between mb-1">
                       <div>
-                        <h3 class="text-white font-mono font-bold group-hover:text-orange-500 transition-colors">
-                          {{ conversation.type === 'personal' ? (conversation.user?.name || 'Неизвестный пользователь') : conversation.group?.name }}
+                        <!-- Личный чат - показываем префикс и имя -->
+                        <div v-if="conversation.type === 'personal'" class="flex items-center gap-1.5 flex-wrap mb-0.5">
+                          <span v-if="conversation.user?.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ conversation.user.admin_prefix }}</span>
+                          <h3 class="text-white font-mono font-bold group-hover:text-orange-500 transition-colors">
+                            {{ conversation.user?.name || 'Неизвестный пользователь' }}
+                          </h3>
+                          <span v-if="conversation.user?.is_vip" class="text-yellow-400 text-sm" title="VIP пользователь">⭐</span>
+                        </div>
+                        <!-- Групповой чат -->
+                        <h3 v-else class="text-white font-mono font-bold group-hover:text-orange-500 transition-colors">
+                          {{ conversation.group?.name }}
                         </h3>
+
+                        <!-- Бейджи для личного чата -->
+                        <div v-if="conversation.type === 'personal'" class="flex items-center gap-1.5 mb-1">
+                          <span v-if="conversation.user?.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                          <span v-if="conversation.user?.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                        </div>
+
                         <span v-if="conversation.type === 'group'" class="text-orange-500/70 text-xs font-mono">
                           Групповой чат
                         </span>
@@ -946,7 +987,9 @@
                 <span class="text-gray-600 text-xs font-mono">{{ formatMessageTime(message.created_at) }}</span>
               </div>
               <div class="bg-orange-500/10 border border-orange-500/30 px-3 py-2 rounded-sm">
-                <p class="text-white font-mono text-sm break-words">{{ message.message }}</p>
+                <p class="text-white font-mono text-sm break-words">
+                  <LinkifiedText :text="message.message" />
+                </p>
               </div>
             </div>
           </div>
@@ -984,6 +1027,7 @@ import { ref, computed, onMounted } from 'vue';
 import Header from '@/Components/Header.vue';
 import Footer from '@/Components/Footer.vue';
 import Seo from '../../Components/SEO.vue';
+import LinkifiedText from '@/Components/LinkifiedText.vue';
 import axios from 'axios';
 import communityBackground from '@/../images/communitybackground.jpg';
 

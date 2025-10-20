@@ -11,7 +11,7 @@
 
     <!-- Background Video -->
     <video autoplay loop muted playsinline class="fixed inset-0 w-full h-full object-cover z-0 opacity-30">
-      <source :src="backgroundVideo" type="video/mp4">
+      <source :src="backgroundVideo" type="video/webm">
     </video>
 
     <!-- Terminal Background -->
@@ -567,9 +567,9 @@ import SEO from '@/Components/SEO.vue';
 
 // Список всех доступных видео
 const backgroundVideos = [
-  '/backgroundvideo/homepage/cod_main_page_1.mp4',
-  '/backgroundvideo/homepage/cod_main_page_2.mp4',
-  '/backgroundvideo/homepage/cod_main_page_3.mp4',
+  '/backgroundvideo/homepage/cod_main_page_1.webm',
+  '/backgroundvideo/homepage/cod_main_page_2.webm',
+  '/backgroundvideo/homepage/cod_main_page_3.webm',
 ];
 
 // Выбираем случайное видео

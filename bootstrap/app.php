@@ -12,13 +12,21 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
+        // КРИТИЧЕСКИЙ ФИКС: Доверяем прокси-серверам (для Spaceweb)
+        $middleware->trustProxies(at: '*');
+
+        // ВРЕМЕННО ОТКЛЮЧЕНО для диагностики Mixed Content
+        // $middleware->append(\App\Http\Middleware\ForceHttps::class);
+
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,
             \App\Http\Middleware\TrackOnlineUsers::class,
+            \App\Http\Middleware\ConvertImagePathsToWebP::class,
         ]);
 
         $middleware->alias([
             'admin' => \App\Http\Middleware\IsAdmin::class,
+            'verified' => \App\Http\Middleware\EnsureEmailIsVerified::class,
         ]);
 
         $middleware->statefulApi();

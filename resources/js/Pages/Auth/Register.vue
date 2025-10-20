@@ -62,6 +62,28 @@
 
           <!-- Register Form - Terminal Style -->
           <form @submit.prevent="register" class="space-y-4 md:space-y-6">
+            <!-- Success Message - Email Verification Required -->
+            <div v-if="registrationSuccess" class="border border-green-500/30 bg-green-900/20 p-4 md:p-6 font-mono">
+              <div class="text-green-400 text-sm md:text-base mb-3">
+                <span class="text-green-600">&gt;</span> РЕГИСТРАЦИЯ УСПЕШНА!
+              </div>
+              <div class="text-gray-300 text-xs md:text-sm mb-4">
+                Мы отправили письмо с подтверждением на <span class="text-orange-400">{{ form.email }}</span>
+              </div>
+              <div class="text-orange-400 text-sm md:text-base mb-3">
+                <span class="text-orange-600">&gt;</span> ТРЕБУЕТСЯ ПОДТВЕРЖДЕНИЕ EMAIL
+              </div>
+              <div class="text-gray-300 text-xs md:text-sm mb-4">
+                Пожалуйста, проверьте почту и перейдите по ссылке для подтверждения перед входом в систему.
+              </div>
+              <div class="pt-4">
+                <a href="/login" class="inline-block px-6 py-3 bg-gradient-to-r from-orange-600 to-red-600 hover:from-orange-500 hover:to-red-500 text-black font-black font-mono tracking-wider transition-all">
+                  <span class="text-orange-600 mr-2">&gt;</span>
+                  ПЕРЕЙТИ КО ВХОДУ
+                </a>
+              </div>
+            </div>
+
             <!-- Error Message -->
             <div v-if="errors.general" class="border border-red-500/30 bg-red-900/20 p-4 font-mono">
               <div class="text-red-500 text-sm">
@@ -188,22 +210,30 @@ const form = ref({
 
 const errors = ref({});
 const loading = ref(false);
+const registrationSuccess = ref(false);
 
 const register = async () => {
   loading.value = true;
   errors.value = {};
+  registrationSuccess.value = false;
 
   try {
     await axios.get('/sanctum/csrf-cookie');
 
     const response = await axios.post('/register', form.value);
 
-    if (response.data.message) {
-      router.visit('/');
+    if (response.data.email_verification_required || response.data.must_verify_email) {
+      registrationSuccess.value = true;
+      // Не очищаем email, чтобы показать его в сообщении
+      // Очищаем только пароли
+      form.value.password = '';
+      form.value.password_confirmation = '';
     }
   } catch (error) {
     if (error.response?.data?.errors) {
       errors.value = error.response.data.errors;
+    } else if (error.response?.data?.message) {
+      errors.value.general = error.response.data.message;
     } else {
       errors.value.general = 'Произошла ошибка при регистрации';
     }

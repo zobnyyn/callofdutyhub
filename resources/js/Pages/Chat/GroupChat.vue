@@ -70,10 +70,16 @@
               <div>
                 <p class="text-orange-500 mb-2">
                   <span class="text-orange-600">›</span> Создатель:
-                  <a :href="`/profile/${group?.creator?.id}`" class="text-white hover:text-orange-400 underline">
-                    {{ group?.creator?.name }}
+                  <a :href="`/profile/${group?.creator?.id}`" class="hover:text-orange-400 underline inline-flex items-center gap-1 flex-wrap">
+                    <span v-if="group?.creator?.admin_prefix" class="text-orange-500 text-xs font-bold">{{ group.creator.admin_prefix }}</span>
+                    <span class="text-white">{{ group?.creator?.name }}</span>
+                    <span v-if="group?.creator?.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
                   </a>
                 </p>
+                <div class="flex gap-1 mb-2">
+                  <span v-if="group?.creator?.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[10px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                  <span v-if="group?.creator?.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[10px] font-bold border border-yellow-500/30 font-mono">VIP</span>
+                </div>
                 <p v-if="group?.description" class="text-gray-400 text-xs">
                   {{ group?.description }}
                 </p>
@@ -110,17 +116,21 @@
 
               <!-- Message Content -->
               <div class="flex-1 min-w-0">
-                <div class="flex items-center space-x-2 mb-1">
+                <div class="flex items-center gap-2 flex-wrap mb-1">
+                  <span v-if="message.user?.admin_prefix" class="text-orange-500 text-xs font-bold font-mono">{{ message.user.admin_prefix }}</span>
                   <a :href="`/profile/${message.user?.id}`" class="text-orange-500 font-mono text-sm font-bold hover:text-orange-400">
                     {{ message.user?.name || 'Пользователь' }}
                   </a>
+                  <span v-if="message.user?.is_vip" class="text-yellow-400 text-xs" title="VIP пользователь">⭐</span>
+                  <span v-if="message.user?.is_admin" class="px-1.5 py-0.5 bg-red-500/20 text-red-400 text-[8px] font-bold border border-red-500/30 font-mono">ADMIN</span>
+                  <span v-if="message.user?.is_vip" class="px-1.5 py-0.5 bg-yellow-500/20 text-yellow-400 text-[8px] font-bold border border-yellow-500/30 font-mono">VIP</span>
                   <span class="text-gray-600 text-xs font-mono">
                     {{ formatMessageDate(message.created_at) }}
                   </span>
                 </div>
                 <div class="bg-orange-500/10 border border-orange-500/30 px-4 py-2 rounded-sm">
                   <p class="text-white font-mono text-sm break-words whitespace-pre-wrap">
-                    {{ message.message }}
+                    <LinkifiedText :text="message.message" />
                   </p>
                 </div>
               </div>
@@ -196,6 +206,7 @@
 import { ref, onMounted, onUnmounted, nextTick } from 'vue';
 import Header from '@/Components/Header.vue';
 import SEO from '@/Components/SEO.vue';
+import LinkifiedText from '@/Components/LinkifiedText.vue';
 import axios from 'axios';
 import { usePage } from '@inertiajs/vue3';
 

@@ -68,6 +68,19 @@
               </div>
             </div>
 
+            <!-- Email Verification Required Message -->
+            <div v-if="emailVerificationRequired" class="border border-orange-500/30 bg-orange-900/20 p-4 md:p-6 font-mono">
+              <div class="text-orange-400 text-sm md:text-base mb-3">
+                <span class="text-orange-600">&gt;</span> ТРЕБУЕТСЯ ПОДТВЕРЖДЕНИЕ EMAIL
+              </div>
+              <div class="text-gray-300 text-xs md:text-sm mb-4">
+                Пожалуйста, подтвердите ваш email адрес перед входом. Мы отправили письмо с подтверждением на <span class="text-orange-400">{{ verificationEmail }}</span>
+              </div>
+              <div class="text-gray-400 text-xs">
+                <span class="text-orange-600">&gt;</span> Проверьте почту и перейдите по ссылке для подтверждения
+              </div>
+            </div>
+
             <!-- Email Field -->
             <div class="font-mono">
               <div class="text-orange-600 text-sm mb-2">
@@ -89,8 +102,13 @@
 
             <!-- Password Field -->
             <div class="font-mono">
-              <div class="text-orange-600 text-sm mb-2">
-                <span class="text-orange-600">&gt;</span> ACCESS_CODE:
+              <div class="flex items-center justify-between mb-2">
+                <div class="text-orange-600 text-sm">
+                  <span class="text-orange-600">&gt;</span> ACCESS_CODE:
+                </div>
+                <a href="/forgot-password" class="text-orange-500 hover:text-orange-400 transition-colors text-xs">
+                  Забыли пароль?
+                </a>
               </div>
               <input
                 id="password"
@@ -152,10 +170,13 @@ const form = ref({
 
 const errors = ref({});
 const loading = ref(false);
+const emailVerificationRequired = ref(false);
+const verificationEmail = ref('');
 
 const login = async () => {
   loading.value = true;
   errors.value = {};
+  emailVerificationRequired.value = false;
 
   try {
     await axios.get('/sanctum/csrf-cookie');
@@ -166,8 +187,15 @@ const login = async () => {
       router.visit('/');
     }
   } catch (error) {
-    if (error.response?.data?.errors) {
+    if (error.response?.status === 403 && error.response?.data?.email_verified === false) {
+      // Email не подтвержден
+      emailVerificationRequired.value = true;
+      verificationEmail.value = error.response.data.email || form.value.email;
+      errors.value.general = error.response.data.message;
+    } else if (error.response?.data?.errors) {
       errors.value = error.response.data.errors;
+    } else if (error.response?.data?.message) {
+      errors.value.general = error.response.data.message;
     } else {
       errors.value.general = 'Произошла ошибка при входе';
     }

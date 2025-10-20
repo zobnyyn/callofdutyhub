@@ -24,8 +24,9 @@ class MessageController extends Controller
             return redirect()->route('community')->with('error', 'Вы можете писать только друзьям');
         }
 
-        // Получаем информацию о собеседнике
-        $companion = User::findOrFail($userId);
+        // Получаем информацию о собеседнике с admin_prefix, is_admin, is_vip
+        $companion = User::select('id', 'name', 'avatar', 'admin_prefix', 'is_admin', 'is_vip', 'created_at')
+            ->findOrFail($userId);
 
         // Получаем сообщения
         $messages = Message::where(function ($query) use ($currentUserId, $userId) {
@@ -36,7 +37,7 @@ class MessageController extends Controller
             $query->where('sender_id', $userId)
                 ->where('receiver_id', $currentUserId);
         })
-        ->with(['sender', 'receiver'])
+        ->with(['sender:id,name,avatar,admin_prefix,is_admin,is_vip', 'receiver:id,name,avatar,admin_prefix,is_admin,is_vip'])
         ->orderBy('created_at', 'asc')
         ->get();
 
@@ -94,7 +95,7 @@ class MessageController extends Controller
 
         // Получаем сообщения группы
         $messages = GroupMessage::where('game_group_id', $groupId)
-            ->with('user:id,name,avatar')
+            ->with('user:id,name,avatar,admin_prefix,is_admin,is_vip')
             ->orderBy('created_at', 'asc')
             ->get();
 
@@ -200,7 +201,7 @@ class MessageController extends Controller
         if (!$this->areFriends($currentUserId, $userId)) {
             return response()->json(['error' => 'Вы можете писать только друзьям'], 403);
         }
-        // Получаем сообщения
+        // Получаем сообщения с нужными полями пользователей
         $messages = Message::where(function ($query) use ($currentUserId, $userId) {
             $query->where('sender_id', $currentUserId)
                 ->where('receiver_id', $userId);
@@ -209,7 +210,7 @@ class MessageController extends Controller
             $query->where('sender_id', $userId)
                 ->where('receiver_id', $currentUserId);
         })
-        ->with(['sender', 'receiver'])
+        ->with(['sender:id,name,avatar,admin_prefix,is_admin,is_vip', 'receiver:id,name,avatar,admin_prefix,is_admin,is_vip'])
         ->orderBy('created_at', 'asc')
         ->get();
         // Помечаем сообщения как прочитанные
@@ -245,7 +246,8 @@ class MessageController extends Controller
             'receiver_id' => $receiverId,
             'message' => $request->message,
         ]);
-        $message->load(['sender', 'receiver']);
+        // Загружаем отношения с нужными полями
+        $message->load(['sender:id,name,avatar,admin_prefix,is_admin,is_vip', 'receiver:id,name,avatar,admin_prefix,is_admin,is_vip']);
         // Создаем уведомление для получателя
         $sender = User::find($currentUserId);
         Notification::create([

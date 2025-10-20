@@ -256,7 +256,7 @@ const navigateToGuides = (mapSlug) => {
     router.visit('/register');
     return;
   }
-  router.visit(`/zombies/Cold War/${mapSlug}/guides`);
+  router.visit(`/zombies/cold-war/${mapSlug}/guides`);
 };
 </script>
 

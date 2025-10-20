@@ -53,7 +53,16 @@
                   :alt="profileUser.name"
                   class="w-32 h-32 rounded-full border-4 border-orange-500 object-cover"
                 />
-                <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-black animate-pulse"></div>
+                <div
+                  v-if="isUserOnline"
+                  class="absolute -bottom-2 -right-2 w-8 h-8 bg-green-500 rounded-full border-4 border-black animate-pulse"
+                  title="Онлайн"
+                ></div>
+                <div
+                  v-else
+                  class="absolute -bottom-2 -right-2 w-8 h-8 bg-gray-500 rounded-full border-4 border-black"
+                  title="Оффлайн"
+                ></div>
               </div>
 
               <!-- User Info -->
@@ -61,9 +70,29 @@
                 <div class="text-orange-600 font-mono text-xs mb-2">
                   <span class="text-orange-600">&gt;</span> OPERATOR_PROFILE
                 </div>
-                <h1 class="text-4xl md:text-5xl font-black mb-3 uppercase font-mono text-white terminal-glow">
-                  {{ profileUser.name }}
-                </h1>
+                <div class="flex items-center gap-2 flex-wrap mb-3">
+                  <span v-if="profileUser.admin_prefix" class="text-2xl md:text-3xl font-black text-orange-500 font-mono terminal-glow">
+                    {{ profileUser.admin_prefix }}
+                  </span>
+                  <h1 class="text-4xl md:text-5xl font-black uppercase font-mono text-white terminal-glow">
+                    {{ profileUser.name }}
+                  </h1>
+                  <span v-if="profileUser.is_vip" class="text-3xl text-yellow-400" title="VIP пользователь">⭐</span>
+                </div>
+
+                <!-- Badges -->
+                <div class="flex items-center gap-3 mb-3 flex-wrap">
+                  <span v-if="profileUser.is_admin" class="px-3 py-1 bg-red-500/20 text-red-400 text-xs font-bold border border-red-500/30 font-mono">
+                    ADMINISTRATOR
+                  </span>
+                  <span v-if="profileUser.is_vip && !profileUser.vip_expires_at" class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-bold border border-yellow-500/30 font-mono">
+                    VIP ∞ FOREVER
+                  </span>
+                  <span v-else-if="profileUser.is_vip && profileUser.vip_expires_at" class="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs font-bold border border-yellow-500/30 font-mono">
+                    VIP до {{ new Date(profileUser.vip_expires_at).toLocaleDateString('ru-RU') }}
+                  </span>
+                </div>
+
                 <div class="flex items-center gap-4 text-sm font-mono text-gray-400">
                   <div class="flex items-center gap-2">
                     <span class="text-orange-500">◉</span>
@@ -91,13 +120,13 @@
             </div>
           </div>
 
-          <!-- Tabs Navigation -->
-          <div class="mb-6 border-b border-orange-500/30">
-            <div class="flex gap-2 font-mono text-sm">
+          <!-- Tabs Navigation - с горизонтальной прокруткой для мобильных -->
+          <div class="mb-6 border-b border-orange-500/30 overflow-x-auto scrollbar-thin">
+            <div class="flex gap-2 font-mono text-sm min-w-max">
               <button
                 @click="activeTab = 'info'"
                 :class="[
-                  'px-6 py-3 border-b-2 transition-colors',
+                  'px-4 md:px-6 py-3 border-b-2 transition-colors whitespace-nowrap',
                   activeTab === 'info'
                     ? 'border-orange-500 text-orange-500 bg-orange-500/10'
                     : 'border-transparent text-gray-500 hover:text-orange-500'
@@ -108,7 +137,7 @@
               <button
                 @click="activeTab = 'achievements'"
                 :class="[
-                  'px-6 py-3 border-b-2 transition-colors flex items-center gap-2',
+                  'px-4 md:px-6 py-3 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap',
                   activeTab === 'achievements'
                     ? 'border-orange-500 text-orange-500 bg-orange-500/10'
                     : 'border-transparent text-gray-500 hover:text-orange-500'
@@ -123,7 +152,7 @@
               <button
                 @click="activeTab = 'online'"
                 :class="[
-                  'px-6 py-3 border-b-2 transition-colors flex items-center gap-2',
+                  'px-4 md:px-6 py-3 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap',
                   activeTab === 'online'
                     ? 'border-orange-500 text-orange-500 bg-orange-500/10'
                     : 'border-transparent text-gray-500 hover:text-orange-500'
@@ -135,7 +164,7 @@
               <button
                 @click="activeTab = 'friends'"
                 :class="[
-                  'px-6 py-3 border-b-2 transition-colors flex items-center gap-2',
+                  'px-4 md:px-6 py-3 border-b-2 transition-colors flex items-center gap-2 whitespace-nowrap',
                   activeTab === 'friends'
                     ? 'border-orange-500 text-orange-500 bg-orange-500/10'
                     : 'border-transparent text-gray-500 hover:text-orange-500'
@@ -323,6 +352,7 @@ import FriendsTab from '../../Components/FriendsTab.vue';
 import Seo from '@/Components/SEO.vue';
 import xboxIcon from '@/../images/icons/xbox-svgrepo-com.svg';
 import playstationIcon from '@/../images/icons/playstation-svgrepo-com.svg';
+import axios from 'axios';
 
 const props = defineProps({
   profileUser: {
@@ -334,6 +364,7 @@ const props = defineProps({
 const page = usePage();
 const activeTab = ref('info');
 const achievementsCount = ref(0);
+const isUserOnline = ref(false);
 
 onMounted(() => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -341,7 +372,22 @@ onMounted(() => {
   if (tab && ['info', 'achievements', 'online', 'friends'].includes(tab)) {
     activeTab.value = tab;
   }
+
+  // Проверяем онлайн-статус пользователя
+  checkOnlineStatus();
+  // Обновляем статус каждые 30 секунд
+  setInterval(checkOnlineStatus, 30000);
 });
+
+async function checkOnlineStatus() {
+  try {
+    const response = await axios.get('/api/online-users');
+    const onlineUsers = response.data.users || [];
+    isUserOnline.value = onlineUsers.some(user => user.id === props.profileUser.id);
+  } catch (error) {
+    console.error('Error checking online status:', error);
+  }
+}
 
 function getAvatarUrl(avatar) {
   if (!avatar || avatar === 'null' || avatar === '0' || avatar === 0) {
